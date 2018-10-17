@@ -1,5 +1,6 @@
 import React from 'react'
 import { Animated, Easing, Button, View, Text, SafeAreaView, ScrollView, Dimensions, Image, StyleSheet } from 'react-native';
+import {Container, Content, Header, Body, Icon} from 'native-base';
 
 import { createDrawerNavigator, createStackNavigator, DrawerItems } from 'react-navigation'
 
@@ -8,6 +9,7 @@ import Signup from './scenes/Login/scenes/Signup'
 import ForgottenPassword from './scenes/Login/scenes/ForgottenPassword'
 
 import Home from './scenes/Home'
+import Messages from './scenes/Messages'
 import Info from './scenes/Info'
 import Attendance from './scenes/Attendance'
 import FindUs from './scenes/Find_Us'
@@ -22,20 +24,17 @@ const LoginStack = createStackNavigator({
   forgottenPasswordScreen: { screen: ForgottenPassword, navigationOptions: { title: 'Forgot Password' } }
 
 }, {
-    headerMode: 'float',
+    headerMode: 'none', // Header do Login
     navigationOptions: {
-      //headerStyle: { backgroundColor: '#E73536' },
-      //title: 'You are not logged in',
-      //headerTintColor: 'white',
-      navigationOptions: {
-        gesturesEnabled: false,
-      },
+      gesturesEnabled: false,
     }
   })
+
 
 // drawer stack
 const DrawerStack = createDrawerNavigator({
   home: { screen: Home },
+  messages: { screen: Messages },
   Info: { screen: Info },
   attendance: { screen: Attendance },
   findUs: { screen: FindUs },
@@ -61,15 +60,16 @@ const styles = StyleSheet.create({
   }
 });
 
+/* Create a Drawer (Menu) and its metadatas */
 const DrawerNavigation = createStackNavigator({
   DrawerStack: { screen: DrawerStack }
 }, {
     headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
-      headerStyle: { backgroundColor: 'green' },
-      title: 'Student APP',
+      headerStyle: { backgroundColor: '#E54236' },
+      title: 'Mindroom Student APP',
       gesturesEnabled: false,
-      headerLeft: <Text onPress={() => navigation.toggleDrawer()}>Menu</Text>
+      headerLeft: <Icon name="md-menu" size={30} style={{paddingLeft:16}} color='black' onPress={() => navigation.toggleDrawer()} /> 
     })
   })
 
