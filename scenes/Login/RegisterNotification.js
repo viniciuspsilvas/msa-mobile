@@ -42,3 +42,20 @@ async function registerForPushNotificationsAsync() {
     }),
   });
 }
+
+
+        // List messages
+        fetch(config.backend.messages, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        })
+          .then(resp => resp.json())
+          .then(messageList => {
+              this.setState({ messageList: messageList })
+          })
+          .catch(function (err) {
+              console.log(err)
+          });

@@ -6,7 +6,7 @@ const FULL_BACKEND_URL = BACKEND_URL + ":"+ BACKEND_PORT;
 var backend = {
 	students: FULL_BACKEND_URL + '/students',
 	groupStudents: FULL_BACKEND_URL + '/groupStudents',
-	 
+	messages: FULL_BACKEND_URL + '/messages',
 }
 
 var config = {
