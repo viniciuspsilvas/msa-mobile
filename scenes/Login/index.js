@@ -1,22 +1,42 @@
 import React, { Component } from 'react';
-import { Button, Text } from 'native-base';
+import { Button, Text, Toast } from 'native-base';
 import { View, StyleSheet, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
-import Expo from "expo";
+import Expo, { Permissions, Notifications } from 'expo';
 
 // This refers to the function defined earlier in this guide
-import registerForPushNotificationsAsync from './RegisterNotification';
+import { registerForPushNotificationsAsync } from './registerForPushNotificationsAsync';
 
+var config = require('../../config/config');
 
 export default class Login extends Component {
 
 	/* Contructor */
 	constructor(props) {
 		super(props);
-		this.state = { 
+		this.state = {
 			email: '',
-			loading: true };
-
+			password: '',
+			loading: true,
+			notification: {},
+			showToast: false
+		};
 	}
+
+	componentDidMount() {
+		//registerForPushNotificationsAsync();
+
+		// Handle notifications that are received or selected while the app
+		// is open. If the app was closed and then opened by tapping the
+		// notification (rather than just tapping the app icon to open it),
+		// this function will fire on the next tick after the app starts
+		// with the notification data.
+		//this._notificationSubscription = Notifications.addListener(this._handleNotification);
+	}
+
+	_handleNotification = (notification) => {
+		this.setState({ notification: notification });
+	};
+
 
 	static navigationOptions = {
 		//title: '',
@@ -34,13 +54,43 @@ export default class Login extends Component {
 	// ##### FIM do workaround 
 
 	loginHandler = () => {
-		console.log(this.state.email);
 
+		var credential = {
+			email: this.state.email,
+			password: this.state.password,
+		};
 
-		registerForPushNotificationsAsync();
+		var header = {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(credential)
+		};
 
-		this.props.navigation.navigate('drawerStack')
-	 }
+		var self = this;
+
+		fetch(config.backend.login, header)
+			.then(response => {
+				if (response.status === 200) {
+					self.props.navigation.navigate('drawerStack');
+					return response.json();
+
+				} else {
+
+					Toast.show({
+						text: "Username/password invalid!",
+						buttonText: "Okay",
+						duration: 3000
+					})
+				}
+			}).then(function (json) {
+
+				registerForPushNotificationsAsync(json.userId);
+
+			}).catch(err => console.error(err));
+	}
 
 	render() {
 
@@ -64,15 +114,16 @@ export default class Login extends Component {
 						keyboardType='email-address'
 						autoCorrect={false}
 						autoCapitalize='none'
-						onChangeText={(text) => this.setState({text})}
+						onChangeText={(text) => this.setState({ email: text })}
 						onSubmitEditing={() => this.passwordInput.focus()}
 					/>
 
-					<TextInput 
+					<TextInput
 						returnKeyType='go'
 						placeholder='Password'
 						placeholderTextColor='rgb(38, 8, 7)'
 						secureTextEntry
+						onChangeText={(text) => this.setState({ password: text })}
 						ref={(input) => this.passwordInput = input}
 						style={styles.input} />
 

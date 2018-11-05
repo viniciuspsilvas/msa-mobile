@@ -1,8 +1,8 @@
 import { Permissions, Notifications } from 'expo';
+var config = require('../../config/config');
 
-const PUSH_ENDPOINT = 'https://localhost:3001/message';
+export async function registerForPushNotificationsAsync(userId) {
 
-async function registerForPushNotificationsAsync() {
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS
   );
@@ -25,37 +25,22 @@ async function registerForPushNotificationsAsync() {
   // Get the token that uniquely identifies this device
   let token = await Notifications.getExpoPushTokenAsync();
 
-  // POST the token to your backend server from where you can retrieve it to send push notifications.
-  return fetch(PUSH_ENDPOINT, {
+  var advice = {
+    "description": Expo.Constants.deviceName,
+    "token": token,
+    "customUserId": userId
+  }
+
+  var headerAdvice = {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      token: {
-        value: token,
-      },
-      user: {
-        username: 'Brent',
-      },
-    }),
-  });
+    body: JSON.stringify(advice)
+  };
+
+  return fetch(config.backend.userAdvices, headerAdvice).catch(err => console.error(err));
+
 }
 
-
-        // List messages
-        fetch(config.backend.messages, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        })
-          .then(resp => resp.json())
-          .then(messageList => {
-              this.setState({ messageList: messageList })
-          })
-          .catch(function (err) {
-              console.log(err)
-          });
