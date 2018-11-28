@@ -54,9 +54,9 @@ export default class Login extends Component {
 	// ##### FIM do workaround 
 
 	loginHandler = () => {
-
+		
 		var credential = {
-			email: this.state.email,
+			login: this.state.email,
 			password: this.state.password,
 		};
 
@@ -73,9 +73,10 @@ export default class Login extends Component {
 
 		fetch(config.backend.login, header)
 			.then(response => {
+				console.log(response)
 				if (response.status === 200) {
 					self.props.navigation.navigate('drawerStack');
-					return response.json();
+					return response.json().userId;
 
 				} else {
 
@@ -85,9 +86,9 @@ export default class Login extends Component {
 						duration: 3000
 					})
 				}
-			}).then(function (json) {
+			}).then(function (userId) {
 
-				registerForPushNotificationsAsync(json.userId);
+				registerForPushNotificationsAsync(userId);
 
 			}).catch(err => console.error(err));
 	}
