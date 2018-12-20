@@ -21,7 +21,6 @@ export default class CustomHeader extends React.Component {
     if (this.state.loading) {
       return <Expo.AppLoading />;
     }
-    console.log(this.props);
     return (
         <Header>
             <Left><Icon name="menu" onPress={() => this.props.drawerOpen8()} /></Left>

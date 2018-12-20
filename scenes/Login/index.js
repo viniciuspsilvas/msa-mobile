@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { Button, Text, Toast } from 'native-base';
 import { View, StyleSheet, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import Expo, { Permissions, Notifications } from 'expo';
-
-// This refers to the function defined earlier in this guide
-import { registerForPushNotificationsAsync } from './registerForPushNotificationsAsync';
+import axios from 'axios';
 
 var config = require('../../config/config');
 
@@ -22,21 +20,31 @@ export default class Login extends Component {
 		};
 	}
 
-	componentDidMount() {
-		//registerForPushNotificationsAsync();
+	async componentDidMount() {
+		const { status: existingStatus } = await Permissions.getAsync(
+			Permissions.NOTIFICATIONS
+		);
+		let finalStatus = existingStatus;
 
-		// Handle notifications that are received or selected while the app
-		// is open. If the app was closed and then opened by tapping the
-		// notification (rather than just tapping the app icon to open it),
-		// this function will fire on the next tick after the app starts
-		// with the notification data.
-		//this._notificationSubscription = Notifications.addListener(this._handleNotification);
+		// only ask if permissions have not already been determined, because
+		// iOS won't necessarily prompt the user a second time.
+		if (existingStatus !== 'granted') {
+			// Android remote notification permissions are granted during the app
+			// install, so this will only ask on iOS
+			const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+			finalStatus = status;
+		}
+
+		// Stop here if the user did not grant permissions
+		if (finalStatus !== 'granted') {
+			return;
+		}
+
+		// Get the token that uniquely identifies this device
+		let tokenAdvice = await Notifications.getExpoPushTokenAsync();
+		let adviceDesc = Expo.Constants.deviceName;
+		this.setState ({tokenAdvice : tokenAdvice, adviceDesc : adviceDesc});
 	}
-
-	_handleNotification = (notification) => {
-		this.setState({ notification: notification });
-	};
-
 
 	static navigationOptions = {
 		//title: '',
@@ -54,47 +62,39 @@ export default class Login extends Component {
 	// ##### FIM do workaround 
 
 	loginHandler = () => {
-		
-		var credential = {
-			login: this.state.email,
-			password: this.state.password,
-		};
-
-		var header = {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(credential)
-		};
+		// Get the token that uniquely identifies this device
+		let tokenAdvice = this.state.tokenAdvice;
+		let adviceDesc = Expo.Constants.deviceName;
 
 		var self = this;
 
-		fetch(config.backend.login, header)
-			.then(response => {
-				console.log(response)
-				if (response.status === 200) {
+		let credential = {
+			login: this.state.email,
+			password: this.state.password,
+			tokenAdvice: tokenAdvice,
+			adviceDesc: adviceDesc
+		}
+
+		axios.post(config.backend.loginMoodle, { "credencial": credential })
+			.then(res => {
+				console.log(res);
+
+				if (res.status === 200) {
 					self.props.navigation.navigate('drawerStack');
-					return response.json().userId;
+					let userId = res.data;
+					registerForPushNotificationsAsync(userId);
 
 				} else {
-
 					Toast.show({
 						text: "Username/password invalid!",
 						buttonText: "Okay",
 						duration: 3000
 					})
 				}
-			}).then(function (userId) {
-
-				registerForPushNotificationsAsync(userId);
-
-			}).catch(err => console.error(err));
+			}).catch(err => console.log(err));
 	}
 
 	render() {
-
 		if (this.state.loading) {
 			return <Expo.AppLoading />;
 		}
