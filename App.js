@@ -1,23 +1,28 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-//import { DrawerItems, createDrawerNavigator } from 'react-navigation'; // Version can be specified in package.json
 import { Root } from 'native-base';
 import AppNavigation from './AppNavigation'
 
-// const {width} = Dimensions.get('window');
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
+import { createLogger } from "redux-logger";
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    }
-});
+import rootReducer from "./rootReducer";
 
+const logger = createLogger();
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, /* preloadedState, */ composeEnhancers(
+    applyMiddleware(thunk, logger)
+));
 
 export default class App extends React.Component {
     render() {
-        return <Root>
-            <AppNavigation />
-        </Root>;
+        return <Provider store={store}>
+            <Root>
+                <AppNavigation />
+            </Root>
+        </Provider>;
 
     }
 }

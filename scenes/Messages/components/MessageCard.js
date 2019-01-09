@@ -12,8 +12,6 @@ export default class MessageCard extends Component {
     render() {
         const { title, body, createdAt, category } = this.props;
 
-        console.log(444,this.props)
-
         let dateNew = new Date(createdAt);
         let icon = this.getIcon(category);
 

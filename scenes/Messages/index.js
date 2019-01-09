@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Container, Text, Content, Icon } from 'native-base';
 
 import MessageCard from './components/MessageCard'
+import axios from 'axios';
 
 var config = require('../../config/config');
+
 
 export default class Messages extends Component {
 
@@ -19,21 +21,18 @@ export default class Messages extends Component {
 
     componentDidMount() {
 
-        // List messages
-        fetch(config.backend.messages, {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-          })
-            .then(resp => resp.json())
-            .then(messageList => {
-                this.setState({ messageList: messageList })
+        const studentIdFilter = {
+            filter: "{'where':{'studentId':" + 1 + "} , 'order':'createdAt DESC'}" // Filtrar pelo student logado
+        }
+        axios.get(config.backend.messages, studentIdFilter)
+            .then(res => {
+
+                this.setState({ messageList: res.data })
             })
-            .catch(function (err) {
+            .catch(err =>
                 console.log(err)
-            });
+            );
+
     }
 
     static navigationOptions = {
@@ -44,33 +43,9 @@ export default class Messages extends Component {
     render() {
 
         const messageList = this.state.messageList;
+
         //const isNotEmpty = messageList && messageList.length > 0;
 
-/* 
-        var listMessagem = [
-
-            // userId, data, title, text, isDownloaded, isRead, isArchived, category
-
-            {
-                title: "Friday! New Year Holiday",
-                text: "Nao havera aula nos dias xxx ate zzz",
-                date: new Date("Oct 3, 2018 20:15:10"),
-                isDownloaded: true,
-                isRead: true,
-                isArchived: true,
-                category: "info"
-            },
-            {
-                title: "Monday! New Year Holiday",
-                text: "Nao havera aula nos dias xxx ate zzz",
-                date: new Date("Oct 10, 2018 20:15:10"),
-                isDownloaded: true,
-                isRead: true,
-                isArchived: true,
-                category: "alert"
-            },
-
-        ]; */
 
         var messages = [];
 
@@ -81,8 +56,8 @@ export default class Messages extends Component {
             messages.push(
                 <MessageCard key={i}
                     title={message.title}
-                    text={message.text}
-                    date={message.date}
+                    body={message.body}
+                    createdAt={message.createdAt}
                     category={message.category}
                 />
             )
@@ -91,10 +66,14 @@ export default class Messages extends Component {
         return (
             <Container>
                 <Content>
-                {messages.length > 0 ? messages
-                    :
-                    (<Text> Empty list </Text>)
-                }
+
+                    <Text style={{fontWeight: 'bold'}}>
+                        Messages
+                        </Text>
+                    {messages.length > 0 ? messages
+                        :
+                        (<Text> Empty list </Text>)
+                    }
                 </Content>
             </Container>
         );

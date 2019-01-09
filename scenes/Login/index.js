@@ -2,22 +2,30 @@ import React, { Component } from 'react';
 import { Button, Text, Toast } from 'native-base';
 import { View, StyleSheet, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import Expo, { Permissions, Notifications } from 'expo';
+import { connect } from "react-redux";
+
 import axios from 'axios';
+import config from '../../config/config'
 
-var config = require('../../config/config');
+import Loader from "../../components/Loader"
+import { loginMoodle, togleLoading } from "./actions";
 
-export default class Login extends Component {
+class Login extends Component {
 
 	/* Contructor */
 	constructor(props) {
 		super(props);
 		this.state = {
+			tokenAdvice: '',
+			adviceDesc: '',
 			email: '',
 			password: '',
-			loading: true,
+
 			notification: {},
-			showToast: false
 		};
+
+		this.handleInputChange = this.handleInputChange.bind(this);
+		this.loginHandler = this.loginHandler.bind(this);
 	}
 
 	async componentDidMount() {
@@ -43,12 +51,8 @@ export default class Login extends Component {
 		// Get the token that uniquely identifies this device
 		let tokenAdvice = await Notifications.getExpoPushTokenAsync();
 		let adviceDesc = Expo.Constants.deviceName;
-		this.setState ({tokenAdvice : tokenAdvice, adviceDesc : adviceDesc});
+		this.setState({ tokenAdvice: tokenAdvice, adviceDesc: adviceDesc });
 	}
-
-	static navigationOptions = {
-		//title: '',
-	};
 
 	// Workaround to solve the problem related to font 'Roboto_medium'
 	async componentWillMount() {
@@ -57,11 +61,13 @@ export default class Login extends Component {
 			Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
 			Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
 		});
-		this.setState({ loading: false });
+
+		this.props.togleLoading(false);
 	}
 	// ##### FIM do workaround 
 
 	loginHandler = () => {
+
 		// Get the token that uniquely identifies this device
 		let tokenAdvice = this.state.tokenAdvice;
 		let adviceDesc = Expo.Constants.deviceName;
@@ -69,11 +75,17 @@ export default class Login extends Component {
 		var self = this;
 
 		let credential = {
-			login: this.state.email,
-			password: this.state.password,
+			//login: this.state.email,
+			//password: this.state.password,
+
+			login: "glaucomp@hotmail.com",
+			password: "Password123!",
+
 			tokenAdvice: tokenAdvice,
 			adviceDesc: adviceDesc
 		}
+
+		//this.props.loginMoodle(credential);
 
 		axios.post(config.backend.loginMoodle, { "credencial": credential })
 			.then(res => {
@@ -82,25 +94,48 @@ export default class Login extends Component {
 				if (res.status === 200) {
 					self.props.navigation.navigate('drawerStack');
 					let userId = res.data;
-					registerForPushNotificationsAsync(userId);
+					//registerForPushNotificationsAsync(userId);
 
-				} else {
-					Toast.show({
-						text: "Username/password invalid!",
-						buttonText: "Okay",
-						duration: 3000
-					})
 				}
-			}).catch(err => console.log(err));
+			}).catch(err => {
+				console.log(err)
+				Toast.show({
+					text: "Username/password invalid!",
+					buttonText: "Okay",
+					duration: 3000
+				})
+			});
+
 	}
 
+	// Called always when a input is changed
+	handleInputChange = (event) => {
+
+		const target = event.target;
+		const value = target.type === 'checkbox' ? target.checked : target.value;
+		const name = target.name;
+
+		this.setState({
+			[name]: value
+		});
+	}
+
+
 	render() {
-		if (this.state.loading) {
-			return <Expo.AppLoading />;
+		const { error, isLoading } = this.props;
+
+		if (isLoading) { return <Loader loading={isLoading} /> }
+		if (error) {
+			Toast.show({
+				text: "Username/password invalid!",
+				buttonText: "Okay",
+				duration: 3000
+			})
 		}
 
 		return (
 			<KeyboardAvoidingView behavior='padding' style={styles.container}>
+
 				<View style={styles.logoContainer}>
 					<Image source={require('../../assets/Logo_vert.png')} style={styles.logo} />
 
@@ -193,3 +228,16 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 	}
 });
+
+//Redux configuration
+const mapStateToProps = state => {
+	return state.loginReducer;
+};
+
+const mapDispatchToProps = dispatch => ({
+	loginMoodle: (credential) => dispatch(loginMoodle(credential)),
+	togleLoading: () => dispatch(togleLoading()),
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
