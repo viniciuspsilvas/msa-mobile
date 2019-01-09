@@ -7,7 +7,7 @@ const FULL_BACKEND_URL = BACKEND_URL + ":"+ BACKEND_PORT;
 var backend = {
 	students: FULL_BACKEND_URL + '/api/Students',
 	//groupStudents: FULL_BACKEND_URL + '/groupStudents',
-	//messages: FULL_BACKEND_URL + '/messages',
+	messages: FULL_BACKEND_URL + '/api/Messages',
 	loginMoodle: FULL_BACKEND_URL + '/api/Students/loginMoodle',
 	
 	studentAdvices: FULL_BACKEND_URL + '/api/StudentAdvices',
