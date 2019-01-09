@@ -10,9 +10,11 @@ export default class MessageCard extends Component {
     }
 
     render() {
-        const { title, text, date, category } = this.props;
+        const { title, body, createdAt, category } = this.props;
 
-        let dateNew = new Date(date);
+        console.log(444,this.props)
+
+        let dateNew = new Date(createdAt);
         let icon = this.getIcon(category);
 
         var res = Math.abs(Date.now() - dateNew) / 1000;
@@ -30,9 +32,11 @@ export default class MessageCard extends Component {
                     </Left>
                 </CardItem>
                 <CardItem >
-                    <Text>
-                        {text}
-                    </Text>
+                    <Body>
+                        <Text>
+                            {body}
+                        </Text>
+                    </Body>
                 </CardItem>
                 <CardItem>
                     <Left>
