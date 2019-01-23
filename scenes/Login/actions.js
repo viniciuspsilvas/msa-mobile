@@ -9,14 +9,28 @@ export const TOGLE_LOADING = 'TOGLE_LOADING';
 
 export const loginMoodle = (credential) => (dispatch) => {
 
-    console.log(333, credential)
-
-    dispatch({ type: FETCH_LOGIN_BEGIN })
-    axios.post(config.backend.loginMoodle, { "credencial": credential })
-        .then(res => { dispatch({ type: FETCH_LOGIN_SUCCESS, payload: res }) })
-        .catch(err => dispatch({ type: FETCH_LOGIN_FAILURE, payload: err }));
+    dispatch(fetchLoginMoodlesBegin())
+    return axios.post(config.backend.loginMoodle, { "credencial": credential })
+        .then(res => dispatch(fetchLoginMoodlesSuccess(res)))
+        .catch(err => dispatch(fetchLoginMoodlesFailure(err)));
 
 }
+
+// Action
+export const fetchLoginMoodlesBegin = () => ({
+    type: FETCH_LOGIN_BEGIN
+});
+
+// Action
+export const fetchLoginMoodlesSuccess = credential => ({
+    type: FETCH_LOGIN_SUCCESS,
+    payload: { credential }
+});
+
+export const fetchLoginMoodlesFailure = error => ({
+    type: FETCH_LOGIN_FAILURE,
+    payload: { error }
+});
 
 export const togleLoading = (value) => (dispatch) => {
     dispatch({ type: TOGLE_LOADING, payload: value })

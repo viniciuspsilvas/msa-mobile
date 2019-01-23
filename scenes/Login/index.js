@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Text, Toast } from 'native-base';
-import { View, StyleSheet, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { Text, Toast } from 'native-base';
+import { Button, View, StyleSheet, Image, KeyboardAvoidingView } from 'react-native';
 import Expo, { Permissions, Notifications } from 'expo';
 import { connect } from "react-redux";
 
-import axios from 'axios';
-import config from '../../config/config'
+import LoginForm from "./components/LoginForm"
 
 import Loader from "../../components/Loader"
 import { loginMoodle, togleLoading } from "./actions";
@@ -18,13 +17,8 @@ class Login extends Component {
 		this.state = {
 			tokenAdvice: '',
 			adviceDesc: '',
-			email: '',
-			password: '',
-
-			notification: {},
 		};
 
-		this.handleInputChange = this.handleInputChange.bind(this);
 		this.loginHandler = this.loginHandler.bind(this);
 	}
 
@@ -66,7 +60,9 @@ class Login extends Component {
 	}
 	// ##### FIM do workaround 
 
-	loginHandler = () => {
+	loginHandler = (values) => {
+
+		const { email, password } = values;
 
 		// Get the token that uniquely identifies this device
 		let tokenAdvice = this.state.tokenAdvice;
@@ -75,51 +71,19 @@ class Login extends Component {
 		var self = this;
 
 		let credential = {
-			//login: this.state.email,
-			//password: this.state.password,
+			//login: email,
+			//password: password,
 
-			login: "glaucomp@hotmail.com",
+			login: "glaucomp@hotmail.coms",
 			password: "Password123!",
 
 			tokenAdvice: tokenAdvice,
 			adviceDesc: adviceDesc
 		}
 
-		//this.props.loginMoodle(credential);
-
-		axios.post(config.backend.loginMoodle, { "credencial": credential })
-			.then(res => {
-				console.log(res);
-
-				if (res.status === 200) {
-					self.props.navigation.navigate('drawerStack');
-					let userId = res.data;
-					//registerForPushNotificationsAsync(userId);
-
-				}
-			}).catch(err => {
-				console.log(err)
-				Toast.show({
-					text: "Username/password invalid!",
-					buttonText: "Okay",
-					duration: 3000
-				})
-			});
+		this.props.loginMoodle(credential);
 
 	}
-
-	// Called always when a input is changed
-	handleInputChange = (event) => {
-
-		const target = event.target;
-		const value = target.type === 'checkbox' ? target.checked : target.value;
-		const name = target.name;
-
-		this.setState({
-			[name]: value
-		});
-	}
-
 
 	render() {
 		const { error, isLoading } = this.props;
@@ -142,38 +106,7 @@ class Login extends Component {
 				</View>
 				<View style={styles.formContainer}>
 
-					<TextInput
-						returnKeyType='next'
-						placeholder='Email'
-						placeholderTextColor='rgb(38, 8, 7)'
-						style={styles.input}
-						keyboardType='email-address'
-						autoCorrect={false}
-						autoCapitalize='none'
-						onChangeText={(text) => this.setState({ email: text })}
-						onSubmitEditing={() => this.passwordInput.focus()}
-					/>
-
-					<TextInput
-						returnKeyType='go'
-						placeholder='Password'
-						placeholderTextColor='rgb(38, 8, 7)'
-						secureTextEntry
-						onChangeText={(text) => this.setState({ password: text })}
-						ref={(input) => this.passwordInput = input}
-						style={styles.input} />
-
-					<Button full
-						style={styles.buttonSubmit}
-						onPress={() => this.loginHandler()}
-						title="Submit"
-						large >
-						<Text>Login</Text>
-					</Button>
-
-					<TouchableOpacity style={styles.linkForgotPassword}>
-						<Text >Forgotten password?</Text>
-					</TouchableOpacity>
+					<LoginForm onSubmit={this.loginHandler} />
 
 				</View>
 			</KeyboardAvoidingView>
@@ -204,29 +137,6 @@ const styles = StyleSheet.create({
 		height: 250,
 		width: 250
 	},
-
-	linkForgotPassword: {
-		//color: '#200705',
-		alignItems: 'center',
-		flexGrow: 1,
-		//justifyContent: 'center',
-		marginTop: 20,
-	},
-
-	buttonSubmit: {
-		backgroundColor: '#200705',
-		alignItems: 'center',
-		justifyContent: 'center',
-		height: 50,
-	},
-
-	input: {
-		height: 50,
-		backgroundColor: 'rgba(255, 255, 255, 0.2)',
-		marginBottom: 20,
-		color: '#200705',
-		paddingHorizontal: 20,
-	}
 });
 
 //Redux configuration

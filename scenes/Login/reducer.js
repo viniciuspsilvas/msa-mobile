@@ -8,6 +8,7 @@ import {
 const initialState = {
     isLoading: true,
     error: null,
+    credential: {}
 };
 
 export default function loginReducer(state = initialState, action = {}) {
@@ -16,17 +17,16 @@ export default function loginReducer(state = initialState, action = {}) {
     switch (type) {
 
         case TOGLE_LOADING:
-
-            return Object.assign({}, state, { isLoading: payload? payload: !state.isLoading })
+            return { ...state, isLoading: payload ? payload : !state.isLoading };
 
         case FETCH_LOGIN_BEGIN:
-            return Object.assign({}, state, { isLoading: true })
+            return { ...state, isLoading: true };
 
         case FETCH_LOGIN_SUCCESS:
-            return Object.assign({}, state, { isLoading: false })
+            return { ...state, isLoading: false, credential: payload };
 
         case FETCH_LOGIN_FAILURE:
-            return Object.assign({}, state, { isLoading: false, error: payload })
+            return { ...state, isLoading: false, error: payload };
 
         default:
             // ALWAYS have a default case in a reducer

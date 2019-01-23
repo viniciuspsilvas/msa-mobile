@@ -1,6 +1,8 @@
 import React from 'react'
 import { Animated, Easing, Button, View, Text, SafeAreaView, ScrollView, Dimensions, Image, StyleSheet } from 'react-native';
-import {Container, Content, Header, Body, Icon} from 'native-base';
+import { Icon } from 'native-base';
+
+import { connect } from "react-redux";
 
 import { createDrawerNavigator, createStackNavigator, DrawerItems } from 'react-navigation'
 
@@ -14,6 +16,8 @@ import Info from './scenes/Info'
 import Attendance from './scenes/Attendance'
 import FindUs from './scenes/Find_Us'
 import Schedule from './scenes/Schedule'
+
+
 
 
 // login stack
@@ -40,23 +44,23 @@ const DrawerStack = createDrawerNavigator({
   findUs: { screen: FindUs },
   schedule: { screen: Schedule },
 }, {
-  gesturesEnabled: false,
-  contentComponent: (props) => (
-    <ScrollView>
+    gesturesEnabled: false,
+    contentComponent: (props) => (
+      <ScrollView>
         <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
-            <Image source={require('./assets/icon.png')} style={{ height: 120, width: 120, borderRadius: 60 }}>
-            </Image>
+          <Image source={require('./assets/icon.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
+        
         </View>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-            <DrawerItems {...props} />
+          <DrawerItems {...props} />
         </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
     )
-})
+  })
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
+    flex: 1,
   }
 });
 
@@ -69,7 +73,7 @@ const DrawerNavigation = createStackNavigator({
       headerStyle: { backgroundColor: '#E54236' },
       title: 'Mindroom Student APP',
       gesturesEnabled: false,
-      headerLeft: <Icon name="md-menu" size={30} style={{paddingLeft:16}} color='black' onPress={() => navigation.toggleDrawer()} /> 
+      headerLeft: <Icon name="md-menu" size={30} style={{ paddingLeft: 16 }} color='black' onPress={() => navigation.toggleDrawer()} />
     })
   })
 
@@ -96,4 +100,14 @@ const PrimaryNav = createStackNavigator({
     },
   })
 
-export default PrimaryNav
+
+//Redux configuration
+const mapStateToProps = state => {
+  return {
+      ...state.loginReducer,
+  };
+};
+
+
+
+export default (PrimaryNav);
