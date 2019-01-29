@@ -6,9 +6,9 @@ import {
 } from './actions';
 
 const initialState = {
-    isLoading: true,
+    isLoading: false,
     error: null,
-    credential: {}
+    userDetails: {}
 };
 
 export default function loginReducer(state = initialState, action = {}) {
@@ -23,7 +23,7 @@ export default function loginReducer(state = initialState, action = {}) {
             return { ...state, isLoading: true };
 
         case FETCH_LOGIN_SUCCESS:
-            return { ...state, isLoading: false, credential: payload };
+            return { ...state, isLoading: false, userDetails: payload };
 
         case FETCH_LOGIN_FAILURE:
             return { ...state, isLoading: false, error: payload };

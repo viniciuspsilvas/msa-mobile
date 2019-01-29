@@ -1,6 +1,6 @@
 import React from 'react';
 import { Root } from 'native-base';
-import AppNavigation from './AppNavigation'
+import AppNavigation from './app/AppNavigation'
 
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
@@ -17,7 +17,32 @@ const store = createStore(rootReducer, /* preloadedState, */ composeEnhancers(
 ));
 
 export default class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+
+            user: {},
+            isLoading: true
+        };
+    }
+
+    // Workaround to solve the problem related to font 'Roboto_medium'
+    async componentWillMount() {
+        await Expo.Font.loadAsync({
+            Roboto: require("native-base/Fonts/Roboto.ttf"),
+            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+            Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
+        });
+
+        this.setState({ isLoading: false });
+    }
     render() {
+
+        if (this.state.isLoading) {
+            return <Expo.AppLoading />;
+        }
+
         return <Provider store={store}>
             <Root>
                 <AppNavigation />
@@ -26,3 +51,4 @@ export default class App extends React.Component {
 
     }
 }
+

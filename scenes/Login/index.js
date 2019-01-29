@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { Text, Toast } from 'native-base';
-import { Button, View, StyleSheet, Image, KeyboardAvoidingView } from 'react-native';
-import Expo, { Permissions, Notifications } from 'expo';
+import { Toast } from 'native-base';
+import { View, StyleSheet, Image, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import { Permissions, Notifications } from 'expo';
 import { connect } from "react-redux";
 
 import LoginForm from "./components/LoginForm"
 
 import Loader from "../../components/Loader"
 import { loginMoodle, togleLoading } from "./actions";
+
+import { saveUserDetails } from "../Main/actions"
+
 
 class Login extends Component {
 
@@ -48,18 +51,6 @@ class Login extends Component {
 		this.setState({ tokenAdvice: tokenAdvice, adviceDesc: adviceDesc });
 	}
 
-	// Workaround to solve the problem related to font 'Roboto_medium'
-	async componentWillMount() {
-		await Expo.Font.loadAsync({
-			Roboto: require("native-base/Fonts/Roboto.ttf"),
-			Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-			Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
-		});
-
-		this.props.togleLoading(false);
-	}
-	// ##### FIM do workaround 
-
 	loginHandler = (values) => {
 
 		const { email, password } = values;
@@ -70,18 +61,36 @@ class Login extends Component {
 
 		var self = this;
 
-		let credential = {
+		let userDetails = {
 			//login: email,
 			//password: password,
 
-			login: "glaucomp@hotmail.coms",
+			login: "glaucomp@hotmail.com",
 			password: "Password123!",
 
 			tokenAdvice: tokenAdvice,
 			adviceDesc: adviceDesc
 		}
 
-		this.props.loginMoodle(credential);
+		this.props.loginMoodle(userDetails).then(res => {
+
+			const credential = res.payload.credential
+			const userDetails = credential.data.return;
+
+			if (credential.status === 200) {
+				//this.props.saveUserDetails(userDetails);
+				//registerForPushNotificationsAsync(userId);
+
+				self.props.navigation.navigate('AppStack');
+
+			} else {
+				Toast.show({
+					text: "Username/password invalid!",
+					buttonText: "Okay",
+					duration: 3000
+				})
+			}
+		})
 
 	}
 
@@ -90,7 +99,7 @@ class Login extends Component {
 
 		if (isLoading) { return <Loader loading={isLoading} /> }
 		if (error) {
-			Toast.show({
+			Toast.show({ // TODO - remove this code
 				text: "Username/password invalid!",
 				buttonText: "Okay",
 				duration: 3000
@@ -145,7 +154,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-	loginMoodle: (credential) => dispatch(loginMoodle(credential)),
+	loginMoodle: (userDetails) => dispatch(loginMoodle(userDetails)),
+	saveUserDetails: (userDetails) => dispatch(saveUserDetails(userDetails)),
+
 	togleLoading: () => dispatch(togleLoading()),
 
 })

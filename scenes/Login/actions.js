@@ -7,11 +7,11 @@ export const FETCH_LOGIN_FAILURE = 'FETCH_LOGIN_FAILURE';
 
 export const TOGLE_LOADING = 'TOGLE_LOADING';
 
-export const loginMoodle = (credential) => (dispatch) => {
+export const loginMoodle = (userDetails) => (dispatch) => {
 
     dispatch(fetchLoginMoodlesBegin())
-    return axios.post(config.backend.loginMoodle, { "credencial": credential })
-        .then(res => dispatch(fetchLoginMoodlesSuccess(res)))
+    return axios.post(config.backend.loginMoodle, { "userDetails": userDetails })
+        .then(res =>  dispatch(fetchLoginMoodlesSuccess(res)))
         .catch(err => dispatch(fetchLoginMoodlesFailure(err)));
 
 }

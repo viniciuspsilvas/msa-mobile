@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Image } from 'react-native';
+import { Icon, Button, Badge } from 'native-base';
 
-import { Icon, Button, Badge, Left } from 'native-base';
-
-
-export default class Login extends Component {
+export default class Home extends Component {
 
     static navigationOptions = {
         drawerLabel: 'Home',
@@ -18,7 +16,7 @@ export default class Login extends Component {
                 <Text style={styles.textWelcome}>Welcome to Mindroom Student APP. </Text>
                 <Text style={styles.textContainer}>Here you cand find important info as your attedance, class schedule, notifications, our address and more.</Text>
 
-                <Button block info>
+                <Button block info >
                         <Badge info>
                             <Text>2</Text>
                         </Badge>
@@ -28,8 +26,6 @@ export default class Login extends Component {
         );
     }
 }
-
-
 
 const styles = StyleSheet.create({
     textWelcome: {
