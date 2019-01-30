@@ -59,19 +59,17 @@ class Login extends Component {
 		var self = this;
 
 		let userDetails = {
-			//login: email,
-			//sdfdspassword: password,
+			login: email,
+			sdfdspassword: password,
 
-			login: "glaucomp@hotmail.com",
-			password: "Password123!",
+			//login: "glaucomp@hotmail.com",
+			//password: "Password123!",
 
 			tokenAdvice: tokenAdvice,
 			adviceDesc: adviceDesc
 		}
 
 		this.props.loginMoodle(userDetails).then(res => {
-
-			console.log(22222, res)
 
 			if (res.userDetails.status === 200) {
 				//registerForPushNotificationsAsync(userId);
