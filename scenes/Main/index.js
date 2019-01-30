@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { getUserDetails } from './actions';
+import { getUserDetails } from '../Login/actions';
 
 class MainContainer extends React.Component {
 
@@ -26,7 +26,7 @@ class MainContainer extends React.Component {
   _bootstrapAsync = () => {
 
     this.props.getUserDetails().then(() => {
-      this.props.navigation.navigate(this.props.mainReducer.userDetails !== null ? 'AppStack' : 'AuthStack');
+      this.props.navigation.navigate(this.props.loginReducer.userDetails !== null ? 'AppStack' : 'AuthStack');
     })
       .catch(error => {
         this.setState({ error })
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  mainReducer: state.mainReducer,
+  loginReducer: state.loginReducer,
 });
 
 

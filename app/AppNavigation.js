@@ -14,6 +14,8 @@ import Schedule from '../scenes/Schedule'
 import MainContainer from '../scenes/Main'
 import Login from '../scenes/Login'
 
+import Username from "../components/Username"
+import LogoutButton from "../components/LogoutButton"
 
 
 // drawer Navigator
@@ -31,21 +33,11 @@ const AppDrawerStack = createDrawerNavigator({
       <ScrollView>
         <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
           <Image source={require('../assets/icon.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
-          <Text style={styles.headline}>nameUser</Text>
+           <Username />
         </View>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItems {...props} />
-          <TouchableOpacity
-            onPress={() => {
-
-              props.removeUserToken()
-                .then(() => {
-                  props.navigation.navigate('Auth');
-                })
-
-            }}>
-            <Text style={styles.headline}>Log out</Text>
-          </TouchableOpacity>
+          <LogoutButton {...props}/>
         </SafeAreaView>
       </ScrollView>
     )
@@ -54,18 +46,12 @@ const AppDrawerStack = createDrawerNavigator({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  headline: {
-    textAlign: 'center',
-    fontSize: 14,
-    marginTop: 20,
-
   }
 }
 );
 
 /* Create a Drawer (Menu) and its metadatas */
-const AppStack = createStackNavigator({
+ const AppStack = createStackNavigator({
   DrawerStack: { screen: AppDrawerStack }
 }, {
     headerMode: 'float',

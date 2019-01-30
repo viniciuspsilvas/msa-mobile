@@ -9,9 +9,6 @@ import LoginForm from "./components/LoginForm"
 import Loader from "../../components/Loader"
 import { loginMoodle, togleLoading } from "./actions";
 
-import { saveUserDetails } from "../Main/actions"
-
-
 class Login extends Component {
 
 	/* Contructor */
@@ -63,7 +60,7 @@ class Login extends Component {
 
 		let userDetails = {
 			//login: email,
-			//password: password,
+			//sdfdspassword: password,
 
 			login: "glaucomp@hotmail.com",
 			password: "Password123!",
@@ -74,14 +71,13 @@ class Login extends Component {
 
 		this.props.loginMoodle(userDetails).then(res => {
 
-			const credential = res.payload.credential
-			const userDetails = credential.data.return;
+			console.log(22222, res)
 
-			if (credential.status === 200) {
-				//this.props.saveUserDetails(userDetails);
+			if (res.userDetails.status === 200) {
 				//registerForPushNotificationsAsync(userId);
-
 				self.props.navigation.navigate('AppStack');
+
+				AsyncStorage.setItem('userDetails', JSON.stringify(res.userDetails.data.return));
 
 			} else {
 				Toast.show({
@@ -155,7 +151,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
 	loginMoodle: (userDetails) => dispatch(loginMoodle(userDetails)),
-	saveUserDetails: (userDetails) => dispatch(saveUserDetails(userDetails)),
 
 	togleLoading: () => dispatch(togleLoading()),
 

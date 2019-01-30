@@ -2,7 +2,10 @@ import {
     FETCH_LOGIN_BEGIN,
     FETCH_LOGIN_SUCCESS,
     FETCH_LOGIN_FAILURE,
-    TOGLE_LOADING
+    TOGLE_LOADING,
+    GET_USER_LOGGED,
+    REMOVE_USER_LOGGED
+
 } from './actions';
 
 const initialState = {
@@ -12,7 +15,7 @@ const initialState = {
 };
 
 export default function loginReducer(state = initialState, action = {}) {
-    const { type, payload } = action;
+    const { type, payload, userDetails } = action;
 
     switch (type) {
 
@@ -23,14 +26,19 @@ export default function loginReducer(state = initialState, action = {}) {
             return { ...state, isLoading: true };
 
         case FETCH_LOGIN_SUCCESS:
-            return { ...state, isLoading: false, userDetails: payload };
+            return { ...state, isLoading: false, userDetails: userDetails.data.return };
 
         case FETCH_LOGIN_FAILURE:
             return { ...state, isLoading: false, error: payload };
+
+        case GET_USER_LOGGED:
+            return { ...state, userDetails };
+
+        case REMOVE_USER_LOGGED:
+            return { ...state, userDetails : {}};
 
         default:
             // ALWAYS have a default case in a reducer
             return state;
     }
 }
-
