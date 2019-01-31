@@ -60,7 +60,7 @@ class Login extends Component {
 
 		let userDetails = {
 			login: email,
-			sdfdspassword: password,
+			password: password,
 
 			//login: "glaucomp@hotmail.com",
 			//password: "Password123!",
@@ -71,7 +71,7 @@ class Login extends Component {
 
 		this.props.loginMoodle(userDetails).then(res => {
 
-			if (res.userDetails.status === 200) {
+			if (res.userDetails =! null && res.userDetails.status === 200) {
 				//registerForPushNotificationsAsync(userId);
 				self.props.navigation.navigate('AppStack');
 
@@ -94,10 +94,12 @@ class Login extends Component {
 		if (isLoading) { return <Loader loading={isLoading} /> }
 		if (error) {
 			Toast.show({ // TODO - remove this code
-				text: "Username/password invalid!",
+				text: "Error!",
 				buttonText: "Okay",
 				duration: 3000
 			})
+			
+			console.error(error)
 		}
 
 		return (
