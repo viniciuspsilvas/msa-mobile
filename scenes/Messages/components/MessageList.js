@@ -1,18 +1,21 @@
 import React from 'react';
-import { View } from 'native-base';
-
-import MessageCard from './MessageCard'
+import { List, ListItem, Body, Right, Text } from 'native-base';
 
 export default props =>
     (
-        <View>
-            { props.list.message && 
-                props.list.message.map(message => <MessageCard key={message.id}
-                    title={message.title}
-                    body={message.body}
-                    createdAt={message.createdAt}
-                    category={message.category}
-                />)
+        <List>
+            {props.list &&
+                props.list.map(message =>
+                    <ListItem key={message.id} >
+                        <Body>
+                            <Text>{message.title}</Text>
+                            <Text note>{message.body}</Text>
+                        </Body>
+                        <Right>
+                            <Text note>{ new Date(message.createdAt).toLocaleDateString() }</Text>
+                        </Right>
+                    </ListItem>
+                )
             }
-        </View>
+        </List>
     )

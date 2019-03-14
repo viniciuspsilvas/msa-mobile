@@ -1,37 +1,48 @@
 import React, { Component } from 'react';
-import { Container, Content, Icon, Text, View } from 'native-base';
+import { Container, Content, Icon, Text, View, H1 } from 'native-base';
 import { connect } from "react-redux";
+import { StyleSheet } from 'react-native'
 
 import { getMessagesList } from "./actions"
 
+import MessageCardList from './components/MessageCardList'
 import MessageList from './components/MessageList'
+
+//import styles from './Stylestyle'
+
+let count = 0;
+
 
 class Messages extends Component {
 
-    static navigationOptions = {
+    static navigationOptions = ({ navigations }) => ({
         drawerLabel: 'Messages',
         drawerIcon: () => (<Icon type='Ionicons' name='ios-chatboxes' />)
-    };
+    });
+
 
     /*
     Constructor 
     */
     constructor(props) {
         super(props);
+
+        this.state = {
+            msgUnreadList: [],
+            msgList: []
+        };
     }
 
     componentDidMount() {
         const { userDetails } = this.props;
 
-        const filter = { params: { filter: `{"where":{"studentId":"` + userDetails.id + `"} , "order":"createdAt DESC"}` } }
+        this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
 
-        this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(filter));
+        this.props.navigation.addListener('willFocus', () => console.log("COUNT => ", ++count));
+        
     }
 
     componentWillUnmount() {
-        /*         this.subs.forEach((sub) => {
-                  sub.remove();
-                }); */
     }
 
     render() {
@@ -40,11 +51,24 @@ class Messages extends Component {
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
         if (isLoading) { return <View><Text>Loading...</Text></View> }
 
+        var msgUnreadList;
+        var msgList;
+
+        if (messagesList.message){
+             msgUnreadList = messagesList.message.filter(msg => !msg.isRead);
+             msgList = messagesList.message.filter(msg => msg.isRead);
+        }
+    
         return (
-            <Container>
+            <Container style={styles.container}>
                 <Content>
-                    <Text>Messages...</Text>
-                    <MessageList list={messagesList} />
+
+                    <Text style={styles.title}>Messages</Text>
+
+                    {messagesList.message <=0 && <Text>No messages.</Text>}
+
+                    <MessageCardList list={msgUnreadList} />
+                    <MessageList list={msgList} />
                 </Content>
             </Container>
         );
@@ -66,3 +90,16 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Messages);
+
+
+const styles = StyleSheet.create({
+    container: {
+        margin: 10,
+    },
+
+    title: {
+        margin: 10,
+        fontSize: 19,
+        fontWeight: 'bold',
+    }
+})

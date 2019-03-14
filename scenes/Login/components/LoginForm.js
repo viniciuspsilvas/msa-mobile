@@ -1,7 +1,9 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 
-import { View, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+
+import { Button, Text } from 'native-base';
 
 import { inputLabeled } from "../../../components/InputLabeled"
 import { required, email } from "../../../util/validators"
@@ -20,6 +22,7 @@ const LoginForm = props => {
                     component={inputLabeled}
                     validate={[required, email]}
                     autoFocus
+                    textContentType="username"
                 />
             </View>
             <View style={styles.password} >
@@ -27,17 +30,21 @@ const LoginForm = props => {
                     name="password"
                     label="Password"
                     component={inputLabeled}
-                    type="password"
+                    secureTextEntry={true} 
+                    textContentType="password"
                     validate={[required]}
                 />
             </View>
             <View style={styles.button} >
-                <Button
+                <Button dark full
                     style={styles.buttonSubmit}
                     onPress={handleSubmit}
+                    bordered={pristine || submitting}
                     disabled={pristine || submitting}
-                    title="Login"
-                />
+                    color="black">
+
+                    <Text>Login</Text>
+                </Button>
             </View>
 
             <View style={styles.button} >
@@ -64,10 +71,12 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     button: {
-        marginTop: 15,
+        marginTop: 55,
     },
     buttonSubmit: {
-        
+        borderColor: 'black',
+        borderWidth: 1,
+        color: 'black',
     },
 
     linkForgotPassword: {

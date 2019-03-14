@@ -3,6 +3,8 @@ import { Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from
 
 import PropTypes from 'prop-types';
 
+import { getDaysFromDate } from "../../../util/dateTime"
+
 export default class MessageCard extends Component {
 
     constructor(props) {
@@ -12,11 +14,10 @@ export default class MessageCard extends Component {
     render() {
         const { title, body, createdAt, category } = this.props;
 
-        let dateNew = new Date(createdAt);
         let icon = this.getIcon(category);
 
-        var res = Math.abs(Date.now() - dateNew) / 1000;
-        var days = Math.floor(res / 86400);
+        let dateNew = new Date(createdAt);
+        var days = getDaysFromDate(createdAt)
 
         return (
             <Card>

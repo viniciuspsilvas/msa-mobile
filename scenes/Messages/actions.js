@@ -22,7 +22,11 @@ export const fetchMessagesFailure = error => ({
 });
 
 // Action creator
-export function getMessagesList(filter) {
+export function getMessagesList(userDetails) {
+
+    const filter = { params: { filter: `{"where":{"studentId":"` + userDetails.id + `"} , "order":"createdAt DESC"}` } }
+
+
     return dispatch => {
         dispatch(fetchMessagesBegin());
 

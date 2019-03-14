@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Toast } from 'native-base';
-import { View, StyleSheet, Image, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Image, KeyboardAvoidingView, AsyncStorage, Text } from 'react-native';
 import { Permissions, Notifications } from 'expo';
+
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux'
 
 import LoginForm from "./components/LoginForm"
 
@@ -59,8 +61,8 @@ class Login extends Component {
 		var self = this;
 
 		let userDetails = {
-			login: email,
-			password: password,
+			login: email.trim(),
+			password: password.trim(),
 
 			//login: "glaucomp@hotmail.com",
 			//password: "Password123!",
@@ -70,19 +72,18 @@ class Login extends Component {
 		}
 
 		this.props.loginMoodle(userDetails).then(res => {
+			const { error } = this.props;
 
-			if (res.userDetails =! null && res.userDetails.status === 200) {
-				//registerForPushNotificationsAsync(userId);
+			
+			if (res) {
+				AsyncStorage.setItem('userDetails', JSON.stringify(res.payload));
 				self.props.navigation.navigate('AppStack');
-
-				AsyncStorage.setItem('userDetails', JSON.stringify(res.userDetails.data.return));
-
-			} else {
-				Toast.show({
-					text: "Username/password invalid!",
+			} else if (error) {
+				Toast.show({ // TODO - remove this code
+					text: error.error,
 					buttonText: "Okay",
 					duration: 3000
-				})
+				});
 			}
 		})
 
@@ -92,15 +93,6 @@ class Login extends Component {
 		const { error, isLoading } = this.props;
 
 		if (isLoading) { return <Loader loading={isLoading} /> }
-		if (error) {
-			Toast.show({ // TODO - remove this code
-				text: "Error!",
-				buttonText: "Okay",
-				duration: 3000
-			})
-			
-			console.error(error)
-		}
 
 		return (
 			<KeyboardAvoidingView behavior='padding' style={styles.container}>
@@ -146,14 +138,18 @@ const styles = StyleSheet.create({
 
 //Redux configuration
 const mapStateToProps = state => {
-	return state.loginReducer;
+	return {
+		userDetails: state.loginReducer.userDetails,
+		error: state.loginReducer.error
+	};
 };
 
-const mapDispatchToProps = dispatch => ({
-	loginMoodle: (userDetails) => dispatch(loginMoodle(userDetails)),
-
-	togleLoading: () => dispatch(togleLoading()),
-
-})
+const mapDispatchToProps = dispatch => bindActionCreators(
+	{
+		loginMoodle,
+		togleLoading,
+	},
+	dispatch,
+)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

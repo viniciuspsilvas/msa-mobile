@@ -13,9 +13,32 @@ export const REMOVE_USER_LOGGED = 'REMOVE_USER_LOGGED';
 export const loginMoodle = (userDetails) => (dispatch) => {
 
     dispatch(fetchLoginMoodlesBegin())
+
     return axios.post(config.backend.loginMoodle, { "userDetails": userDetails })
-        .then(res => dispatch(fetchLoginMoodlesSuccess(res)))
-        .catch(err => dispatch(fetchLoginMoodlesFailure(err)));
+
+        .then(res => dispatch(fetchLoginMoodlesSuccess(res.data.return)))
+
+        .catch(function (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                // Falha no servidor
+
+                dispatch(fetchLoginMoodlesFailure(error.response.data.error.message))
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+
+                // Falha na requisicao
+                dispatch(fetchLoginMoodlesFailure(error.message))
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('3333 Error', error.message);
+            }
+
+            console.log("### ERROR Login: ", error.config); // tratamento geral de erro
+        });
 }
 
 // Action
@@ -26,7 +49,7 @@ export const fetchLoginMoodlesBegin = () => ({
 // Action
 export const fetchLoginMoodlesSuccess = userDetails => ({
     type: FETCH_LOGIN_SUCCESS,
-    userDetails
+    payload: userDetails
 });
 
 export const fetchLoginMoodlesFailure = error => ({
