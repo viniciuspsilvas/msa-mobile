@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Toast } from 'native-base';
-import { View, StyleSheet, Image, KeyboardAvoidingView, AsyncStorage, Text, Button } from 'react-native';
+import { AsyncStorage , Alert } from 'react-native';
 import { Permissions, Notifications } from 'expo';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 
 import LoginForm from "./components/LoginForm"
+
 
 import Loader from "../../components/Loader"
 import { loginMoodle, togleLoading } from "./actions";
@@ -50,8 +51,10 @@ class Login extends Component {
 		this.setState({ tokenAdvice: tokenAdvice, adviceDesc: adviceDesc });
 	}
 
-	loginHandler = (values) => {
+	loginHandler = () => {
 
+		Alert.alert('You tapped the button!')
+/* 
 		const { email, password } = values;
 
 		// Get the token that uniquely identifies this device
@@ -85,8 +88,7 @@ class Login extends Component {
 					duration: 3000
 				});
 			}
-		})
-
+		}) */
 	}
 
 	render() {
@@ -95,51 +97,11 @@ class Login extends Component {
 		if (isLoading) { return <Loader loading={isLoading} /> }
 
 		return (
-			<KeyboardAvoidingView behavior='padding' style={styles.container}>
-
-				{process.env.NODE_ENV.trim() === "development" &&
-					<Button
-						title="Storybook"
-						onPress={() => this.props.navigation.navigate('Storybook')}
-					/>
-				}
-
-				<View style={styles.logoContainer}>
-					<Image source={require('../../assets/Logo_vert.png')} style={styles.logo} />
-				</View>
-				<View style={styles.formContainer}>
-					<LoginForm onSubmit={this.loginHandler} />
-				</View>
-
-			</KeyboardAvoidingView>
+			<LoginForm onSubmit={this.loginHandler} />
+			
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#E54236',
-	},
-
-	logoContainer: {
-		alignItems: 'center',
-		flexGrow: 1,
-		justifyContent: 'center'
-	},
-
-	formContainer: {
-		padding: 20,
-		flexGrow: 1,
-		justifyContent: 'center',
-		//alignItems: 'center'
-	},
-
-	logo: {
-		height: 250,
-		width: 250
-	},
-});
 
 //Redux configuration
 const mapStateToProps = state => {

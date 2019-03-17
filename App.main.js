@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Text, Button } from 'react-native';
 import AppNavigation from './app/AppNavigation'
 
 import { Provider } from "react-redux";
@@ -9,6 +8,8 @@ import thunk from "redux-thunk";
 import { createLogger } from "redux-logger";
 
 import rootReducer from "./rootReducer";
+
+import  StorybookUIRoot from './storybook';
 
 const logger = createLogger();
 
