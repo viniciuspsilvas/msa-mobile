@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { Text, View } from 'react-native';
-//import { Root } from 'native-base';
+import { Text, Button } from 'react-native';
 import AppNavigation from './app/AppNavigation'
 
 import { Provider } from "react-redux";

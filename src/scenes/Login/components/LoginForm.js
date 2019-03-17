@@ -1,7 +1,9 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+
+import styles from './style'
 
 import { Button, Text } from 'native-base';
 
@@ -30,7 +32,7 @@ const LoginForm = props => {
                     name="password"
                     label="Password"
                     component={inputLabeled}
-                    secureTextEntry={true} 
+                    secureTextEntry={true}
                     textContentType="password"
                     validate={[required]}
                 />
@@ -58,35 +60,7 @@ const LoginForm = props => {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'stretch',
 
-    },
-    name: {
-    },
-    password: {
-        marginTop: 15,
-    },
-    button: {
-        marginTop: 55,
-    },
-    buttonSubmit: {
-        borderColor: 'black',
-        borderWidth: 1,
-        color: 'black',
-    },
-
-    linkForgotPassword: {
-        //color: '#200705',
-        alignItems: 'center',
-        flexGrow: 1,
-        //justifyContent: 'center',
-        marginTop: 20,
-    },
-});
 
 export default reduxForm({
     form: 'loginForm',// a unique identifier for this form

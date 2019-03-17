@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Toast } from 'native-base';
-import { View, StyleSheet, Image, KeyboardAvoidingView, AsyncStorage, Text } from 'react-native';
+import { View, StyleSheet, Image, KeyboardAvoidingView, AsyncStorage, Text, Button } from 'react-native';
 import { Permissions, Notifications } from 'expo';
 
 import { connect } from "react-redux";
@@ -74,7 +74,7 @@ class Login extends Component {
 		this.props.loginMoodle(userDetails).then(res => {
 			const { error } = this.props;
 
-			
+
 			if (res) {
 				AsyncStorage.setItem('userDetails', JSON.stringify(res.payload));
 				self.props.navigation.navigate('AppStack');
@@ -97,15 +97,20 @@ class Login extends Component {
 		return (
 			<KeyboardAvoidingView behavior='padding' style={styles.container}>
 
+				{process.env.NODE_ENV.trim() === "development" &&
+					<Button
+						title="Storybook"
+						onPress={() => this.props.navigation.navigate('Storybook')}
+					/>
+				}
+
 				<View style={styles.logoContainer}>
 					<Image source={require('../../assets/Logo_vert.png')} style={styles.logo} />
-
 				</View>
 				<View style={styles.formContainer}>
-
 					<LoginForm onSubmit={this.loginHandler} />
-
 				</View>
+
 			</KeyboardAvoidingView>
 		);
 	}

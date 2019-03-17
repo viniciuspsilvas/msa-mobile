@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '../../config/config'
+import config from '../../../config/config'
 
 export const FETCH_MESSAGE_BEGIN = 'FETCH_MESSAGE_BEGIN';
 export const FETCH_MESSAGE_SUCCESS = 'FETCH_MESSAGE_SUCCESS';

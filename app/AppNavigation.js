@@ -3,19 +3,21 @@ import { Animated, Easing, View, Text, SafeAreaView, ScrollView, Image, StyleShe
 import { Icon } from 'native-base';
 import { createAppContainer, createDrawerNavigator, createStackNavigator, DrawerItems, createSwitchNavigator } from 'react-navigation'
 
-import ForgottenPassword from '../scenes/Login/scenes/ForgottenPassword'
-import Home from '../scenes/Home'
-import Messages from '../scenes/Messages'
-import Info from '../scenes/Info'
-import Attendance from '../scenes/Attendance'
-import FindUs from '../scenes/Find_Us'
-import Schedule from '../scenes/Schedule'
+import ForgottenPassword from '../src/scenes/Login/scenes/ForgottenPassword'
+import Home from '../src/scenes/Home'
+import Messages from '../src/scenes/Messages'
+import Info from '../src/scenes/Info'
+import Attendance from '../src/scenes/Attendance'
+import FindUs from '../src/scenes/Find_Us'
+import Schedule from '../src/scenes/Schedule'
 
-import MainContainer from '../scenes/Main'
-import Login from '../scenes/Login'
+import MainContainer from '../src/scenes/Main'
+import Login from '../src/scenes/Login'
 
-import Username from "../components/Username"
-import LogoutButton from "../components/LogoutButton"
+import Username from "../src/components/Username"
+import LogoutButton from "../src/components/LogoutButton"
+
+import  StorybookUIRoot from '../storybook';
 
 
 // drawer Navigator
@@ -32,7 +34,7 @@ const AppDrawerStack = createDrawerNavigator({
     contentComponent: (props) => (
       <ScrollView>
         <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
-          <Image source={require('../assets/icon.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
+          <Image source={require('../src/assets/icon.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
            <Username />
         </View>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -96,6 +98,7 @@ export default createAppContainer(createSwitchNavigator(
     MainContainer: MainContainer,
     AppStack: AppStack,
     AuthStack: AuthStack,
+    Storybook: StorybookUIRoot
   },
   {
     initialRouteName: 'MainContainer',

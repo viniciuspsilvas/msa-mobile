@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '../../config/config'
+import config from '../../../config/config'
 import { AsyncStorage } from 'react-native';
 
 export const FETCH_LOGIN_BEGIN = 'FETCH_LOGIN_BEGIN';
