@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItem, Body, Center, Right, Text } from 'native-base';
+import { List, ListItem, Body, Right, Text } from 'native-base';
 
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,11 +13,11 @@ export default props =>
                 props.list.map(message =>
                     <ListItem key={message.id} >
 
-                            {message.isRead ? (
-                                <Icon name='envelope' size={30} type='font-awesome' />
-                            ) : (
-                                    <Icon  name='envelope-open' size={30} type='font-awesome'/>
-                                )}
+                        {message.isRead ? (
+                            <Icon name='envelope' size={30} type='font-awesome' />
+                        ) : (
+                                <Icon name='envelope-open' size={30} type='font-awesome' />
+                            )}
                         <Body>
 
 
@@ -25,12 +25,12 @@ export default props =>
                             <Text note>{message.body}</Text>
                         </Body>
 
-                            <Button
-                                titleStyle={styles.titleStyle}
-                                buttonStyle={styles.buttonOpen}
-                                type="outline"
-                                title='+'
-                            />
+                        <Button
+                            titleStyle={styles.titleStyle}
+                            buttonStyle={styles.buttonOpen}
+                            type="outline"
+                            title='+'
+                        />
 
                         <Right>
                             <Text note>{new Date(message.createdAt).toLocaleDateString()}</Text>
