@@ -18,36 +18,35 @@ class Home extends Component {
     */
     constructor(props) {
         super(props);
+
+        this.state = { qtdMessage: 0 };
     }
 
     componentDidMount() {
         const { userDetails } = this.props;
         this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
+
+        this.setState({
+            //qtdMessage: messagesList.message.filter(msg => !msg.isRead).length
+        });
     }
 
     render() {
-
         const { error, isLoading, messagesList } = this.props;
+        const { qtdMessage } = this.state;
+
+        //const qtdMessage2 = messagesList.length > 0 ? messagesList.message.filter(msg => !msg.isRead).length : 0;
+        console.log("$$$$$-> " + messagesList.length)
 
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
         if (isLoading) { return <View><Text>Loading...</Text></View> }
 
-return (
-            <View style={styles.container}>
-                <Image source={require('../../assets/Logo_vert.png')} style={styles.logo} />
-                <Text style={styles.textWelcome}>Welcome to Mindroom Student APP. </Text>
-                <Text style={styles.textContainer}>Here you cand find important info as your attedance, class schedule, notifications, our address and more.</Text>
+        return (
 
-                {messagesList.message > 0 &&
-                    <Button block info onPress={() => this.props.navigation.navigate("messages")}>
-                        <Badge info>
-                            <Text>{messagesList.message.filter(msg => !msg.isRead).length > 1 && messagesList.message.filter(msg => !msg.isRead).length}</Text>
-                        </Badge>
-                        <Text>New Notifications</Text>
-                    </Button>
-                }
-
-            </View>
+            <HomeScreen
+                qtdMessage={qtdMessage}
+                onClick={() => this.props.navigation.navigate("messages")}
+            />
         );
     }
 }
@@ -67,31 +66,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
-
-const styles = StyleSheet.create({
-    textWelcome: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 20
-    },
-
-    textContainer: {
-        fontSize: 20,
-        //textAlignVertical: 'center',
-        flexGrow: 1,
-        textAlign: 'justify',
-        marginTop: 20
-    },
-
-    logo: {
-        height: 250,
-        width: 250
-    },
-
-    container: {
-        alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'center',
-        padding: 20,
-    },
-});

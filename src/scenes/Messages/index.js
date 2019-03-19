@@ -91,15 +91,3 @@ const mapDispatchToProps = (dispatch) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Messages);
 
-
-const styles = StyleSheet.create({
-    container: {
-        margin: 10,
-    },
-
-    title: {
-        margin: 10,
-        fontSize: 19,
-        fontWeight: 'bold',
-    }
-})

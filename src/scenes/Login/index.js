@@ -51,10 +51,7 @@ class Login extends Component {
 		this.setState({ tokenAdvice: tokenAdvice, adviceDesc: adviceDesc });
 	}
 
-	loginHandler = () => {
-
-		Alert.alert('You tapped the button!')
-/* 
+	loginHandler = (values) => {
 		const { email, password } = values;
 
 		// Get the token that uniquely identifies this device
@@ -88,7 +85,7 @@ class Login extends Component {
 					duration: 3000
 				});
 			}
-		}) */
+		})
 	}
 
 	render() {

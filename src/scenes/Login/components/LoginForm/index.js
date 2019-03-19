@@ -6,6 +6,7 @@ import { View, TouchableOpacity, Image, KeyboardAvoidingView, Text } from 'react
 import styles from './style'
 
 import ButtonLogin from '../ButtonLogin'
+import IconButton from '../IconButton'
 
 import InputLabeled from "../InputLabeled"
 import { required, email } from "../../../../util/validators"
@@ -15,26 +16,28 @@ const LoginForm = props => {
     const resizeMode = 'contain';
 
     return (
-        <View>
-            <KeyboardAvoidingView behavior='position' enabled style={styles.container}>
+        <View style={styles.container}>
 
-                <Image source={require('../../../../assets/red-ball.png')}
-                    style={{
-                        width: '140%',
-                        position: 'absolute',
-                        left: '50%',
-                        right: '50%',
-                        top: -120,
-                        bottom: 0,
-                        resizeMode
-                    }} />
+            <Image source={require('../../../../assets/background2.png')}
+                style={{
+                    position: 'absolute',
+                    width: '100%', height: '100%',
+                    top: 25,
+                }} />
 
+            <KeyboardAvoidingView behavior='position' enabled style={styles.keyboardContainer}>
 
                 <View style={styles.logoContainer}>
-                    <Image source={require('../../../../assets/Logo_vert.png')} style={styles.logo} />
+                    <Image source={require('../../../../assets/Logo_horiz.png')}
+                        style={{
+                            width: '100%',
+                            top: '-20%',
+                            resizeMode
+                        }}
+                    />
                 </View>
 
-                <View>
+                <View >
                     <Field
                         name="email"
                         label="Email"
@@ -44,7 +47,7 @@ const LoginForm = props => {
                     />
                 </View>
 
-                <View>
+                <View style={{ marginTop: 10 }}>
                     <Field
                         name="password"
                         label="Password"
@@ -55,9 +58,10 @@ const LoginForm = props => {
                     />
                 </View>
 
-            </KeyboardAvoidingView>
-            <View style={{ flex: 1,margin: 20,flexDirection: 'row', justifyContent: 'space-between', marginTop: 25, }}>
+                <View style={{ height: 20 }} />
 
+            </KeyboardAvoidingView>
+            <View style={{ flex: 1, marginLeft: 20, marginRight: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View >
                     <TouchableOpacity >
                         <Text style={styles.linkForgotPassword} >Forgot your password</Text>
@@ -69,6 +73,23 @@ const LoginForm = props => {
                         disabled={pristine || submitting}
                     />
                 </View>
+            </View>
+
+            <View style={styles.footerContainer} >
+                <View style={styles.footer} >
+
+                    <Image source={require('../../../../assets/logo3.png')}
+                        style={{
+                            width: '50%',
+                            resizeMode
+                        }} />
+
+
+                    <IconButton iconName='facebook-f' />
+                    <IconButton iconName='instagram' />
+                    <IconButton iconName='youtube' />
+                </View>
+
             </View>
         </View>
     )

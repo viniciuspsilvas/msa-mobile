@@ -4,14 +4,14 @@ export default  StyleSheet.create({
 
     buttonDisabled: {
         backgroundColor: '#ce5c5c',
-        borderColor: '#ce1616',
+        borderColor: '#bcbcbc',
     },
 
     buttonSubmit: {
-        borderColor: '#721010',
+        borderColor: '#ce1616',
         borderWidth: 1,
-        width: 60,
-        height: 60, 
+        width: 50,
+        height: 50, 
         borderRadius: 50,
         backgroundColor: '#e51616',
     },

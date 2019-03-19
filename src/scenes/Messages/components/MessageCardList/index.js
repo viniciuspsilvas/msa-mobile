@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'native-base';
 
-import MessageCard from './MessageCard'
+import MessageCard from '../MessageCard'
 
 export default props =>
     (
