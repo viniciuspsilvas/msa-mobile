@@ -69,4 +69,7 @@ const messageList = [
 storiesOf('MessageList', module)
     .addDecorator(CenterDecorator)
     .add('default', () => <MessageList list={messageList} />)
+    .add('empty list', () => <MessageList list={[]} />)
+    .add('no array', () => <MessageList />)
+    
 

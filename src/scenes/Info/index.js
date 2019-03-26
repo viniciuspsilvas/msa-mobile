@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 
-import { Container, Header, Content, Card, CardItem, Thumbnail, Button, Icon, Left, Body } from 'native-base';
+import {  Card, CardItem, Icon, Body } from 'native-base';
+
+import Title from '../../components/Title';
 
 export default class Info extends Component {
 
@@ -13,6 +15,10 @@ export default class Info extends Component {
     render() {
         return (
             <View style={styles.container}>
+            
+                <Title title='Info' />
+
+
                 <Card style={{ flex: 0 }}>
                     <CardItem>
                         <Body style={styles.cardItemBody}>

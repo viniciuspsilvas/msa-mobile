@@ -17,6 +17,20 @@ const CenterDecorator = storyFn => <View style={{
 
 storiesOf('MessageCard', module)
     .addDecorator(CenterDecorator)
-    .add('info', () => <MessageCard title='Title' body='Body' createdAt={2019-11-22} category='info' />)
-    .add('alert', () => <MessageCard title='Title' body='Body' createdAt={2019-11-22} category='alert' />)
+    .add('info', () =>
+        <MessageCard
+            title='Title'
+            body='Body'
+            createdAt={2019 - 11 - 22}
+            category='info'
+            handleBackButton={() => console.log("Teste")} />)
+
+    .add('alert', () =>
+        <MessageCard
+            title='Title'
+            body='Body'
+            createdAt={2019 - 11 - 22}
+            category='alert'
+            handleBackButton={() => console.log("Teste")} />)
+
 

@@ -5,6 +5,8 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
+  require('../src/components/Title/story');
+  require('../src/scenes/Attendance/components/PieChart/story');
   require('../src/scenes/Home/components/BadgeButton/story');
   require('../src/scenes/Home/components/HomeScreen/story');
   require('../src/scenes/Login/components/ButtonLogin/story');
@@ -14,11 +16,12 @@ function loadStories() {
   require('../src/scenes/Messages/components/MessageCard/story');
   require('../src/scenes/Messages/components/MessageCardList/story');
   require('../src/scenes/Messages/components/MessageList/story');
-  require('../src/scenes/Messages/components/MessagesScreen/story');
   
 }
 
 const stories = [
+  '../src/components/Title/story',
+  '../src/scenes/Attendance/components/PieChart/story',
   '../src/scenes/Home/components/BadgeButton/story',
   '../src/scenes/Home/components/HomeScreen/story',
   '../src/scenes/Login/components/ButtonLogin/story',
@@ -28,7 +31,6 @@ const stories = [
   '../src/scenes/Messages/components/MessageCard/story',
   '../src/scenes/Messages/components/MessageCardList/story',
   '../src/scenes/Messages/components/MessageList/story',
-  '../src/scenes/Messages/components/MessagesScreen/story',
   
 ];
 

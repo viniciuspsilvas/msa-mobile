@@ -5,13 +5,16 @@ const BACKEND_URL= "http://10.0.0.6";
 const FULL_BACKEND_URL = BACKEND_URL + ":"+ BACKEND_PORT;
 
 var backend = {
+
+	// Students API - '/api/Students'
 	students: FULL_BACKEND_URL + '/api/Students',
-	//groupStudents: FULL_BACKEND_URL + '/groupStudents',
-	messages: FULL_BACKEND_URL + '/api/Messages',
-	loginMoodle: FULL_BACKEND_URL + '/api/Students/loginMoodle',
-	
+	loginMoodle: FULL_BACKEND_URL + '/api/Students/loginMoodle',	
 	studentAdvices: FULL_BACKEND_URL + '/api/StudentAdvices',
+	getAttendance: FULL_BACKEND_URL + '/api/Students/getAttendance',
 	
+
+	messages: FULL_BACKEND_URL + '/api/Messages',
+	//groupStudents: FULL_BACKEND_URL + '/groupStudents',
 }
 
 var config = {

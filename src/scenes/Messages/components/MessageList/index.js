@@ -4,13 +4,27 @@ import { List, ListItem, Body, Right, Text } from 'native-base';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import PropTypes from 'prop-types';
+
 import styles from './style'
 
-export default props =>
-    (
+var options = { 
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit'
+ };
+
+
+export default MessageList = ({ list }) =>
+    
+    
+    ( 
         <List>
-            {props.list &&
-                props.list.map(message =>
+
+        {list === undefined || list.length == 0 && <Text>No messages.</Text> }
+
+            {list &&
+                list.map(message =>
                     <ListItem key={message.id} >
 
                         {message.isRead ? (
@@ -33,10 +47,14 @@ export default props =>
                         />
 
                         <Right>
-                            <Text note>{new Date(message.createdAt).toLocaleDateString()}</Text>
+                            <Text note>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</Text>
                         </Right>
                     </ListItem>
                 )
             }
         </List>
     )
+
+MessageList.propTypes = {
+    list: PropTypes.array.isRequired,
+};
