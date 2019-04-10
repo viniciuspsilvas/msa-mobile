@@ -27,8 +27,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "au.edu.mindroom.msa"
     },
-    "description": ""
+    "android": {
+      "package": "au.edu.mindroom.msa"
+    }
   }
 }
