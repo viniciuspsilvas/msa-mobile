@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Toast } from 'native-base';
-import { AsyncStorage , Alert } from 'react-native';
+import { Alert } from 'react-native';
 import { Permissions, Notifications } from 'expo';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 
 import LoginForm from "./components/LoginForm"
-
-
 import Loader from "../../components/Loader"
+
 import { loginMoodle, togleLoading } from "./actions";
 
 class Login extends Component {
@@ -57,45 +55,41 @@ class Login extends Component {
 		// Get the token that uniquely identifies this device
 		let tokenAdvice = this.state.tokenAdvice;
 		let adviceDesc = Expo.Constants.deviceName;
-
-		var self = this;
-
+		
 		let userDetails = {
 			login: email.trim(),
 			password: password.trim(),
-
-			//login: "glaucomp@hotmail.com",
-			//password: "Password123!",
 
 			tokenAdvice: tokenAdvice,
 			adviceDesc: adviceDesc
 		}
 
-		this.props.loginMoodle(userDetails).then(res => {
-			const { error } = this.props;
+		this.props.loginMoodle(userDetails);
+	}
 
 
-			if (res) {
-				AsyncStorage.setItem('userDetails', JSON.stringify(res.payload));
-				self.props.navigation.navigate('AppStack');
-			} else if (error) {
-				Toast.show({ // TODO - remove this code
-					text: error.error,
-					buttonText: "Okay",
-					duration: 3000
-				});
-			}
-		})
+	checkAuth = () => {
+
+		const { isAuthenticated, userDetails } = this.props;
+
+		if (isAuthenticated && userDetails) {
+			this.props.navigation.navigate('AppStack');
+		}
 	}
 
 	render() {
-		const { error, isLoading } = this.props;
+		const { error, isFetching } = this.props;
 
-		if (isLoading) { return <Loader loading={isLoading} /> }
+		if (isFetching) { return <Loader loading={isFetching} /> }
+
+		this.checkAuth();
+
+		if (error) {
+			Alert.alert(error);
+		} 
 
 		return (
 			<LoginForm onSubmit={this.loginHandler} />
-			
 		);
 	}
 }
@@ -103,8 +97,7 @@ class Login extends Component {
 //Redux configuration
 const mapStateToProps = state => {
 	return {
-		userDetails: state.loginReducer.userDetails,
-		error: state.loginReducer.error
+		...state.loginReducer
 	};
 };
 

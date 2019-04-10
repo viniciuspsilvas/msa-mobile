@@ -36,7 +36,6 @@ class Home extends Component {
         const { qtdMessage } = this.state;
 
         //const qtdMessage2 = messagesList.length > 0 ? messagesList.message.filter(msg => !msg.isRead).length : 0;
-        console.log("$$$$$-> " + messagesList.length)
 
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
         if (isLoading) { return <View><Text>Loading...</Text></View> }

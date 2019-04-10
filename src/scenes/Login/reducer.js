@@ -8,34 +8,64 @@ import {
 
 } from './actions';
 
+import { AsyncStorage } from 'react-native';
+
 const initialState = {
-    isLoading: false,
+    isFetching: false,
     error: null,
-    userDetails: {}
+
+    isAuthenticated: false,
+    userDetails: {
+        token: {}
+    },
 };
 
 export default function loginReducer(state = initialState, action = {}) {
-    const { type, payload, userDetails } = action;
+    const { type, payload } = action;
 
     switch (type) {
 
         case TOGLE_LOADING:
-            return { ...state, isLoading: payload ? payload : !state.isLoading };
+            return { ...state, isFetching: payload ? payload : !state.isFetching };
 
         case FETCH_LOGIN_BEGIN:
-            return { ...state, isLoading: true };
+            return { ...state, isFetching: true };
 
         case FETCH_LOGIN_SUCCESS:
-            return { ...state, isLoading: false, userDetails: payload };
+
+            return {
+                ...state,
+                isFetching: false,
+                isAuthenticated: true,
+                userDetails: payload,
+                error: null
+            };
 
         case FETCH_LOGIN_FAILURE:
-            return { ...state, isLoading: false, error: payload };
+
+            let error;
+
+            if (!payload.response) {
+                error = "Network failure."
+            } else {
+
+                const status = payload.response.status
+                if ((status >= 500 && status <= 599)) {
+                    error = "Network failure."
+                } else if (status >= 400 && status <= 499) {
+                    error = "Login/password invalid."
+                } else {
+                    error = "Unknown failure."
+                }
+            }
+
+            return { ...state, isFetching: false, error, userDetails: {} };
 
         case GET_USER_LOGGED:
-            return { ...state, userDetails };
+            return { ...state, userDetails: payload };
 
         case REMOVE_USER_LOGGED:
-            return { ...state, userDetails : {}};
+            return { ...state, userDetails: {} };
 
         default:
             // ALWAYS have a default case in a reducer

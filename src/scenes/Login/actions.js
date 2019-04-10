@@ -12,50 +12,30 @@ export const REMOVE_USER_LOGGED = 'REMOVE_USER_LOGGED';
 
 export const loginMoodle = (userDetails) => (dispatch) => {
 
-    dispatch(fetchLoginMoodlesBegin())
+    dispatch({ type: FETCH_LOGIN_BEGIN })
 
     return axios.post(config.backend.loginMoodle, { "userDetails": userDetails })
 
-        .then(res => dispatch(fetchLoginMoodlesSuccess(res.data.return)))
+        .then(resp => {
+            const { email, firstname, fullname, id, lastname, phone, username } = resp.data.return;
 
-        .catch(function (error) {
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                // Falha no servidor
-
-                dispatch(fetchLoginMoodlesFailure(error.response.data.error.message))
-            } else if (error.request) {
-                // The request was made but no response was received
-                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                // http.ClientRequest in node.js
-
-                // Falha na requisicao
-                dispatch(fetchLoginMoodlesFailure(error.message))
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('3333 Error', error.message);
+            const userDetailLogged = {
+                tokenAdvice: userDetails.tokenAdvice,
+                adviceDesc: userDetails.adviceDesc,
+                email, firstname, fullname, id, lastname, phone, username
             }
 
-            console.log("### ERROR Login: ", error.config); // tratamento geral de erro
-        });
+
+            dispatch(
+                // TODO Send the userDetail from the action. ATM I`m not sure in this ACTION is the best
+                // place to do it.
+                {
+                    type: FETCH_LOGIN_SUCCESS,
+                    payload: userDetailLogged
+                })
+        })
+        .catch(error => dispatch({ type: FETCH_LOGIN_FAILURE, payload: error }))
 }
-
-// Action
-export const fetchLoginMoodlesBegin = () => ({
-    type: FETCH_LOGIN_BEGIN
-});
-
-// Action
-export const fetchLoginMoodlesSuccess = userDetails => ({
-    type: FETCH_LOGIN_SUCCESS,
-    payload: userDetails
-});
-
-export const fetchLoginMoodlesFailure = error => ({
-    type: FETCH_LOGIN_FAILURE,
-    payload: { error }
-});
 
 export const togleLoading = (value) => (dispatch) => {
     dispatch({ type: TOGLE_LOADING, payload: value })
@@ -66,12 +46,16 @@ export const getUserDetails = () => dispatch =>
     AsyncStorage.getItem('userDetails')
         .then((userDetails) => {
             //dispatch({ type: TOGLE_LOADING, isLoading: false });
-            const userDetailsParsed = JSON.parse(userDetails);
-            dispatch({ type: GET_USER_LOGGED, userDetails: userDetailsParsed });
+
+            if (userDetails) {
+                const userDetailsParsed = JSON.parse(userDetails);
+                dispatch({ type: GET_USER_LOGGED, payload: userDetailsParsed });
+            }
         })
         .catch((err) => {
+            console.log(err)
             // dispatch({ type: TOGLE_LOADING, isLoading: false });
-            dispatch(error(err.message || 'error'));
+            //dispatch(error(err.message || 'error'));
         })
 
 export const removeUserDetails = () => dispatch =>

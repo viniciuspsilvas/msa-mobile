@@ -26,7 +26,7 @@ class MainContainer extends React.Component {
   _bootstrapAsync = () => {
 
     this.props.getUserDetails().then(() => {
-      this.props.navigation.navigate(this.props.loginReducer.userDetails !== null ? 'AppStack' : 'AuthStack');
+      this.props.navigation.navigate(this.props.loginReducer.isAuthenticated ? 'AppStack' : 'AuthStack');
     })
       .catch(error => {
         this.setState({ error })
