@@ -34,7 +34,7 @@ const AppDrawerStack = createDrawerNavigator({
     contentComponent: (props) => (
       <ScrollView>
         <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
-          <Image source={require('../src/assets/icon.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
+          <Image source={require('msa-mobile/assets/icon.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
            <Username />
         </View>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>

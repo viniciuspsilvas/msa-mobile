@@ -26,7 +26,7 @@ export default class Info extends Component {
                                 <Image
                                     style={{ height: 200, width: 350 }}
                                     resizeMode="contain"
-                                    source={require('../../assets/background.png')} />
+                                    source={require('msa-mobile/assets/background.png')} />
                             </View>
                         </Body>
                     </CardItem>

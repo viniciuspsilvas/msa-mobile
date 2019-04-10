@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 
 getIcon = category => {
 
-    const INFO_ICON = require('../../../../assets/icon-info.png');
-    const ALERT_ICON = require('../../../../assets/icon-alert.png');
+    const INFO_ICON = require('msa-mobile/assets/icon-info.png');
+    const ALERT_ICON = require('msa-mobile/assets/icon-alert.png');
 
     switch (category) {
         case 'info':

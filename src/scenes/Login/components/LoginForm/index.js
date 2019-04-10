@@ -18,7 +18,7 @@ const LoginForm = props => {
     return (
         <View style={styles.container}>
 
-            <Image source={require('../../../../assets/background2.png')}
+            <Image source={require('msa-mobile/assets/background2.png')}
                 style={{
                     position: 'absolute',
                     width: '100%', height: '100%',
@@ -28,7 +28,7 @@ const LoginForm = props => {
             <KeyboardAvoidingView behavior='position' enabled style={styles.keyboardContainer}>
 
                 <View style={styles.logoContainer}>
-                    <Image source={require('../../../../assets/Logo_horiz.png')}
+                    <Image source={require('msa-mobile/assets/Logo_horiz.png')}
                         style={{
                             width: '100%',
                             top: '-20%',
@@ -78,7 +78,7 @@ const LoginForm = props => {
             <View style={styles.footerContainer} >
                 <View style={styles.footer} >
 
-                    <Image source={require('../../../../assets/logo3.png')}
+                    <Image source={require('msa-mobile/assets/logo3.png')}
                         style={{
                             width: '50%',
                             resizeMode

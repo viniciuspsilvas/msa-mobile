@@ -12,7 +12,7 @@ export default HomeScreen = ({ qtdMessage, onClick }) => {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../../../../assets/Logo_vert.png')} style={styles.logo} />
+            <Image source={require('msa-mobile/assets/Logo_vert.png')} style={styles.logo} />
 
             <Text style={styles.textWelcome}>Welcome to Mindroom Student APP. </Text>
             <Text style={styles.textContainer}>Here you can find important infos as your attedance, class schedule, notifications, our address and more.</Text>
