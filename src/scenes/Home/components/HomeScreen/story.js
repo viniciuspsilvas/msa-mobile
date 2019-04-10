@@ -18,6 +18,7 @@ const CenterDecorator = storyFn => <View style={{
 storiesOf('HomeScreen', module)
     .add('default', () => <HomeScreen qtdMessage={3} />)
     .add('No Notification', () => <HomeScreen qtdMessage={0} />)
+    .add('2 notifications', () => <HomeScreen qtdMessage={2} />)
 
 
 
