@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -9,7 +9,6 @@ import {
 const Loader = props => {
   const {
     loading,
-    ...attributes
   } = props;
 
   return (
