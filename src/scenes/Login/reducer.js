@@ -2,9 +2,7 @@ import {
     FETCH_LOGIN_BEGIN,
     FETCH_LOGIN_SUCCESS,
     FETCH_LOGIN_FAILURE,
-    TOGLE_LOADING,
-    GET_USER_LOGGED,
-    REMOVE_USER_LOGGED
+    LOGOUT
 
 } from './actions';
 
@@ -25,9 +23,6 @@ export default function loginReducer(state = initialState, action = {}) {
 
     switch (type) {
 
-        case TOGLE_LOADING:
-            return { ...state, isFetching: payload ? payload : !state.isFetching };
-
         case FETCH_LOGIN_BEGIN:
             return { ...state, isFetching: true };
 
@@ -43,32 +38,34 @@ export default function loginReducer(state = initialState, action = {}) {
 
         case FETCH_LOGIN_FAILURE:
 
-            let error;
-
-            if (!payload.response) {
-                error = "Network failure."
-            } else {
-
-                const status = payload.response.status
-                if ((status >= 500 && status <= 599)) {
-                    error = "Network failure."
-                } else if (status >= 400 && status <= 499) {
-                    error = "Login/password invalid."
-                } else {
-                    error = "Unknown failure."
-                }
-            }
-
+            let error = handleErrors(payload.response);
             return { ...state, isFetching: false, error, userDetails: {} };
 
-        case GET_USER_LOGGED:
-            return { ...state, userDetails: payload };
-
-        case REMOVE_USER_LOGGED:
-            return { ...state, userDetails: {} };
+        case LOGOUT:
+            return { ...state, userDetails: {}, isAuthenticated: false };
 
         default:
             // ALWAYS have a default case in a reducer
             return state;
+    }
+}
+
+
+/**
+ * Handle the erros as network and login.
+ */
+handleErrors = (response) => {
+    if (!response) {
+        return "Network failure."
+    } else {
+
+        const status = response.status
+        if ((status >= 500 && status <= 599)) {
+            return "Network failure."
+        } else if (status >= 400 && status <= 499) {
+            return "Login/password invalid."
+        } else {
+            return "Unknown failure."
+        }
     }
 }

@@ -5,9 +5,23 @@ import attendanceReducer from "../src/scenes/Attendance/reducer";
 
 import { reducer as formReducer } from 'redux-form';
 
-export default combineReducers({
+import { LOGOUT } from '../src/scenes/Login/actions';
+
+const appReducer = combineReducers({
     loginReducer,
     messagesReducer,
     attendanceReducer,
     form: formReducer
-});
+})
+
+export default rootReducer = (state, action) => {
+    if (action.type === LOGOUT) {
+
+        // for all keys defined in your persistConfig(s)
+        //storage.removeItem('persist:root')
+        // storage.removeItem('persist:otherKey')
+        state = undefined
+    }
+
+    return appReducer(state, action)
+}

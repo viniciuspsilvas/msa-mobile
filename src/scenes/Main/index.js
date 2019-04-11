@@ -6,7 +6,6 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { getUserDetails } from '../Login/actions';
 
 class MainContainer extends React.Component {
 
@@ -22,15 +21,9 @@ class MainContainer extends React.Component {
     this._bootstrapAsync();
   }
 
-  // Fetch the token from storage then navigate to our appropriate place
+  //Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = () => {
-
-    this.props.getUserDetails().then(() => {
-      this.props.navigation.navigate(this.props.loginReducer.isAuthenticated ? 'AppStack' : 'AuthStack');
-    })
-      .catch(error => {
-        this.setState({ error })
-      })
+    this.props.navigation.navigate(this.props.isAuthenticated ? 'AppStack' : 'AuthStack');
   };
 
   // Render any loading content that you like here
@@ -53,12 +46,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  loginReducer: state.loginReducer,
+  ...state.loginReducer
 });
 
-
-const mapDispatchToProps = dispatch => ({
-  getUserDetails: () => dispatch(getUserDetails()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
+export default connect(mapStateToProps)(MainContainer);

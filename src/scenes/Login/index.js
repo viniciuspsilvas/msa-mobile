@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux'
 import LoginForm from "./components/LoginForm"
 import Loader from "../../components/Loader"
 
-import { loginMoodle, togleLoading } from "./actions";
+import { loginMoodle } from "./actions";
 
 class Login extends Component {
 
@@ -104,7 +104,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => bindActionCreators(
 	{
 		loginMoodle,
-		togleLoading,
 	},
 	dispatch,
 )
