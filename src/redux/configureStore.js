@@ -4,6 +4,7 @@ import { createLogger } from "redux-logger";
 import rootReducer from "./rootReducer";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const logger = createLogger();
 
@@ -15,11 +16,9 @@ const persistConfig = {
     //whitelist: ["loginReducer"]
 };
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 export const store = createStore(
     persistReducer(persistConfig, rootReducer),
-    composeEnhancers(applyMiddleware(thunk, logger))
+    composeWithDevTools(applyMiddleware(thunk, logger))
 );
 
 export const persistor = persistStore(store);
