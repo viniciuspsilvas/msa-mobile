@@ -24,8 +24,8 @@ const AppDrawerStack = createDrawerNavigator({
   messages: { screen: Messages },
   Info: { screen: Info },
   attendance: { screen: Attendance },
-  findUs: { screen: FindUs },
-  schedule: { screen: Schedule }
+  //findUs: { screen: FindUs },
+  //schedule: { screen: Schedule }
 
 }, {
     gesturesEnabled: false,
