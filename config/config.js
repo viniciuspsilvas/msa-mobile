@@ -1,6 +1,4 @@
-const BACKEND_PORT= "3000";
-//const BACKEND_URL= "http://192.168.43.7";
-const BACKEND_URL= "http://10.0.0.6";
+import { BACKEND_URL, BACKEND_PORT } from 'react-native-dotenv'
 
 const FULL_BACKEND_URL = BACKEND_URL + ":"+ BACKEND_PORT;
 
