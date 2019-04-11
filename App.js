@@ -1,36 +1,27 @@
 
 import React from 'react';
+
+//AppNavigation
 import AppNavigation from './app/AppNavigation'
-import { IS_STORYBOOK_ENABLED } from 'react-native-dotenv'
 
+//Redux
+import { store, persistor } from './src/redux/configureStore'
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
-import { createLogger } from "redux-logger";
-import rootReducer from "./app/RootReducer";
-import  StorybookUIRoot from './storybook';
+import { PersistGate } from "redux-persist/integration/react";
 
-import {Text } from "react-native"
-
-const logger = createLogger();
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(rootReducer, /* preloadedState, */ composeEnhancers(
-    applyMiddleware(thunk, logger)
-));
+// Storybook
+import { IS_STORYBOOK_ENABLED } from 'react-native-dotenv'
+import StorybookUIRoot from './storybook';
 
 export default class App extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
-
-            user: {},
             isLoading: true
         };
     }
 
-    // Workaround to solve the problem related to font 'Roboto_medium'
+    // Workaround to solve a bug related with the font 'Roboto_medium'
     async componentWillMount() {
         await Expo.Font.loadAsync({
             Roboto: require("native-base/Fonts/Roboto.ttf"),
@@ -47,13 +38,15 @@ export default class App extends React.Component {
             return <Expo.AppLoading />;
         }
 
-        return ( 
+        return (
             <Provider store={store}>
-                 {IS_STORYBOOK_ENABLED ===  "true"? (
-                    <StorybookUIRoot />
-                ) : (
-                    <AppNavigation /> 
-                )}  
+                <PersistGate loading={null} persistor={persistor}>
+                    {IS_STORYBOOK_ENABLED === "true" ? (
+                        <StorybookUIRoot />
+                    ) : (
+                            <AppNavigation />
+                        )}
+                </PersistGate>
             </Provider>
         );
     }

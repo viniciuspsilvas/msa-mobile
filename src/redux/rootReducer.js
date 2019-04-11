@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
-import loginReducer from "../src/scenes/Login/reducer"
-import messagesReducer from "../src/scenes/Messages/reducer";
-import attendanceReducer from "../src/scenes/Attendance/reducer";
+import loginReducer from "../scenes/Login/reducer"
+import messagesReducer from "../scenes/Messages/reducer";
+import attendanceReducer from "../scenes/Attendance/reducer";
 
 import { reducer as formReducer } from 'redux-form';
 
-import { LOGOUT } from '../src/scenes/Login/actions';
+import { LOGOUT } from '../scenes/Login/actions';
 
 const appReducer = combineReducers({
     loginReducer,
