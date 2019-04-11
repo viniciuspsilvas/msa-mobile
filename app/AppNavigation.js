@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, Easing, View, Text, SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Animated, Easing, View, SafeAreaView, ScrollView, Image, StyleSheet } from 'react-native';
 import { Icon } from 'native-base';
 import { createAppContainer, createDrawerNavigator, createStackNavigator, DrawerItems, createSwitchNavigator } from 'react-navigation'
 
@@ -10,15 +10,13 @@ import Info from '../src/scenes/Info'
 import Attendance from '../src/scenes/Attendance'
 import FindUs from '../src/scenes/Find_Us'
 import Schedule from '../src/scenes/Schedule'
-
-import MainContainer from '../src/scenes/Main'
 import Login from '../src/scenes/Login'
 
 import Username from "../src/components/Username"
 import LogoutButton from "../src/components/LogoutButton"
 
 import  StorybookUIRoot from '../storybook';
-
+import MainContainer from './MainContainer'
 
 // drawer Navigator
 const AppDrawerStack = createDrawerNavigator({
