@@ -40,13 +40,13 @@ export default class App extends React.Component {
 
         return (
             <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    {IS_STORYBOOK_ENABLED === "true" ? (
-                        <StorybookUIRoot />
-                    ) : (
+                {IS_STORYBOOK_ENABLED === "true" ? (
+                    <StorybookUIRoot />
+                ) : (
+                        <PersistGate loading={null} persistor={persistor}>
                             <AppNavigation />
-                        )}
-                </PersistGate>
+                        </PersistGate>
+                    )}
             </Provider>
         );
     }
