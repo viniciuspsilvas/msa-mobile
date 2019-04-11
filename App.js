@@ -1,7 +1,7 @@
 
 import React from 'react';
 import AppNavigation from './app/AppNavigation'
-//import { IS_STORYBOOK_ENABLED } from 'react-native-dotenv'
+import { BACKEND_URL } from 'react-native-dotenv'
 
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
@@ -9,6 +9,8 @@ import thunk from "redux-thunk";
 import { createLogger } from "redux-logger";
 import rootReducer from "./app/RootReducer";
 //import  StorybookUIRoot from './storybook';
+
+import {Text } from "react-native"
 
 const logger = createLogger();
 
@@ -52,6 +54,7 @@ export default class App extends React.Component {
                 ) : (
                 )}  */}               
                 <AppNavigation />
+                <Text >{BACKEND_URL}</Text>
             </Provider>
         );
     }
