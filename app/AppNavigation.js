@@ -36,7 +36,7 @@ const AppDrawerStack = createDrawerNavigator({
         <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
           <Image source={require('msa-mobile/assets/icon_white.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
            <Username />
-        </View>
+        </View> 
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItems {...props} />
           <LogoutButton {...props}/>

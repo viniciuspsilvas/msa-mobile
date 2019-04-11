@@ -1,14 +1,14 @@
 
 import React from 'react';
 import AppNavigation from './app/AppNavigation'
-import { BACKEND_URL } from 'react-native-dotenv'
+import { IS_STORYBOOK_ENABLED } from 'react-native-dotenv'
 
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { createLogger } from "redux-logger";
 import rootReducer from "./app/RootReducer";
-//import  StorybookUIRoot from './storybook';
+import  StorybookUIRoot from './storybook';
 
 import {Text } from "react-native"
 
@@ -47,14 +47,13 @@ export default class App extends React.Component {
             return <Expo.AppLoading />;
         }
 
-        return (
+        return ( 
             <Provider store={store}>
-                {/* {IS_STORYBOOK_ENABLED === 'true' ? (
+                 {IS_STORYBOOK_ENABLED ===  "true"? (
                     <StorybookUIRoot />
                 ) : (
-                )}  */}               
-                <AppNavigation />
-                <Text >{BACKEND_URL}</Text>
+                    <AppNavigation /> 
+                )}  
             </Provider>
         );
     }
