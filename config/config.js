@@ -1,6 +1,7 @@
 import { BACKEND_URL, BACKEND_PORT } from 'react-native-dotenv'
 
-const FULL_BACKEND_URL = BACKEND_URL + ":"+ BACKEND_PORT;
+
+const FULL_BACKEND_URL = BACKEND_URL + (BACKEND_PORT ?  ":"+ BACKEND_PORT : "");
 
 var backend = {
 

@@ -59,8 +59,11 @@ handleErrors = (response) => {
         return "Network failure."
     } else {
 
-        const status = response.status
-        if ((status >= 500 && status <= 599)) {
+        const status = response.status;
+
+        if (status == 503) {
+            return "Service Unavailable."
+        } else if (status >= 500 && status <= 599) {
             return "Network failure."
         } else if (status >= 400 && status <= 499) {
             return "Login/password invalid."
