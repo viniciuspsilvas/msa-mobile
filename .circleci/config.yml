@@ -10,9 +10,9 @@ publish: &publish
     - run: 
           name: "Setup custom environment variables"
           command: |
-            echo 'export BACKEND_URL=$BACKEND_URL' > .env
-            echo 'export BACKEND_PORT=$BACKEND_PORT' >> .env
-            echo 'export IS_STORYBOOK_ENABLED=false' >> .env
+            echo 'BACKEND_URL=${BACKEND_URL}' > .env
+            echo 'BACKEND_PORT=${BACKEND_PORT}' >> .env
+            echo 'IS_STORYBOOK_ENABLED=false' >> .env
             cat .env
 
     - run:
