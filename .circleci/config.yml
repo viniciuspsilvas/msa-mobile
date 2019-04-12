@@ -1,0 +1,53 @@
+version: 2
+publish: &publish
+  working_directory: ~/msa-mobile
+  docker:
+    - image: circleci/node:10.4.1
+
+  steps:
+    - checkout
+
+    - run:
+        name: Installing dependencies
+        command: npm install
+
+    - run:
+        name: Installing exp
+        command: yarn global add exp
+
+    - run:
+        name: Deploying to Expo
+        command: |
+            export PATH="$PATH:$( yarn global bin )"
+            exp login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
+            exp publish
+
+    - run:
+        name: Build Android version
+        command:  |
+            export PATH="$PATH:$( yarn global bin )"
+            exp build:android --non-interactive
+
+jobs:
+  publish_to_expo_dev:
+    environment:
+      EXPO_RELEASE_CHANNEL: dev
+    <<: *publish
+
+  publish_to_expo_prod:
+    environment:
+      EXPO_RELEASE_CHANNEL: default
+    <<: *publish
+
+workflows:
+  version: 2
+  my_app:
+    jobs:
+      - publish_to_expo_dev:
+          filters:
+            branches:
+              only: develop
+      - publish_to_expo_prod:
+          filters:
+            branches:
+              only: master
