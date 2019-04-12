@@ -6,6 +6,18 @@ publish: &publish
 
   steps:
     - checkout
+    
+    - run: # test what branch we're on.
+        name: "What branch am I on?"
+        command: echo ${CIRCLE_BRANCH}
+    # Run another step, the same as above; note that you can
+    # invoke environment variable without curly braces.
+    - run:
+        name: "What branch am I on now?"
+        command: echo $CIRCLE_BRANCH
+    - run:
+        name: "What was my custom environment variable?"
+        command: echo ${MY_ENV_VAR}
 
     - run:
         name: Installing dependencies
