@@ -12,6 +12,7 @@ publish: &publish
           command: |
             echo 'export BACKEND_URL=$BACKEND_URL >> .env 
             echo 'export BACKEND_PORT=$BACKEND_PORT >> .env
+            echo 'export IS_STORYBOOK_ENABLED=false >> .env
 
     - run:
         name: Installing dependencies
