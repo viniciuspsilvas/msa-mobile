@@ -5,8 +5,6 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
-  require('../src/components/AlertBox/story');
-  require('../src/components/Loader/story');
   require('../src/components/Title/story');
   require('../src/scenes/Attendance/components/PieChart/story');
   require('../src/scenes/Home/components/BadgeButton/story');

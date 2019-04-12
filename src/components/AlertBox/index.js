@@ -10,18 +10,18 @@ class AlertBox extends React.Component {
 
         return (
             <Container>
-                {Toast.show({
+           {/*      {Toast.show({
                     text: text,
                     buttonText: buttonText,
                     duration: duration
-                })}}
+                })}} */}
             </Container>
         );
     }
 }
 
 AlertBox.propTypes = {
-    classes: PropTypes.object.isRequired,
+   // classes: PropTypes.object.isRequired,
 };
 
 export default AlertBox;
