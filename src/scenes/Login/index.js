@@ -67,9 +67,7 @@ class Login extends Component {
 		this.props.loginMoodle(userDetails);
 	}
 
-
-	checkAuth = () => {
-
+	componentDidUpdate(){
 		const { isAuthenticated, userDetails } = this.props;
 
 		if (isAuthenticated && userDetails) {
@@ -81,8 +79,6 @@ class Login extends Component {
 		const { error, isFetching } = this.props;
 
 		if (isFetching) { return <Loader loading={isFetching} /> }
-
-		this.checkAuth();
 
 		if (error) {
 			Alert.alert(error);
