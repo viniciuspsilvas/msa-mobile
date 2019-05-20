@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
-import { Icon, Button, Badge } from 'native-base';
+import { Text, View } from 'react-native';
+import { Icon } from 'native-base';
+
+import Background from '../../components/Background'
 
 import { getMessagesList } from "../Messages/actions"
 import { connect } from "react-redux";
@@ -42,10 +44,18 @@ class Home extends Component {
 
         return (
 
-            <HomeScreen
-                qtdMessage={qtdMessage}
-                onClick={() => this.props.navigation.navigate("messages")}
-            />
+            <View style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'center',
+            }} >
+                <Background />
+                <HomeScreen
+                    qtdMessage={qtdMessage}
+                    onClick={() => this.props.navigation.navigate("messages")}
+                />
+
+            </View>
         );
     }
 }

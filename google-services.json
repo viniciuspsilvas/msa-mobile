@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "627543620630",
+    "firebase_url": "https://mindroom-student-app.firebaseio.com",
+    "project_id": "mindroom-student-app",
+    "storage_bucket": "mindroom-student-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627543620630:android:2f3da63e6806cf38",
+        "android_client_info": {
+          "package_name": "au.edu.mindroom.msa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627543620630-oj4edap6j5ba46p51gfnmo6qfdk1khej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG0_BFkSaDGjPb7JIwxkKb74yDt8oAHC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627543620630-oj4edap6j5ba46p51gfnmo6qfdk1khej.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

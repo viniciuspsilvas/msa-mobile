@@ -6,7 +6,7 @@ import { View, TouchableOpacity, Image, KeyboardAvoidingView, Text } from 'react
 import styles from './style'
 
 import ButtonLogin from '../ButtonLogin'
-import IconButton from '../IconButton'
+import Background from '../../../../components/Background'
 
 import InputLabeled from "../InputLabeled"
 import { required, email } from "../../../../util/validators"
@@ -16,82 +16,53 @@ const LoginForm = props => {
     const resizeMode = 'contain';
 
     return (
-        <View style={styles.container}>
 
-            <Image source={require('msa-mobile/assets/background2.png')}
-                style={{
-                    position: 'absolute',
-                    width: '100%', height: '100%',
-                    top: 25,
-                }} />
-
-            <KeyboardAvoidingView behavior='position' enabled style={styles.keyboardContainer}>
-
-                <View style={styles.logoContainer}>
-                    <Image source={require('msa-mobile/assets/Logo_horiz.png')}
+        <View style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+        }} >
+            <Background />
+            <View style={styles.container}>
+                <KeyboardAvoidingView behavior='position' enabled>
+                    <Image source={require('msa-mobile/assets/Logo_vert_red.png')}
                         style={{
-                            width: '100%',
-                            top: '-20%',
-                            resizeMode
+                            alignSelf: "center",
+                            width: 250, height: 250,
+                            resizeMode,
                         }}
                     />
-                </View>
-
-                <View >
                     <Field
                         name="email"
                         label="Email"
                         component={InputLabeled}
                         validate={[required, email]}
-                        textContentType="username"
-                    />
-                </View>
+                        textContentType="username" />
 
-                <View style={{ marginTop: 10 }}>
                     <Field
                         name="password"
                         label="Password"
                         component={InputLabeled}
                         secureTextEntry={true}
                         textContentType="password"
-                        validate={[required]}
-                    />
-                </View>
+                        validate={[required]} />
 
-                <View style={{ height: 20 }} />
-
-            </KeyboardAvoidingView>
-            <View style={{ flex: 1, marginLeft: 20, marginRight: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View >
-                    <TouchableOpacity >
+                    <TouchableOpacity style={{ alignItems: 'flex-end' }}  >
                         <Text style={styles.linkForgotPassword} >Forgot your password</Text>
                     </TouchableOpacity>
-                </View>
-                <View>
-                    <ButtonLogin
-                        onPress={handleSubmit}
-                        disabled={pristine || submitting}
-                    />
-                </View>
-            </View>
 
-            <View style={styles.footerContainer} >
-                <View style={styles.footer} >
-
-                    <Image source={require('msa-mobile/assets/logo3.png')}
-                        style={{
-                            width: '50%',
-                            resizeMode
-                        }} />
-
-
-                    <IconButton iconName='facebook-f' />
-                    <IconButton iconName='instagram' />
-                    <IconButton iconName='youtube' />
-                </View>
+                    <View style={{ alignItems: 'center', marginTop: 20, }}>
+                        <ButtonLogin
+                            onPress={handleSubmit}
+                            disabled={pristine || submitting}
+                        />
+                    </View>
+                </KeyboardAvoidingView>
 
             </View>
+
         </View>
+
     )
 }
 

@@ -31,7 +31,8 @@
       "bundleIdentifier": "au.edu.mindroom.msa"
     },
     "android": {
-      "package": "au.edu.mindroom.msa"
+      "package": "au.edu.mindroom.msa",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }

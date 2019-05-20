@@ -55,7 +55,7 @@ class Login extends Component {
 		// Get the token that uniquely identifies this device
 		let tokenAdvice = this.state.tokenAdvice;
 		let adviceDesc = Expo.Constants.deviceName;
-		
+
 		let userDetails = {
 			login: email.trim(),
 			password: password.trim(),
@@ -67,7 +67,7 @@ class Login extends Component {
 		this.props.loginMoodle(userDetails);
 	}
 
-	componentDidUpdate(){
+	componentDidUpdate() {
 		const { isAuthenticated, userDetails } = this.props;
 
 		if (isAuthenticated && userDetails) {
@@ -79,10 +79,7 @@ class Login extends Component {
 		const { error, isFetching } = this.props;
 
 		if (isFetching) { return <Loader loading={isFetching} /> }
-
-		if (error) {
-			Alert.alert(error);
-		} 
+		if (error) { Alert.alert(error); }
 
 		return (
 			<LoginForm onSubmit={this.loginHandler} />
@@ -91,17 +88,8 @@ class Login extends Component {
 }
 
 //Redux configuration
-const mapStateToProps = state => {
-	return {
-		...state.loginReducer
-	};
-};
+const mapStateToProps = state => ({ ...state.loginReducer });
 
-const mapDispatchToProps = dispatch => bindActionCreators(
-	{
-		loginMoodle,
-	},
-	dispatch,
-)
+const mapDispatchToProps = dispatch => bindActionCreators({ loginMoodle }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

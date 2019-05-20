@@ -15,6 +15,7 @@ export default StyleSheet.create({
     input: {
 
         height: 50,
+        //width: 250,
         borderColor: 'black',
         borderWidth: 1,
         backgroundColor: 'white',
@@ -23,7 +24,7 @@ export default StyleSheet.create({
 
         fontSize: 20,
         color: 'black',
-        borderRadius: 10,
+        borderRadius: 20,
         paddingHorizontal: 10,
         textDecorationLine: 'none'
     },
@@ -39,7 +40,7 @@ export default StyleSheet.create({
 
         fontSize: 20,
         color: 'black',
-        borderRadius: 10,
+        borderRadius: 20,
         paddingHorizontal: 10,
         textDecorationLine: 'none'
     },

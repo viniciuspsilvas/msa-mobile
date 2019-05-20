@@ -5,29 +5,31 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent:'center',
+    alignItems: 'stretch',
+    margin: 20,
   },
 
   keyboardContainer: {
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     margin: 20,
   },
 
   linkForgotPassword: {
-    color: '#dd3233',
+    color: '#3d3d3d',
     alignItems: 'center',
     flexGrow: 1,
     //justifyContent: 'center',
-    marginTop: 20,
-    fontSize: 20,
+    marginTop: 10,
+    fontSize: 15,
   },
 
   logoContainer: {
     alignItems: 'center',
     flexGrow: 1,
     justifyContent: 'center',
-    marginTop: 0,
+    marginTop: -120,
   },
 
   logo: {

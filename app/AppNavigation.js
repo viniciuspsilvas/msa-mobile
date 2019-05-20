@@ -11,6 +11,7 @@ import Attendance from '../src/scenes/Attendance'
 import FindUs from '../src/scenes/Find_Us'
 import Schedule from '../src/scenes/Schedule'
 import Login from '../src/scenes/Login'
+import Settings from '../src/scenes/Settings'
 
 import Username from "../src/components/Username"
 import LogoutButton from "../src/components/LogoutButton"
@@ -24,6 +25,8 @@ const AppDrawerStack = createDrawerNavigator({
   messages: { screen: Messages },
   Info: { screen: Info },
   attendance: { screen: Attendance },
+  settings: { screen: Settings },
+  
   //findUs: { screen: FindUs },
   //schedule: { screen: Schedule }
 

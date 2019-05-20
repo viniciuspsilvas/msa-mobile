@@ -1,18 +1,18 @@
-import React, {StyleSheet} from 'react-native'
+import React, { StyleSheet } from 'react-native'
 
-export default  StyleSheet.create({
+export default StyleSheet.create({
 
     buttonDisabled: {
-        backgroundColor: '#ce5c5c',
-        borderColor: '#ce1616',
+        // backgroundColor: '#ce5c5c',
+        borderColor: 'black',
     },
 
     buttonSubmit: {
-        borderColor: '#721010',
+        borderColor: 'black',
         borderWidth: 1,
-        width: 60,
-        height: 60, 
-        borderRadius: 50,
-        backgroundColor: '#e51616',
+        width: 160,
+        height: 50,
+        borderRadius: 20,
+        backgroundColor: 'white',
     },
 });
