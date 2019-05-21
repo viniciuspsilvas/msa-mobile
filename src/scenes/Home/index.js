@@ -14,36 +14,24 @@ class Home extends Component {
         drawerIcon: () => (<Icon name='ios-home' type='Ionicons' />)
     };
 
-
-    /*
-    Constructor 
-    */
-    constructor(props) {
-        super(props);
-
-        this.state = { qtdMessage: 0 };
+    componentDidMount() {
+        const { userDetails, messagesList } = this.props;
+        this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
+        this.interval = setInterval(() => this.props.getMessagesList(userDetails), 3000);
     }
 
-    componentDidMount() {
-        const { userDetails } = this.props;
-        this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
-
-        this.setState({
-            //qtdMessage: messagesList.message.filter(msg => !msg.isRead).length
-        });
+    componentWillUnmount() {
+        clearInterval(this.interval)
     }
 
     render() {
         const { error, isLoading, messagesList } = this.props;
-        const { qtdMessage } = this.state;
-
-        //const qtdMessage2 = messagesList.length > 0 ? messagesList.message.filter(msg => !msg.isRead).length : 0;
+        const qtdMessage = messagesList.length > 0 ? messagesList.filter(msg => !msg.isRead).length : 0;
 
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
-        if (isLoading) { return <View><Text>Loading...</Text></View> }
+        //if (isLoading) { return <View><Text>Loading...</Text></View> }
 
         return (
-
             <View style={{
                 flex: 1,
                 flexDirection: 'column',
@@ -63,7 +51,7 @@ class Home extends Component {
 //Redux configuration
 const mapStateToProps = state => {
     return {
-        ...state.messagesReducer,
+        messagesList: state.messagesReducer.messagesList,
         userDetails: state.loginReducer.userDetails
     };
 };

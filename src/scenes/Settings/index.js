@@ -30,7 +30,13 @@ class Settings extends Component {
 
 
     render() {
-        const { error, isLoading, listSettings } = this.props;
+        const { error, isLoading,  } = this.props;
+
+        const listSettings = [
+            { desc: "Important Notifications", value: false },
+            { desc: "Info Notifications", value: true },
+            { desc: "Classes Notifications", value: false }
+        ]
 
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
 

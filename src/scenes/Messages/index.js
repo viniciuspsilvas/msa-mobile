@@ -28,7 +28,7 @@ class Messages extends Component {
         const { error, isLoading, messagesList } = this.props;
 
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
-        if (isLoading) { return <View><Text>Loading...</Text></View> }
+        //if (isLoading) { return <View><Text>Loading...</Text></View> }
 
         return (
             <Container >
@@ -40,7 +40,7 @@ class Messages extends Component {
                     {messagesList <= 0 ? (
                         <Text>No messages.</Text>
                     ) : (
-                            <MessageList list={messagesList.message} />
+                            <MessageList list={messagesList} />
                         )}
                 </Content>
 

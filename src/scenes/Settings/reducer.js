@@ -9,10 +9,7 @@ import {
 
 const initialState = {
 
-    listCategories: [],
-    currentPage: 1,
-    lastPageCategories: 1, // Used for pagination
-    categorieSelected: null,
+
     isLoading: false,
     error: null,
 };
@@ -29,17 +26,14 @@ export default function categoriesReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                listCategories: payload.listCategories,
-                lastPageCategories: payload.lastPageCategories,
-                currentPage: 1
+       
             };
 
         case UPDATE_LIST_CATEGORIES:
             return {
                 ...state,
                 isLoading: false,
-                listCategories: state.listCategories.concat(payload),
-                currentPage: state.currentPage + 1
+
             };
 
         case FETCH_CATEGORIE_FAILURE:

@@ -14,7 +14,7 @@ export default BadgeButton = ({ qtdMessage, onClick }) => {
         <View>
             {
                 hasMessage ? (
-                    <Button block 
+                    <Button block onPress={onClick}
                         style={styles.newMessageButton}
                         >
                         <Badge  style={styles.newMessageButton}>

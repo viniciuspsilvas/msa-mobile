@@ -16,10 +16,8 @@ var options = {
 
 
 export default MessageList = ({ list }) =>
-
     (
         <List>
-
             {list === undefined || list.length == 0 && <Text>No messages.</Text>}
 
             {list &&
