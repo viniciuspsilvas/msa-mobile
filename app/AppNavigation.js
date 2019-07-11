@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, Easing, View, SafeAreaView, ScrollView, Image, StyleSheet } from 'react-native';
+import { Animated, Easing, View, SafeAreaView, ScrollView, Image, StyleSheet, Text } from 'react-native';
 import { Icon } from 'native-base';
 import { createAppContainer, createDrawerNavigator, createStackNavigator, DrawerItems, createSwitchNavigator } from 'react-navigation'
 
@@ -18,6 +18,8 @@ import LogoutButton from "../src/components/LogoutButton"
 
 import  StorybookUIRoot from '../storybook';
 import MainContainer from './MainContainer'
+
+const version = require('../package.json').version
 
 // drawer Navigator
 const AppDrawerStack = createDrawerNavigator({
@@ -42,6 +44,10 @@ const AppDrawerStack = createDrawerNavigator({
           <DrawerItems {...props} />
           <LogoutButton {...props}/>
         </SafeAreaView>
+
+{/*         <SafeAreaView style={styles.container} forceInset={{ bottom: 'always', horizontal: 'never' }}>
+          <Text style={styles.paragraph}> {version} </Text>
+        </SafeAreaView> */}
       </ScrollView>
     )
   })

@@ -1,10 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react-native';
 
-import Loader from './'
-
+import Loader from '.'
 import { View } from 'react-native';
-
 
 const CenterDecorator = storyFn => <View style={{
     flex: 1,
