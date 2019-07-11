@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, Easing, View, SafeAreaView, ScrollView, Image, StyleSheet } from 'react-native';
+import { Animated, Easing, View, SafeAreaView, ScrollView, Image, StyleSheet, Text } from 'react-native';
 import { Icon } from 'native-base';
 import { createAppContainer, createDrawerNavigator, createStackNavigator, DrawerItems, createSwitchNavigator } from 'react-navigation'
 
@@ -11,6 +11,7 @@ import Attendance from '../src/scenes/Attendance'
 import FindUs from '../src/scenes/Find_Us'
 import Schedule from '../src/scenes/Schedule'
 import Login from '../src/scenes/Login'
+import Settings from '../src/scenes/Settings'
 
 import Username from "../src/components/Username"
 import LogoutButton from "../src/components/LogoutButton"
@@ -18,12 +19,16 @@ import LogoutButton from "../src/components/LogoutButton"
 import  StorybookUIRoot from '../storybook';
 import MainContainer from './MainContainer'
 
+const version = require('../package.json').version
+
 // drawer Navigator
 const AppDrawerStack = createDrawerNavigator({
   home: { screen: Home },
   messages: { screen: Messages },
   Info: { screen: Info },
   attendance: { screen: Attendance },
+  settings: { screen: Settings },
+  
   //findUs: { screen: FindUs },
   //schedule: { screen: Schedule }
 
@@ -39,6 +44,10 @@ const AppDrawerStack = createDrawerNavigator({
           <DrawerItems {...props} />
           <LogoutButton {...props}/>
         </SafeAreaView>
+
+{/*         <SafeAreaView style={styles.container} forceInset={{ bottom: 'always', horizontal: 'never' }}>
+          <Text style={styles.paragraph}> {version} </Text>
+        </SafeAreaView> */}
       </ScrollView>
     )
   })

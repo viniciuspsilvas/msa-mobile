@@ -6,8 +6,9 @@ const color = '#b2b2b2'
 export default  StyleSheet.create({
 
     title: {
-        fontSize: 22,
+        fontSize: 30,
         fontWeight: 'bold',
         backgroundColor: 'transparent',
+        marginLeft: 40
     }
 });

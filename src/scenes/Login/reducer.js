@@ -42,7 +42,7 @@ export default function loginReducer(state = initialState, action = {}) {
             return { ...state, isFetching: false, error, userDetails: {} };
 
         case LOGOUT:
-            return { ...state, userDetails: {}, isAuthenticated: false };
+            return { ...state, userDetails: {}, isAuthenticated: false, isFetching: false, error: null};
 
         default:
             // ALWAYS have a default case in a reducer

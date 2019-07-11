@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Icon } from 'native-base';
+import { Icon, Container } from 'native-base';
 import PieChart from './components/PieChart';
 import Title from '../../components/Title';
-
+import Background from '../../components/Background'
 import { connect } from "react-redux";
-
 import { getAttendance } from "./actions"
-
 import styles from './style'
 
 class Attendance extends Component {
@@ -18,19 +16,8 @@ class Attendance extends Component {
     };
 
 
-    /*
-    Constructor 
-    */
-   constructor(props) {
-        super(props);
-
-        this.state = {
-        };
-    }
-
     componentDidMount() {
         const { userDetails } = this.props;
-
         this.props.navigation.addListener('willFocus', () => this.props.getAttendance(userDetails));
     }
 
@@ -38,10 +25,11 @@ class Attendance extends Component {
         const { attendance } = this.props;
 
         return (
-            <View style={styles.container}>
-                <Title title='Attendance' />
+            <Container style={styles.container}>
+                <Background />
+                <Title title='Attendance' icon='ios-stats' />
                 <PieChart progress={attendance} />
-            </View>
+            </Container>
         );
     }
 }

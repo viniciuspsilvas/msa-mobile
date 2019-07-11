@@ -21,7 +21,7 @@ export default function messagesReducer(state = initialState, action) {
         case FETCH_MESSAGE_BEGIN:
             return { ...state, isLoading: true, error: null };
         case FETCH_MESSAGE_SUCCESS:
-            return { ...state, isLoading: false, messagesList: payload };
+            return { ...state, isLoading: false, messagesList: payload.message};
         case FETCH_MESSAGE_FAILURE:
             return { ...state, isLoading: false, error: payload.error, messagesList: [] };
 

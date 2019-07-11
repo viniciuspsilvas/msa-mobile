@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  StyleSheet,
   View,
   Modal,
   ActivityIndicator
 } from 'react-native';
+
+import styles from './style'
 
 const Loader = props => {
   const {
@@ -19,7 +20,7 @@ const Loader = props => {
       onRequestClose={() => {}}>
       <View style={styles.modalBackground}>
         <View style={styles.activityIndicatorWrapper}>
-          <ActivityIndicator color="#ff0000"
+          <ActivityIndicator color="#000000"
             size="large"
             animating={loading} />
         </View>
@@ -27,24 +28,5 @@ const Loader = props => {
     </Modal>
   )
 }
-
-const styles = StyleSheet.create({
-  modalBackground: {
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    backgroundColor: '#00000040'
-  },
-  activityIndicatorWrapper: {
-    backgroundColor: '#FFFFFF',
-    height: 100,
-    width: 100,
-    borderRadius: 10,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around'
-  }
-});
 
 export default Loader;

@@ -11,7 +11,6 @@ publish: &publish
           name: "Setup custom environment variables"
           command: |
             echo 'BACKEND_URL='${BACKEND_URL} > .env
-            echo 'BACKEND_PORT='${BACKEND_PORT} >> .env
             echo 'IS_STORYBOOK_ENABLED=false' >> .env
             cat .env
 
@@ -34,7 +33,14 @@ publish: &publish
         name: Build Android version
         command:  |
             export PATH="$PATH:$( yarn global bin )"
+            exp push:android:upload --api-key ${FIREBASE_SERVER_KEY}
             exp build:android --non-interactive
+
+    - run:
+        name: Build iOS version
+        command:  |
+            export PATH="$PATH:$( yarn global bin )"
+            exp build:ios --non-interactive
 
 jobs:
   publish_to_expo_dev:

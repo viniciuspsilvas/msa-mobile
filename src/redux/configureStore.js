@@ -13,7 +13,7 @@ const logger = createLogger();
 const persistConfig = {
     key: "msa-mobile",
     storage,
-    //whitelist: ["loginReducer"]
+    whitelist: ["loginReducer"]
 };
 
 export const store = createStore(

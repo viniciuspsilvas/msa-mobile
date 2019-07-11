@@ -16,7 +16,7 @@ export default class Info extends Component {
         return (
             <View style={styles.container}>
             
-                <Title title='Info' />
+                <Title title='Info' icon='ios-information-circle-outline' />
 
 
                 <Card style={{ flex: 0 }}>

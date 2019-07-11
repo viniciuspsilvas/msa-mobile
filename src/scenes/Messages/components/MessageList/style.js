@@ -8,7 +8,7 @@ export default  StyleSheet.create({
 
     buttonOpen: {
         borderColor: color,
-        borderWidth: 1 ,
+        borderWidth: 0 ,
         width: 25,
         height: 25, 
         borderRadius: 3,

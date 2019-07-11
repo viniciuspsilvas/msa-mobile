@@ -10,15 +10,10 @@ export default ButtonLogin = props => {
     return (
         <Button
             {...props}
+            titleStyle={{color:"black"}}
             buttonStyle={styles.buttonSubmit}
             disabledStyle={styles.buttonDisabled}
-            icon={
-                <Icon
-                    name="arrow-right"
-                    size={25}
-                    color="white"
-                />
-            }
+            title="Log in"
           
         />
     )

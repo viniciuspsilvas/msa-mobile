@@ -5,6 +5,8 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
+  require('../src/components/AlertBox/story');
+  require('../src/components/Loader/story');
   require('../src/components/Title/story');
   require('../src/scenes/Attendance/components/PieChart/story');
   require('../src/scenes/Home/components/BadgeButton/story');
@@ -16,6 +18,8 @@ function loadStories() {
   require('../src/scenes/Messages/components/MessageCard/story');
   require('../src/scenes/Messages/components/MessageCardList/story');
   require('../src/scenes/Messages/components/MessageList/story');
+  require('../src/scenes/Settings/components/ItemSetting/story');
+  require('../src/scenes/Settings/components/SettingsForm/story');
   
 }
 
@@ -33,6 +37,8 @@ const stories = [
   '../src/scenes/Messages/components/MessageCard/story',
   '../src/scenes/Messages/components/MessageCardList/story',
   '../src/scenes/Messages/components/MessageList/story',
+  '../src/scenes/Settings/components/ItemSetting/story',
+  '../src/scenes/Settings/components/SettingsForm/story',
   
 ];
 
