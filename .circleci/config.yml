@@ -33,6 +33,7 @@ publish: &publish
         name: Build Android version
         command:  |
             export PATH="$PATH:$( yarn global bin )"
+            exp push:android:upload --api-key ${FIREBASE_SERVER_KEY}
             exp build:android --non-interactive
 
     - run:
