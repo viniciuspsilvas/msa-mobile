@@ -59,8 +59,6 @@ function dataToCategorie(data) {
     data.forEach(categorie => {
         if (categorie.title != '') {
 
-            console.log("image", categorie.meta.image)
-
             const item = {
                 id: categorie.id,
                 name: categorie.name,

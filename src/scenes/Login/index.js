@@ -57,7 +57,7 @@ class Login extends Component {
 		let adviceDesc = Expo.Constants.deviceName;
 
 		let userDetails = {
-			login: email.trim(),
+			login: email.trim().toLowerCase(),
 			password: password.trim(),
 
 			tokenAdvice: tokenAdvice,

@@ -1,7 +1,7 @@
 import { BACKEND_URL } from 'react-native-dotenv'
- 
-var backend = {
 
+var backend = {
+  
 	// Students API - '/api/Students'
 	students: BACKEND_URL + '/api/Students',
 	loginMoodle: BACKEND_URL + '/api/Students/loginMoodle',	
