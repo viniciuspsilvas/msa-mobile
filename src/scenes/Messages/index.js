@@ -22,7 +22,7 @@ class Messages extends Component {
     componentDidMount() {
         const { userDetails } = this.props;
         this.props.navigation.addListener('willFocus', () => this.loadMessageList(userDetails));
-        this.interval = setInterval(() => this.props.loadMessageList(userDetails), 5000);
+        this.interval = setInterval(() => this.loadMessageList(userDetails), 5000);
 
         this.state = {
             aux: ''
