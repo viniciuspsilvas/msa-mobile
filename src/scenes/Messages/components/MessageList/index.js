@@ -2,6 +2,8 @@ import React from 'react';
 import { List, ListItem, Body, Right, Text } from 'native-base';
 import { TouchableOpacity } from 'react-native';
 
+import Moment from 'react-moment';
+
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -38,7 +40,7 @@ export default MessageList = ({ list, onReadPress }) =>
 
                         <Right>
                             <Text style={!message.isRead ? styles.unreadMsg : {}} note >
-                                {new Date(message.createdAt).toLocaleDateString('en-AU', options)}
+                                <Moment element={Text} format={"DD/MM/YY HH:mm"} >{message.createdAt}</Moment>
                             </Text>
                         </Right>
                     </ListItem>
