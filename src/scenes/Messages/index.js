@@ -22,12 +22,16 @@ class Messages extends Component {
     componentDidMount() {
         const { userDetails } = this.props;
         this.props.navigation.addListener('willFocus', () => this.loadMessageList(userDetails));
+
+        this.state = {
+            aux: ''
+        }
     }
 
     loadMessageList = (userDetails) => {
         this.props.getMessagesList(userDetails)
         const { messagesList } = this.props;
-        
+
     }
 
     constructor(props) {
@@ -39,12 +43,15 @@ class Messages extends Component {
         const { userDetails } = this.props;
 
         msg.isRead = !msg.isRead
-        await this.props.updateMessage(msg)
-        this.props.getMessagesList(userDetails);
+        await this.props.updateMessage(msg, userDetails)
+
+        this.setState({ aux: '' }) // TODO workarrond to force re-render
     }
 
     render() {
         const { error, isLoading, messagesList } = this.props;
+
+        console.log("### render", messagesList)
 
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
         //if (isLoading) { return <View><Text>Loading...</Text></View> }

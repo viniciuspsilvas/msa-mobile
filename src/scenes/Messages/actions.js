@@ -40,15 +40,16 @@ export function getMessagesList(userDetails) {
 }
 
 // Action creator
-export function updateMessage(message) {
+export function updateMessage(message,userDetails) {
 
     return async dispatch => {
         try {
             dispatch({ type: FETCH_MESSAGE_BEGIN });
-            console.log("### message", message)
             const { data } = await axios.put(config.backend.messages, message);
 
+            getMessagesList(userDetails);
             dispatch({ type: FETCH_MESSAGE_UPDATED });
+
             return data.data
 
         } catch (error) {

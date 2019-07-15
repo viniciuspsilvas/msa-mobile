@@ -38,7 +38,7 @@ export default MessageList = ({ list, onReadPress }) =>
 
                         <Right>
                             <Text style={!message.isRead ? styles.unreadMsg : {}} note >
-                                {new Date(message.createdAt).toLocaleDateString('en-US', options)}
+                                {new Date(message.createdAt).toLocaleDateString('en-AU', options)}
                             </Text>
                         </Right>
                     </ListItem>
