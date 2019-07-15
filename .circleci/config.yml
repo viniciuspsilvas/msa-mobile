@@ -36,12 +36,6 @@ publish: &publish
             exp push:android:upload --api-key ${FIREBASE_SERVER_KEY}
             exp build:android --non-interactive
 
-    - run:
-        name: Build iOS version
-        command:  |
-            export PATH="$PATH:$( yarn global bin )"
-            exp build:ios --non-interactive
-
 jobs:
   publish_to_expo_dev:
     environment:
