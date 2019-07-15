@@ -16,6 +16,9 @@ export default  StyleSheet.create({
 
     titleStyle:{
         color: color,
-    }
+    },
 
+    unreadMsg: {
+        fontWeight:'bold'
+    }
 });

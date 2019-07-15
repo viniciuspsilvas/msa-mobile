@@ -26,8 +26,8 @@ const AppDrawerStack = createDrawerNavigator({
   home: { screen: Home },
   messages: { screen: Messages },
   Info: { screen: Info },
-  attendance: { screen: Attendance },
-  settings: { screen: Settings },
+  //attendance: { screen: Attendance },
+  //settings: { screen: Settings },
   
   //findUs: { screen: FindUs },
   //schedule: { screen: Schedule }

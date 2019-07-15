@@ -17,7 +17,7 @@ class Home extends Component {
     componentDidMount() {
         const { userDetails, messagesList } = this.props;
         this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
-        this.interval = setInterval(() => this.props.getMessagesList(userDetails), 1000);
+        this.interval = setInterval(() => this.props.getMessagesList(userDetails), 10000);
     }
 
     componentWillUnmount() {

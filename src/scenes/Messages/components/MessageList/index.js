@@ -1,5 +1,6 @@
 import React from 'react';
 import { List, ListItem, Body, Right, Text } from 'native-base';
+import { TouchableOpacity } from 'react-native';
 
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,7 +16,7 @@ var options = {
 };
 
 
-export default MessageList = ({ list }) =>
+export default MessageList = ({ list, onReadPress }) =>
     (
         <List>
             {list === undefined || list.length == 0 && <Text>No messages.</Text>}
@@ -23,27 +24,22 @@ export default MessageList = ({ list }) =>
             {list &&
                 list.map(message =>
                     <ListItem key={message.id}  >
-
-                        {message.isRead ? (
-                            <Icon name='envelope' size={20} type='font-awesome' />
-                        ) : (
+                        <TouchableOpacity onPress={() => onReadPress(message)}>
+                            {message.isRead ? (
                                 <Icon name='envelope-open' size={20} type='font-awesome' />
-                            )}
-
+                            ) : (
+                                    <Icon name='envelope' size={20} type='font-awesome' />
+                                )}
+                        </TouchableOpacity>
                         <Body>
-                            <Text>{message.title}</Text>
-                            <Text note>{message.body}</Text>
+                            <Text style={!message.isRead ? styles.unreadMsg : {}}>{message.title}</Text>
+                            <Text style={!message.isRead ? styles.unreadMsg : {}} note>{message.body}</Text>
                         </Body>
 
                         <Right>
-                            <Text note>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</Text>
-
-                            <Button
-                                titleStyle={styles.titleStyle}
-                                buttonStyle={styles.buttonOpen}
-                                type="outline"
-                                title='+'
-                            />
+                            <Text style={!message.isRead ? styles.unreadMsg : {}} note >
+                                {new Date(message.createdAt).toLocaleDateString('en-US', options)}
+                            </Text>
                         </Right>
                     </ListItem>
                 )
