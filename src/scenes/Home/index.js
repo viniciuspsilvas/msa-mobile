@@ -7,6 +7,9 @@ import Background from '../../components/Background'
 import { getMessagesList } from "../Messages/actions"
 import { connect } from "react-redux";
 
+import Pusher from 'pusher-js/react-native';
+import { PUSHER_APP_KEY, CLUSTER, PUSHER_EVENTS_MESSAGE } from 'react-native-dotenv'
+
 class Home extends Component {
 
     static navigationOptions = {
@@ -17,7 +20,15 @@ class Home extends Component {
     componentDidMount() {
         const { userDetails, messagesList } = this.props;
         this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
-        this.interval = setInterval(() => this.props.getMessagesList(userDetails), 5000);
+        //this.interval = setInterval(() => this.props.getMessagesList(userDetails), 5000);
+
+        var pusher = new Pusher(PUSHER_APP_KEY, {
+            cluster: CLUSTER,
+            forceTLS: true
+        });
+        var channel = pusher.subscribe(`msa.message.student.${userDetails.id}`);
+        channel.bind(PUSHER_EVENTS_MESSAGE, () =>  this.props.getMessagesList(userDetails));
+
     }
 
     componentWillUnmount() {
