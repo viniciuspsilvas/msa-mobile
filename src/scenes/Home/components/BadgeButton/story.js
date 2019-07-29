@@ -18,7 +18,8 @@ const CenterDecorator = storyFn => <View style={{
 storiesOf('BadgeButton', module)
     .addDecorator(CenterDecorator)
     .add('default', () => <BadgeButton qtdMessage={3}/>)
-    .add('No message', () => <BadgeButton qtdMessage={0}/>)
+    .add('0 message', () => <BadgeButton qtdMessage={0}/>)
+    .add('No message', () => <BadgeButton qtdMessage={null}/>)
 
     
 

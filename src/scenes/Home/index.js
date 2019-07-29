@@ -8,7 +8,7 @@ import { getMessagesList } from "../Messages/actions"
 import { connect } from "react-redux";
 
 import Pusher from 'pusher-js/react-native';
-import { PUSHER_APP_KEY, CLUSTER, PUSHER_EVENTS_MESSAGE } from 'react-native-dotenv'
+import { PUSHER_APP_KEY, CLUSTER, PUSHER_MSA_MESSAGE_CHANNEL } from 'react-native-dotenv'
 
 class Home extends Component {
 
@@ -18,29 +18,28 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        const { userDetails, messagesList } = this.props;
-        this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
-        //this.interval = setInterval(() => this.props.getMessagesList(userDetails), 5000);
+        const { userDetails } = this.props;
+        this.props.getMessagesList(userDetails);
+        this.subscribeMessageChannel();
+    }
+
+    subscribeMessageChannel = () => {
+        const { userDetails } = this.props;
 
         var pusher = new Pusher(PUSHER_APP_KEY, {
             cluster: CLUSTER,
             forceTLS: true
         });
-        var channel = pusher.subscribe(`msa.message.student.${userDetails.id}`);
-        channel.bind(PUSHER_EVENTS_MESSAGE, () =>  this.props.getMessagesList(userDetails));
+        var channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
 
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval)
+        channel.bind(`msa.message.student.${userDetails.id}`, () => this.props.getMessagesList(userDetails));
     }
 
     render() {
-        const { error, isLoading, messagesList } = this.props;
+        const { error, messagesList } = this.props;
         const qtdMessage = messagesList.length > 0 ? messagesList.filter(msg => !msg.isRead).length : 0;
 
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
-        //if (isLoading) { return <View><Text>Loading...</Text></View> }
 
         return (
             <View style={{

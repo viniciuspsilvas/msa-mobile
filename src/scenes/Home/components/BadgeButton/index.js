@@ -5,7 +5,7 @@ import { Button, Badge } from 'native-base';
 
 import PropTypes from 'prop-types';
 
-import styles from './style'
+import styl from './style'
 
 export default BadgeButton = ({ qtdMessage, onClick }) => {
     const hasMessage = qtdMessage > 0;
@@ -15,18 +15,17 @@ export default BadgeButton = ({ qtdMessage, onClick }) => {
             {
                 hasMessage ? (
                     <Button block onPress={onClick}
-                        style={styles.newMessageButton}
+                        style={styl.newMessageButton}
                         >
-                        <Badge  style={styles.newMessageButton}>
-                            <Text style={styles.newMessageText}>{qtdMessage}</Text>
+                        <Badge  style={styl.newMessageButton}>
+                            <Text style={styl.newMessageText}>{qtdMessage}</Text>
                         </Badge>
-                        <Text style={styles.newMessageText}> New Notifications</Text>
+                        <Text style={styl.newMessageText}> New Notifications</Text>
                     </Button>
                 ) : (
-                        <Button block disabled
-                            style={styles.noMessageButton}>
-                            <Text style={styles.noMessageText}> No Notifications</Text>
-                        </Button>
+                        <View style={styl.noMessageButton}>
+                            <Text style={styl.noMessageText}> No Notifications</Text>
+                        </View>
                     )
             }
         </View>

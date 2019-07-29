@@ -18,7 +18,7 @@ var options = {
 };
 
 
-export default MessageList = ({ list, onReadPress }) =>
+export default MessageList = ({ list }) =>
     (
         <List>
             {list === undefined || list.length == 0 && <Text>No messages.</Text>}
@@ -26,13 +26,11 @@ export default MessageList = ({ list, onReadPress }) =>
             {list &&
                 list.map(message =>
                     <ListItem key={message.id}  >
-                        <TouchableOpacity onPress={() => onReadPress(message)}>
-                            {message.isRead ? (
-                                <Icon name='envelope-open' size={20} type='font-awesome' />
-                            ) : (
-                                    <Icon name='envelope' size={20} type='font-awesome' />
-                                )}
-                        </TouchableOpacity>
+                        {message.isRead ? (
+                            <Icon name='envelope-open' size={20} type='font-awesome' />
+                        ) : (
+                                <Icon name='envelope' size={20} type='font-awesome' />
+                            )}
                         <Body>
                             <Text style={!message.isRead ? styles.unreadMsg : {}}>{message.title}</Text>
                             <Text style={!message.isRead ? styles.unreadMsg : {}} note>{message.body}</Text>

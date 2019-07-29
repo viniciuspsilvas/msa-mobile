@@ -12,6 +12,10 @@ import Background from '../../components/Background'
 
 import styles from './style'
 
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 class Messages extends Component {
 
     static navigationOptions = ({ navigations }) => ({
@@ -20,42 +24,34 @@ class Messages extends Component {
     });
 
     componentDidMount() {
-        const { userDetails } = this.props;
-        this.props.navigation.addListener('willFocus', () => this.loadMessageList(userDetails));
-        this.interval = setInterval(() => this.loadMessageList(userDetails), 5000);
+        this.props.navigation.addListener('willFocus', () => this.setLastMessageRead());
+    }
 
-        this.state = {
-            aux: ''
+    setLastMessageRead = async () => {
+        const { userDetails, messagesList } = this.props;
+
+        if (messagesList && messagesList.length > 0) {
+            await sleep(5000);
+
+            var aux = false;
+            messagesList.forEach(msg => {
+                if (!msg.isRead) {
+                    aux = true;
+                    msg.isRead = true;
+                    this.props.updateMessage(msg, userDetails)
+                }
+            });
+
+            if (aux) {
+                this.props.getMessagesList(userDetails)
+            }
+
         }
     }
 
-    loadMessageList = (userDetails) => {
-        this.props.getMessagesList(userDetails)
-        const { messagesList } = this.props;
-
-    }
-
-    constructor(props) {
-        super(props);
-        this.handleReadPress = this.handleReadPress.bind(this);
-    }
-
-    handleReadPress = async (msg) => {
-        const { userDetails } = this.props;
-
-        msg.isRead = !msg.isRead
-        await this.props.updateMessage(msg, userDetails)
-
-        this.setState({ aux: '' }) // TODO workarrond to force re-render
-    }
-
     render() {
-        const { error, isLoading, messagesList } = this.props;
-
-        console.log("### render", messagesList)
-
+        const { error, messagesList } = this.props;
         if (error) { return <View><Text> Error! {error.message}</Text></View> }
-        //if (isLoading) { return <View><Text>Loading...</Text></View> }
 
         return (
             <Container >
@@ -66,7 +62,7 @@ class Messages extends Component {
                     {messagesList <= 0 ? (
                         <Text>No messages.</Text>
                     ) : (
-                            <MessageList list={messagesList} onReadPress={this.handleReadPress} />
+                            <MessageList list={messagesList} />
                         )}
                 </Content>
             </Container>
