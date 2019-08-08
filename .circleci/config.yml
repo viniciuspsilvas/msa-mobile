@@ -31,15 +31,15 @@ publish: &publish
         name: Deploying to Expo
         command: |
             export PATH="$PATH:$( yarn global bin )"
-            exp login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
-            exp publish
+            expo login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
+            expo publish
 
     - run:
         name: Build Android version
         command:  |
             export PATH="$PATH:$( yarn global bin )"
-            exp push:android:upload --api-key ${FIREBASE_SERVER_KEY}
-            exp build:android --non-interactive
+            expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
+            expo build:android --non-interactive
 
 jobs:
   publish_to_expo_dev:
