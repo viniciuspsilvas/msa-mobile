@@ -20,26 +20,26 @@ publish: &publish
             cat .env
 
     - run:
-        name: Installing dependencies
-        command: npm install
+        name: Installing exp
+        command: yarn global add exp
 
     - run:
-        name: Installing exp
-        command: yarn global add expo@^32
+        name: Installing dependencies
+        command: npm install
 
     - run:
         name: Deploying to Expo
         command: |
             export PATH="$PATH:$( yarn global bin )"
-            expo login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
-            expo publish --non-interactive
+            exp login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
+            exp publish --non-interactive
 
     - run:
         name: Build Android version
         command:  |
             export PATH="$PATH:$( yarn global bin )"
-            expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
-            expo build:android --non-interactive
+            exp push:android:upload --api-key ${FIREBASE_SERVER_KEY}
+            exp build:android --non-interactive
 
 jobs:
   publish_to_expo_dev:
