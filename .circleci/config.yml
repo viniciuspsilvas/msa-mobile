@@ -20,19 +20,19 @@ publish: &publish
             cat .env
 
     - run:
-        name: Installing dependencies
-        command: npm install
-
-    - run:
         name: Installing exp
         command: yarn global add exp
+
+    - run:
+        name: Installing dependencies
+        command: npm install
 
     - run:
         name: Deploying to Expo
         command: |
             export PATH="$PATH:$( yarn global bin )"
             exp login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
-            exp publish
+            exp publish --non-interactive
 
     - run:
         name: Build Android version
