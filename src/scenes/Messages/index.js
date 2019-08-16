@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Icon, Content, Text, View } from 'native-base';
+import { Container, Icon, Content, Text } from 'native-base';
+
+import { Alert } from 'react-native'
 
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
@@ -51,7 +53,8 @@ class Messages extends Component {
 
     render() {
         const { error, messagesList } = this.props;
-        if (error) { return <View><Text> Error! {error.message}</Text></View> }
+
+        if (error) { Alert.alert(error.message) };
 
         return (
             <Container >

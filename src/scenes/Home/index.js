@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { Icon } from 'native-base';
 
 import Background from '../../components/Background'
@@ -39,7 +39,7 @@ class Home extends Component {
         const { error, messagesList } = this.props;
         const qtdMessage = messagesList.length > 0 ? messagesList.filter(msg => !msg.isRead).length : 0;
 
-        if (error) { return <View><Text> Error! {error.message}</Text></View> }
+        if (error) { Alert.alert(error.message) };
 
         return (
             <View style={{
@@ -59,12 +59,10 @@ class Home extends Component {
 }
 
 //Redux configuration
-const mapStateToProps = state => {
-    return {
-        messagesList: state.messagesReducer.messagesList,
-        userDetails: state.loginReducer.userDetails
-    };
-};
+const mapStateToProps = state => ({
+    ...state.messagesReducer,
+    userDetails: state.loginReducer.userDetails
+});
 
 const mapDispatchToProps = (dispatch) => {
     return {
