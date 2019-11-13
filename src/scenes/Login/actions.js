@@ -29,6 +29,7 @@ export const loginMoodle =  (userDetails) => async (dispatch) => {
             })
     } catch (error) {
         dispatch({ type: FETCH_LOGIN_FAILURE, payload: error })
+        throw error;
     }
 
 }
