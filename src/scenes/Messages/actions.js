@@ -1,10 +1,28 @@
-import axios from 'axios';
-import config from '../../../config/config'
+import { axiosInstance } from 'msa-mobile/src/util/apiClient';
 
 export const FETCH_MESSAGE_BEGIN = 'FETCH_MESSAGE_BEGIN';
 export const FETCH_MESSAGE_SUCCESS = 'FETCH_MESSAGE_SUCCESS';
 export const FETCH_MESSAGE_UPDATED = 'FETCH_MESSAGE_UPDATED';
 export const FETCH_MESSAGE_FAILURE = 'FETCH_MESSAGE_FAILURE';
+
+const GET_MESSAGES_BY_STUDENT =
+    `query messagesSentByStudent($student : StudentInput!) {
+            messagesSentByStudent(student : $student){
+                _id
+                title
+                body
+                createdAt
+                isRead
+            }
+        }
+    `
+const SET_MESSAGE_READ = `
+        mutation setMessageAsRead($_id:ID!) {
+            setMessageAsRead (_id:$_id) {
+            _id
+            }
+        }
+    `
 
 // Action
 export const fetchMessagesBegin = () => ({
@@ -23,29 +41,45 @@ export const fetchMessagesFailure = error => ({
 });
 
 // Action creator
-export function getMessagesList(userDetails) {
+export function getMessagesList(student) {
+    return async dispatch => {
+        try {
+            dispatch(fetchMessagesBegin());
 
-    const filter = { params: { filter: `{"where":{"studentId":"` + userDetails.id + `", "sentAt":{"neq":null }} , "order":"createdAt DESC"}` } }
-
-    return dispatch => {
-        dispatch(fetchMessagesBegin());
-
-        return axios.get(config.backend.messages, filter)
-            .then(({ data }) => {
-                dispatch(fetchMessagesSuccess(data));
-                return data;
+            // fetch data from a url endpoint
+            var { data } = await axiosInstance.post("", {
+                query: GET_MESSAGES_BY_STUDENT,
+                variables: {
+                    student: { _id: student._id }
+                }
             })
-            .catch(error => dispatch(fetchMessagesFailure(error)));
+
+
+            // In case of error coming from server
+            if (data.errors) throw data.errors[0];
+
+            dispatch(fetchMessagesSuccess(data.data.messagesSentByStudent));
+            return data.data.messagesSentByStudent;
+        } catch (error) {
+            dispatch(fetchMessagesFailure(error))
+        }
     };
 }
 
 // Action creator
-export function updateMessage(message,userDetails) {
+export function updateMessage(message, userDetails) {
 
     return async dispatch => {
         try {
             dispatch({ type: FETCH_MESSAGE_BEGIN });
-            const { data } = await axios.put(config.backend.messages, message);
+
+            // fetch data from a url endpoint
+            var { data } = await axiosInstance.post("", {
+                query: SET_MESSAGE_READ,
+                variables: {
+                    _id: message._id
+                }
+            })
 
             getMessagesList(userDetails);
             dispatch({ type: FETCH_MESSAGE_UPDATED });

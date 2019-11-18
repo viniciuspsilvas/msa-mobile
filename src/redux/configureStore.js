@@ -2,7 +2,8 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { createLogger } from "redux-logger";
 import rootReducer from "./rootReducer";
-import storage from "redux-persist/lib/storage";
+import { AsyncStorage } from 'react-native';
+
 import { persistReducer, persistStore } from "redux-persist";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
@@ -12,7 +13,7 @@ const logger = createLogger();
 */
 const persistConfig = {
     key: "msa-mobile",
-    storage,
+    storage: AsyncStorage,
     whitelist: ["loginReducer"]
 };
 

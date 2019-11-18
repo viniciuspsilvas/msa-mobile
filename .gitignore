@@ -18,3 +18,7 @@ yarn-debug.log*
 yarn-error.log*
 config/config.js
 .DS_Store
+.vscode/launch.json
+.vscode/.react/AppEntry.bundle
+.vscode/.react/AppEntry.map
+.vscode/.react/debuggerWorker.js

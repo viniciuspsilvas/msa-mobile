@@ -1,37 +1,53 @@
-import axios from 'axios';
-import config from '../../../config/config'
+import { axiosInstance } from 'msa-mobile/src/util/apiClient';
 
 export const FETCH_LOGIN_BEGIN = 'FETCH_LOGIN_BEGIN';
 export const FETCH_LOGIN_SUCCESS = 'FETCH_LOGIN_SUCCESS';
 export const FETCH_LOGIN_FAILURE = 'FETCH_LOGIN_FAILURE';
 export const LOGOUT = 'LOGOUT';
 
-export const loginMoodle =  (userDetails) => async (dispatch) => {
+const LOGIN_STUDENT = `
+    mutation loginStudent($loginInput : LoginInput!) {
+        loginStudent(loginInput : $loginInput){
+            token
+            student{
+                _id
+                email
+                firstname
+                lastname
+                phone
+            }
+        }
+    }
+`
 
+export const loginMobile = (loginInput) => async (dispatch) => {
     dispatch({ type: FETCH_LOGIN_BEGIN })
 
     try {
-        let resp = await axios.post(config.backend.loginMoodle, { "userDetails": userDetails });
-        const { email, firstname, fullname, id, lastname, phone, username } = await resp.data.return;
+        const resp = await axiosInstance.post("", {
+            query: LOGIN_STUDENT,
+            variables: { loginInput }
+        })
+
+        // In case of error coming from server
+        if (resp.data.errors) throw resp.data.errors[0];
+
+        const {loginStudent} = resp.data.data;
+        const { _id, email, firstname, lastname, phone } = loginStudent.student;
 
         const userDetailLogged = {
-            tokenAdvice: userDetails.tokenAdvice,
-            adviceDesc: userDetails.adviceDesc,
-            email, firstname, fullname, id, lastname, phone, username
+            _id, email, firstname, lastname, phone,
+            token: loginStudent.token
         }
-
+        
         dispatch(
-            // TODO Send the userDetail from the action. ATM I`m not sure in this ACTION is the best
-            // place to do it.
             {
                 type: FETCH_LOGIN_SUCCESS,
                 payload: userDetailLogged
             })
     } catch (error) {
-        dispatch({ type: FETCH_LOGIN_FAILURE, payload: error })
-        throw error;
+        dispatch({ type: FETCH_LOGIN_FAILURE, payload: error.message })
     }
-
 }
 
 export const logout = () => dispatch => dispatch({ type: LOGOUT });

@@ -3,7 +3,7 @@
     "name": "Mindroom Student APP",
     "slug": "mindroom-student-app",
     "privacy": "public",
-    "sdkVersion": "33.0.0",
+    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android"
@@ -34,5 +34,6 @@
       "package": "au.edu.mindroom.msa",
       "googleServicesFile": "./google-services.json"
     }
-  }
+  },
+  "name": "msa-mobile"
 }

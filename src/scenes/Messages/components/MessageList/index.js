@@ -1,22 +1,9 @@
 import React from 'react';
 import { List, ListItem, Body, Right, Text } from 'native-base';
-import { TouchableOpacity } from 'react-native';
-
 import Moment from 'react-moment';
-
-import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import PropTypes from 'prop-types';
-
 import styles from './style'
-
-var options = {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit'
-};
-
 
 export default MessageList = ({ list }) =>
     (
@@ -25,7 +12,7 @@ export default MessageList = ({ list }) =>
 
             {list &&
                 list.map(message =>
-                    <ListItem key={message.id}  >
+                    <ListItem key={message._id}  >
                         {message.isRead ? (
                             <Icon name='envelope-open' size={20} type='font-awesome' />
                         ) : (

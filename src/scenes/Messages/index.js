@@ -34,8 +34,6 @@ class Messages extends Component {
 
         if (messagesList && messagesList.length > 0) {
             await sleep(5000);
-
-            var aux = false;
             messagesList.forEach(msg => {
                 if (!msg.isRead) {
                     aux = true;
@@ -43,11 +41,6 @@ class Messages extends Component {
                     this.props.updateMessage(msg, userDetails)
                 }
             });
-
-            if (aux) {
-                this.props.getMessagesList(userDetails)
-            }
-
         }
     }
 
