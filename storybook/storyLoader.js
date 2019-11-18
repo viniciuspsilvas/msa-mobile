@@ -17,8 +17,6 @@ function loadStories() {
   require('../src/scenes/Messages/components/MessageCard/story');
   require('../src/scenes/Messages/components/MessageCardList/story');
   require('../src/scenes/Messages/components/MessageList/story');
-  require('../src/scenes/Settings/components/ItemSetting/story');
-  require('../src/scenes/Settings/components/SettingsForm/story');
   
 }
 
@@ -35,8 +33,6 @@ const stories = [
   '../src/scenes/Messages/components/MessageCard/story',
   '../src/scenes/Messages/components/MessageCardList/story',
   '../src/scenes/Messages/components/MessageList/story',
-  '../src/scenes/Settings/components/ItemSetting/story',
-  '../src/scenes/Settings/components/SettingsForm/story',
   
 ];
 
