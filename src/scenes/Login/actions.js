@@ -12,6 +12,7 @@ const LOGIN_STUDENT = `
             student{
                 _id
                 email
+                fullname
                 firstname
                 lastname
                 phone
@@ -33,10 +34,9 @@ export const loginMobile = (loginInput) => async (dispatch) => {
         if (resp.data.errors) throw resp.data.errors[0];
 
         const {loginStudent} = resp.data.data;
-        const { _id, email, firstname, lastname, phone } = loginStudent.student;
 
         const userDetailLogged = {
-            _id, email, firstname, lastname, phone,
+            ...loginStudent.student,
             token: loginStudent.token
         }
         

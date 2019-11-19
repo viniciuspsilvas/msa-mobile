@@ -21,7 +21,7 @@ publish: &publish
 
     - run:
         name: Installing exp
-        command: yarn global add exp
+        command: yarn global add expo-cli
 
     - run:
         name: Installing dependencies
