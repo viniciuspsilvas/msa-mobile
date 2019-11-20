@@ -32,6 +32,7 @@ publish: &publish
         command: |
             export PATH="$PATH:$( yarn global bin )"
             expo login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
+            expo optimize
             expo publish --non-interactive
 
     - run:

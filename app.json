@@ -35,5 +35,9 @@
       "googleServicesFile": "./google-services.json"
     }
   },
-  "name": "msa-mobile"
+  "name": "msa-mobile",
+
+  "updates": {
+    "enabled": false
+  }
 }
