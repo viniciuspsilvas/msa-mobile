@@ -47,7 +47,7 @@ export function getMessagesList(student) {
             dispatch(fetchMessagesBegin());
 
             // fetch data from a url endpoint
-            var { data } = await axiosInstance.post("", {
+            var { data } = await axiosInstance.post("/graphql", {
                 query: GET_MESSAGES_BY_STUDENT,
                 variables: {
                     student: { _id: student._id }
@@ -74,7 +74,7 @@ export function updateMessage(message, userDetails) {
             dispatch({ type: FETCH_MESSAGE_BEGIN });
 
             // fetch data from a url endpoint
-            var { data } = await axiosInstance.post("", {
+            var { data } = await axiosInstance.post("/graphql", {
                 query: SET_MESSAGE_READ,
                 variables: {
                     _id: message._id

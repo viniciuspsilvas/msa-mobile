@@ -25,7 +25,7 @@ export const loginMobile = (loginInput) => async (dispatch) => {
     dispatch({ type: FETCH_LOGIN_BEGIN })
 
     try {
-        const resp = await axiosInstance.post("", {
+        const resp = await axiosInstance.post("/graphql", {
             query: LOGIN_STUDENT,
             variables: { loginInput }
         })
