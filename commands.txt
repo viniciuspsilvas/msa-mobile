@@ -1,0 +1,2 @@
+### EMULADORES ANDROID ###
+/Users/vinicius/Library/Android/sdk/emulator/emulator -avd Mindroomapp

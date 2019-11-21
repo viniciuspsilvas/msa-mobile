@@ -2,7 +2,7 @@ version: 2
 publish: &publish
   working_directory: ~/msa-mobile
   docker:
-    - image: circleci/node:10.4.1
+    - image: circleci/node:10.13.0
 
   steps:
     - checkout
@@ -12,35 +12,35 @@ publish: &publish
           command: |
             echo 'BACKEND_URL='${BACKEND_URL} > .env
             echo 'IS_STORYBOOK_ENABLED=false' >> .env
+            echo 'PUSHER_APP_ID='${PUSHER_APP_ID} >> .env
+            echo 'PUSHER_APP_KEY='${PUSHER_APP_KEY} >> .env
+            echo 'PUSHER_APP_SECRET='${PUSHER_APP_SECRET} >> .env
+            echo 'CLUSTER='${CLUSTER} >> .env
+            echo 'PUSHER_MSA_MESSAGE_CHANNEL='${PUSHER_MSA_MESSAGE_CHANNEL} >> .env
             cat .env
+
+    - run:
+        name: Installing exp
+        command: yarn global add expo-cli
 
     - run:
         name: Installing dependencies
         command: npm install
 
     - run:
-        name: Installing exp
-        command: yarn global add exp
-
-    - run:
         name: Deploying to Expo
         command: |
             export PATH="$PATH:$( yarn global bin )"
-            exp login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
-            exp publish
+            expo login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
+            expo optimize
+            expo publish --non-interactive
 
     - run:
         name: Build Android version
         command:  |
             export PATH="$PATH:$( yarn global bin )"
-            exp push:android:upload --api-key ${FIREBASE_SERVER_KEY}
-            exp build:android --non-interactive
-
-    - run:
-        name: Build iOS version
-        command:  |
-            export PATH="$PATH:$( yarn global bin )"
-            exp build:ios --non-interactive
+            expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
+            expo build:android --non-interactive
 
 jobs:
   publish_to_expo_dev:
@@ -60,7 +60,7 @@ workflows:
       - publish_to_expo_dev:
           filters:
             branches:
-              only: develop
+              only: graphql
       - publish_to_expo_prod:
           filters:
             branches:

@@ -1,19 +1,9 @@
 import React from 'react';
 import { List, ListItem, Body, Right, Text } from 'native-base';
-
-import { Button } from 'react-native-elements';
+import Moment from 'react-moment';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import PropTypes from 'prop-types';
-
 import styles from './style'
-
-var options = {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit'
-};
-
 
 export default MessageList = ({ list }) =>
     (
@@ -22,28 +12,21 @@ export default MessageList = ({ list }) =>
 
             {list &&
                 list.map(message =>
-                    <ListItem key={message.id}  >
-
+                    <ListItem key={message._id}  >
                         {message.isRead ? (
-                            <Icon name='envelope' size={20} type='font-awesome' />
+                            <Icon name='envelope-open' size={20} type='font-awesome' />
                         ) : (
-                                <Icon name='envelope-open' size={20} type='font-awesome' />
+                                <Icon name='envelope' size={20} type='font-awesome' />
                             )}
-
                         <Body>
-                            <Text>{message.title}</Text>
-                            <Text note>{message.body}</Text>
+                            <Text style={!message.isRead ? styles.unreadMsg : {}}>{message.title}</Text>
+                            <Text style={!message.isRead ? styles.unreadMsg : {}} note>{message.body}</Text>
                         </Body>
 
                         <Right>
-                            <Text note>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</Text>
-
-                            <Button
-                                titleStyle={styles.titleStyle}
-                                buttonStyle={styles.buttonOpen}
-                                type="outline"
-                                title='+'
-                            />
+                            <Text style={!message.isRead ? styles.unreadMsg : {}} note >
+                                <Moment element={Text} format={"DD/MM/YY HH:mm"} >{message.createdAt}</Moment>
+                            </Text>
                         </Right>
                     </ListItem>
                 )

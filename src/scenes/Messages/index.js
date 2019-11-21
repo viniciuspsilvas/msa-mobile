@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
-import { Container, Icon, Content, Text, View } from 'native-base';
+import { Container, Icon, Content, Text } from 'native-base';
+
+import { Alert } from 'react-native'
 
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux'
 
-import { getMessagesList } from "./actions"
+import { getMessagesList, updateMessage } from "./actions"
 
 import MessageList from './components/MessageList'
 import Title from '../../components/Title';
-
 import Background from '../../components/Background'
 
 import styles from './style'
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
 
 class Messages extends Component {
 
@@ -20,21 +26,33 @@ class Messages extends Component {
     });
 
     componentDidMount() {
-        const { userDetails } = this.props;
-        this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
+        this.props.navigation.addListener('willFocus', () => this.setLastMessageRead());
     }
-    
-    render() {
-        const { error, isLoading, messagesList } = this.props;
 
-        if (error) { return <View><Text> Error! {error.message}</Text></View> }
-        //if (isLoading) { return <View><Text>Loading...</Text></View> }
+    setLastMessageRead = () => {
+        const { userDetails, messagesList , updateMessage} = this.props;
+        if (messagesList && messagesList.length > 0) {
+            setTimeout(function () {
+                messagesList.forEach(msg => {
+                    if (!msg.isRead) {
+                        aux = true;
+                        msg.isRead = true;
+                        updateMessage(msg, userDetails)
+                    }
+                });
+            }, 5000);
+        }
+    }
+
+    render() {
+        const { error, messagesList } = this.props;
+
+        if (error) { Alert.alert(error.message) };
 
         return (
             <Container >
-
                 <Background />
-                <Title title='Messages'  icon="ios-chatboxes" />
+                <Title title='Messages' icon="ios-chatboxes" />
 
                 <Content style={styles.container}>
                     {messagesList <= 0 ? (
@@ -43,25 +61,15 @@ class Messages extends Component {
                             <MessageList list={messagesList} />
                         )}
                 </Content>
-
             </Container>
         );
     }
 }
 
 //Redux configuration
-const mapStateToProps = state => {
-    return {
-        ...state.messagesReducer,
-        userDetails: state.loginReducer.userDetails
-    };
-};
+const mapStateToProps = state => ({ ...state.messagesReducer, userDetails: state.loginReducer.userDetails });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getMessagesList: (filter) => dispatch(getMessagesList(filter)),
-    }
-}
+const mapDispatchToProps = dispatch => bindActionCreators({ getMessagesList, updateMessage }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Messages);
 

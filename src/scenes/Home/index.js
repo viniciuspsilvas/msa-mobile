@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { Icon } from 'native-base';
 
 import Background from '../../components/Background'
 
 import { getMessagesList } from "../Messages/actions"
 import { connect } from "react-redux";
+
+import Pusher from 'pusher-js/react-native';
+import { PUSHER_APP_KEY, CLUSTER, PUSHER_MSA_MESSAGE_CHANNEL } from 'react-native-dotenv'
 
 class Home extends Component {
 
@@ -15,21 +18,28 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        const { userDetails, messagesList } = this.props;
-        this.props.navigation.addListener('willFocus', () => this.props.getMessagesList(userDetails));
-        this.interval = setInterval(() => this.props.getMessagesList(userDetails), 1000);
+        const { userDetails } = this.props;
+        this.props.getMessagesList(userDetails);
+        this.subscribeMessageChannel();
     }
 
-    componentWillUnmount() {
-        clearInterval(this.interval)
+    subscribeMessageChannel = () => {
+        const { userDetails } = this.props;
+
+        var pusher = new Pusher(PUSHER_APP_KEY, {
+            cluster: CLUSTER,
+            forceTLS: true
+        });
+        var channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
+
+        channel.bind(`msa.message.student.${userDetails._id}`, () => this.props.getMessagesList(userDetails));
     }
 
     render() {
-        const { error, isLoading, messagesList } = this.props;
+        const { error, messagesList } = this.props;
         const qtdMessage = messagesList.length > 0 ? messagesList.filter(msg => !msg.isRead).length : 0;
 
-        if (error) { return <View><Text> Error! {error.message}</Text></View> }
-        //if (isLoading) { return <View><Text>Loading...</Text></View> }
+        if (error) { Alert.alert(error.message) };
 
         return (
             <View style={{
@@ -49,12 +59,10 @@ class Home extends Component {
 }
 
 //Redux configuration
-const mapStateToProps = state => {
-    return {
-        messagesList: state.messagesReducer.messagesList,
-        userDetails: state.loginReducer.userDetails
-    };
-};
+const mapStateToProps = state => ({
+    ...state.messagesReducer,
+    userDetails: state.loginReducer.userDetails
+});
 
 const mapDispatchToProps = (dispatch) => {
     return {
