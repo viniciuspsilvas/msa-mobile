@@ -32,7 +32,7 @@ class Home extends Component {
         });
         var channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
 
-        channel.bind(`msa.message.student.${userDetails.id}`, () => this.props.getMessagesList(userDetails));
+        channel.bind(`msa.message.student.${userDetails._id}`, () => this.props.getMessagesList(userDetails));
     }
 
     render() {

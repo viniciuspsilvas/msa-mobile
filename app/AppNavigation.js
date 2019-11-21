@@ -1,17 +1,18 @@
 import React from 'react'
-import { Animated, Easing, View, SafeAreaView, ScrollView, Image, StyleSheet, Text } from 'react-native';
+import { Animated, Easing, View, SafeAreaView, ScrollView, Image, StyleSheet } from 'react-native';
 import { Icon } from 'native-base';
-import { createAppContainer, createDrawerNavigator, createStackNavigator, DrawerItems, createSwitchNavigator } from 'react-navigation'
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+
+
+import { DrawerItems } from 'react-navigation-drawer';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import ForgottenPassword from '../src/scenes/Login/scenes/ForgottenPassword'
 import Home from '../src/scenes/Home'
 import Messages from '../src/scenes/Messages'
 import Info from '../src/scenes/Info'
-import Attendance from '../src/scenes/Attendance'
-import FindUs from '../src/scenes/Find_Us'
-import Schedule from '../src/scenes/Schedule'
 import Login from '../src/scenes/Login'
-import Settings from '../src/scenes/Settings'
 
 import Username from "../src/components/Username"
 import LogoutButton from "../src/components/LogoutButton"
@@ -26,12 +27,6 @@ const AppDrawerStack = createDrawerNavigator({
   home: { screen: Home },
   messages: { screen: Messages },
   Info: { screen: Info },
-  //attendance: { screen: Attendance },
-  //settings: { screen: Settings },
-  
-  //findUs: { screen: FindUs },
-  //schedule: { screen: Schedule }
-
 }, {
     gesturesEnabled: false,
     contentComponent: (props) => (
@@ -44,10 +39,6 @@ const AppDrawerStack = createDrawerNavigator({
           <DrawerItems {...props} />
           <LogoutButton {...props}/>
         </SafeAreaView>
-
-{/*         <SafeAreaView style={styles.container} forceInset={{ bottom: 'always', horizontal: 'never' }}>
-          <Text style={styles.paragraph}> {version} </Text>
-        </SafeAreaView> */}
       </ScrollView>
     )
   })

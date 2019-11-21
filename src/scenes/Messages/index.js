@@ -29,25 +29,18 @@ class Messages extends Component {
         this.props.navigation.addListener('willFocus', () => this.setLastMessageRead());
     }
 
-    setLastMessageRead = async () => {
-        const { userDetails, messagesList } = this.props;
-
+    setLastMessageRead = () => {
+        const { userDetails, messagesList , updateMessage} = this.props;
         if (messagesList && messagesList.length > 0) {
-            await sleep(5000);
-
-            var aux = false;
-            messagesList.forEach(msg => {
-                if (!msg.isRead) {
-                    aux = true;
-                    msg.isRead = true;
-                    this.props.updateMessage(msg, userDetails)
-                }
-            });
-
-            if (aux) {
-                this.props.getMessagesList(userDetails)
-            }
-
+            setTimeout(function () {
+                messagesList.forEach(msg => {
+                    if (!msg.isRead) {
+                        aux = true;
+                        msg.isRead = true;
+                        updateMessage(msg, userDetails)
+                    }
+                });
+            }, 5000);
         }
     }
 

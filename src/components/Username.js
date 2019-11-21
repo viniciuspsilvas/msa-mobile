@@ -16,11 +16,6 @@ class Username extends React.Component {
 }
 
 //Redux configuration
-const mapStateToProps = state => {
-    return { 
-        username: state.loginReducer.userDetails ? state.loginReducer.userDetails.fullname : "" 
-        
-    };
-};
+const mapStateToProps = state => ({ username: state.loginReducer.userDetails.fullname });
 
 export default connect(mapStateToProps)(Username);

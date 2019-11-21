@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
-import { Permissions, Notifications } from 'expo';
+import { Notifications } from 'expo';
+
+import * as Permissions from 'expo-permissions'
+
+import Constants from 'expo-constants';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
@@ -8,7 +12,7 @@ import { bindActionCreators } from 'redux'
 import LoginForm from "./components/LoginForm"
 import Loader from "../../components/Loader"
 
-import { loginMoodle } from "./actions";
+import { loginMobile } from "./actions";
 
 class Login extends Component {
 
@@ -44,27 +48,24 @@ class Login extends Component {
 		}
 
 		// Get the token that uniquely identifies this device
-		let tokenAdvice = await Notifications.getExpoPushTokenAsync();
+		let tokenAdvice = Constants.isDevice ? await Notifications.getExpoPushTokenAsync() : "DEV_TOKEN";
+
 		let adviceDesc = Expo.Constants.deviceName;
 		this.setState({ tokenAdvice: tokenAdvice, adviceDesc: adviceDesc });
 	}
 
 	loginHandler = (values) => {
 		const { email, password } = values;
+		const username = email.trim().toLowerCase();
 
-		// Get the token that uniquely identifies this device
-		let tokenAdvice = this.state.tokenAdvice;
-		let adviceDesc = Expo.Constants.deviceName;
-
-		let userDetails = {
-			login: email.trim().toLowerCase(),
-			password: password.trim(),
-
-			tokenAdvice: tokenAdvice,
-			adviceDesc: adviceDesc
+		const loginInput = {
+			username,
+			password,
+			tokenDevice: this.state.tokenAdvice,
+			nameDevice: Expo.Constants.deviceName
 		}
 
-		this.props.loginMoodle(userDetails);
+		this.props.loginMobile(loginInput);
 	}
 
 	componentDidUpdate() {
@@ -79,7 +80,9 @@ class Login extends Component {
 		const { error, isFetching } = this.props;
 
 		if (isFetching) { return <Loader loading={isFetching} /> }
-		if (error) { Alert.alert(error); }
+		if (error) {
+			Alert.alert(error);
+		}
 
 		return (
 			<LoginForm onSubmit={this.loginHandler} />
@@ -90,6 +93,6 @@ class Login extends Component {
 //Redux configuration
 const mapStateToProps = state => ({ ...state.loginReducer });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ loginMoodle }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ loginMobile }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

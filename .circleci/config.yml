@@ -2,7 +2,7 @@ version: 2
 publish: &publish
   working_directory: ~/msa-mobile
   docker:
-    - image: circleci/node:10.4.1
+    - image: circleci/node:10.13.0
 
   steps:
     - checkout
@@ -21,7 +21,7 @@ publish: &publish
 
     - run:
         name: Installing exp
-        command: yarn global add exp
+        command: yarn global add expo-cli
 
     - run:
         name: Installing dependencies
@@ -31,15 +31,16 @@ publish: &publish
         name: Deploying to Expo
         command: |
             export PATH="$PATH:$( yarn global bin )"
-            exp login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
-            exp publish --non-interactive
+            expo login --username ${EXPO_USER_NAME} --password ${EXPO_PASSWORD}
+            expo optimize
+            expo publish --non-interactive
 
     - run:
         name: Build Android version
         command:  |
             export PATH="$PATH:$( yarn global bin )"
-            exp push:android:upload --api-key ${FIREBASE_SERVER_KEY}
-            exp build:android --non-interactive
+            expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
+            expo build:android --non-interactive
 
 jobs:
   publish_to_expo_dev:
@@ -59,7 +60,7 @@ workflows:
       - publish_to_expo_dev:
           filters:
             branches:
-              only: develop
+              only: graphql
       - publish_to_expo_prod:
           filters:
             branches:

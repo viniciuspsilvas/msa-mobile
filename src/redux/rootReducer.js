@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
 import loginReducer from "../scenes/Login/reducer"
 import messagesReducer from "../scenes/Messages/reducer";
-import attendanceReducer from "../scenes/Attendance/reducer";
 
 import { reducer as formReducer } from 'redux-form';
 
@@ -10,7 +9,6 @@ import { LOGOUT } from '../scenes/Login/actions';
 const appReducer = combineReducers({
     loginReducer,
     messagesReducer,
-    attendanceReducer,
     form: formReducer
 })
 

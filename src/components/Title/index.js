@@ -1,5 +1,5 @@
 import React from 'react';
-import Divider from 'react-native-divider';
+//import Divider from 'react-native-divider';
 
 import { Text } from 'react-native'
 
@@ -12,10 +12,10 @@ export default Title = ({ title, icon }) =>
     (
 
         <View style={{ marginTop: 20, marginBottom: 20 }}>
-            <Divider
+{/*             <Divider
                 borderColor="#c6c6c6"
                 color="#777777"
-                orientation="left">
+                orientation="left"> */}
 
                 <Icon type='Ionicons' name={icon}
                     style={{ fontSize: 50, color:"#777777" }} />
@@ -23,7 +23,7 @@ export default Title = ({ title, icon }) =>
                 <Text style={styles.title}>
                     {"   "+title}
                 </Text>
-            </Divider>
+       {/*      </Divider> */}
         </View>
     )
 

@@ -6,8 +6,6 @@ import {
 
 } from './actions';
 
-import { AsyncStorage } from 'react-native';
-
 const initialState = {
     isFetching: false,
     error: null,
@@ -24,7 +22,7 @@ export default function loginReducer(state = initialState, action = {}) {
     switch (type) {
 
         case FETCH_LOGIN_BEGIN:
-            return { ...state, isFetching: true };
+            return { ...state, isFetching: true, error: null };
 
         case FETCH_LOGIN_SUCCESS:
 
@@ -38,11 +36,11 @@ export default function loginReducer(state = initialState, action = {}) {
 
         case FETCH_LOGIN_FAILURE:
 
-            let error = handleErrors(payload.response);
-            return { ...state, isFetching: false, error, userDetails: {} };
+            //let error = handleErrors(payload.response);
+            return { ...state, isFetching: false, error: payload, userDetails: {} };
 
         case LOGOUT:
-            return { ...state, userDetails: {}, isAuthenticated: false, isFetching: false, error: null};
+            return { ...state, userDetails: {}, isAuthenticated: false, isFetching: false, error: null };
 
         default:
             // ALWAYS have a default case in a reducer
