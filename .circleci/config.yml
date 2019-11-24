@@ -25,7 +25,7 @@ publish: &publish
 
     - run:
         name: Installing dependencies
-        command: npm install
+        command: yarn install
 
     - run:
         name: Deploying to Expo
@@ -60,7 +60,7 @@ workflows:
       - publish_to_expo_dev:
           filters:
             branches:
-              only: graphql
+              only: develop
       - publish_to_expo_prod:
           filters:
             branches:
