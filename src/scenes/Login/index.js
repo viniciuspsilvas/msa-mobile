@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
+import { Alert, } from 'react-native';
 import { Notifications } from 'expo';
 
 import * as Permissions from 'expo-permissions'
-
 import Constants from 'expo-constants';
-
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 
 import LoginForm from "./components/LoginForm"
-import Loader from "../../components/Loader"
-
 import { loginMobile } from "./actions";
 
 class Login extends Component {
 
-	/* Contructor */
+	/* Constructor */
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -54,7 +50,7 @@ class Login extends Component {
 		this.setState({ tokenAdvice: tokenAdvice, adviceDesc: adviceDesc });
 	}
 
-	loginHandler = (values) => {
+	loginHandler = async (values) => {
 		const { email, password } = values;
 		const username = email.trim().toLowerCase();
 
@@ -65,7 +61,8 @@ class Login extends Component {
 			nameDevice: Expo.Constants.deviceName
 		}
 
-		this.props.loginMobile(loginInput);
+		const resp = await this.props.loginMobile(loginInput);
+		if (resp) Alert.alert(resp)
 	}
 
 	componentDidUpdate() {
@@ -77,13 +74,6 @@ class Login extends Component {
 	}
 
 	render() {
-		const { error, isFetching } = this.props;
-
-		if (isFetching) { return <Loader loading={isFetching} /> }
-		if (error) {
-			Alert.alert(error);
-		}
-
 		return (
 			<LoginForm onSubmit={this.loginHandler} />
 		);

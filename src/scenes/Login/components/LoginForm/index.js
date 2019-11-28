@@ -54,6 +54,7 @@ const LoginForm = props => {
                     <View style={{ alignItems: 'center', marginTop: 20, }}>
                         <ButtonLogin
                             onPress={handleSubmit}
+                            loading={submitting}
                             disabled={pristine || submitting}
                         />
                     </View>
