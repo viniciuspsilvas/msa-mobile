@@ -16,12 +16,13 @@ const LOGIN_STUDENT = `
                 firstname
                 lastname
                 phone
+                isActive
             }
         }
     }
 `
 
-export const loginMobile = (loginInput) => async (dispatch) => {
+export const loginMobile = loginInput => async dispatch => {
     dispatch({ type: FETCH_LOGIN_BEGIN })
 
     try {
@@ -33,20 +34,24 @@ export const loginMobile = (loginInput) => async (dispatch) => {
         // In case of error coming from server
         if (resp.data.errors) throw resp.data.errors[0];
 
-        const {loginStudent} = resp.data.data;
+        const { loginStudent } = resp.data.data;
 
         const userDetailLogged = {
             ...loginStudent.student,
             token: loginStudent.token
         }
-        
+
         dispatch(
             {
                 type: FETCH_LOGIN_SUCCESS,
                 payload: userDetailLogged
             })
+
+        return userDetailLogged;
+
     } catch (error) {
         dispatch({ type: FETCH_LOGIN_FAILURE, payload: error.message })
+        throw new Error(error.message);
     }
 }
 

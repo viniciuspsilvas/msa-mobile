@@ -5,57 +5,63 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent:'center',
+    justifyContent: 'center',
     alignItems: 'stretch',
-    margin: 20,
-  },
-
-  keyboardContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    margin: 20,
-  },
-
-  linkForgotPassword: {
-    color: '#3d3d3d',
-    alignItems: 'center',
-    flexGrow: 1,
-    //justifyContent: 'center',
-    marginTop: 10,
-    fontSize: 15,
-  },
-
-  logoContainer: {
-    alignItems: 'center',
-    flexGrow: 1,
-    justifyContent: 'center',
-    marginTop: -120,
-  },
-
-  logo: {
-    height: 150,
-    width: 150
-  },
-
-
-  footer: {
-    flex: 1,
-    flexDirection: 'row',
-    margin: 5,
-    justifyContent: 'space-between',
     marginLeft: 20,
     marginRight: 20,
   },
 
-
-  footerContainer: {
-    height: 60,
-    backgroundColor: '#dd3233',
-    justifyContent: 'flex-end',
-
-
+  label: {
+    marginTop: 5,
+    color: 'black',
+    fontSize: 20,
   },
 
+  labelError: {
+    marginTop: 5,
+    fontSize: 20,
+    color: 'red',
+  },
 
+  input: {
+    height: 50,
+    borderColor: 'black',
+    borderWidth: 1,
+    backgroundColor: 'white',
+    marginTop: 5,
+    fontSize: 20,
+    color: 'black',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    textDecorationLine: 'none'
+  },
+
+  inputError: {
+    height: 50,
+    borderColor: 'red',
+    borderWidth: 2,
+    backgroundColor: 'white',
+    marginTop: 5,
+    fontSize: 20,
+    color: 'black',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    textDecorationLine: 'none'
+  },
+
+  buttonSubmit: {
+    alignItems: 'center',
+    flexGrow: 1,
+    justifyContent: 'center',
+    height: 50,
+    borderRadius: 10,
+    backgroundColor: '#dd3233',
+    marginTop: 25
+  },
+
+  textButton: {
+    color: 'white',
+    fontSize: 20,
+  }
 
 });

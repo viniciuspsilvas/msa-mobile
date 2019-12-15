@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
 import { Notifications } from 'expo';
 
 import * as Permissions from 'expo-permissions'
 
 import Constants from 'expo-constants';
 
-import { connect } from "react-redux";
-import { bindActionCreators } from 'redux'
-
 import LoginForm from "./components/LoginForm"
-import Loader from "../../components/Loader"
-
-import { loginMobile } from "./actions";
 
 class Login extends Component {
 
@@ -77,22 +70,11 @@ class Login extends Component {
 	}
 
 	render() {
-		const { error, isFetching } = this.props;
-
-		if (isFetching) { return <Loader loading={isFetching} /> }
-		if (error) {
-			Alert.alert(error);
-		}
-
+	
 		return (
-			<LoginForm onSubmit={this.loginHandler} />
+			<LoginForm {...this.props} />
 		);
 	}
 }
 
-//Redux configuration
-const mapStateToProps = state => ({ ...state.loginReducer });
-
-const mapDispatchToProps = dispatch => bindActionCreators({ loginMobile }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

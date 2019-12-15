@@ -9,19 +9,18 @@ import { PersistGate } from "redux-persist/integration/react";
 
 // Storybook
 import { IS_STORYBOOK_ENABLED } from 'react-native-dotenv'
-//import StorybookUIRoot from './storybook';
-
+import StorybookUIRoot from './storybook';
 
 export default function App() {
   return (
     <Provider store={store}>
       {IS_STORYBOOK_ENABLED === "true" ? (
-      {/*    <StorybookUIRoot /> */}
+        <StorybookUIRoot />
       ) : (
-              <PersistGate loading={null} persistor={persistor}>
-                  <AppNavigation />
-              </PersistGate>
-      )}
+          <PersistGate loading={null} persistor={persistor}>
+            <AppNavigation />
+          </PersistGate>
+        )}
     </Provider>
   );
 }
