@@ -1,73 +1,107 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-
-import { View, TouchableOpacity, Image, KeyboardAvoidingView, Text } from 'react-native';
+import { View, TouchableHighlight, Image, KeyboardAvoidingView, Text, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './style'
 
-import ButtonLogin from '../ButtonLogin'
-import Background from '../../../../components/Background'
+import { loginMobile } from "../../actions";
+import { useDeviceInfo } from "./deviceInfo"
 
-import InputLabeled from "../InputLabeled"
-import { required, email } from "../../../../util/validators"
+export default function LoginForm({ navigation }) {
+  const { register, setValue, handleSubmit, errors } = useForm();
+  const dispatch = useDispatch();
+  const { tokenDevice, nameDevice } = useDeviceInfo();
 
-const LoginForm = props => {
-    const { handleSubmit, pristine, submitting } = props
-    const resizeMode = 'contain';
+  const { isFetching } = useSelector(state => state.loginReducer);
 
+  const resizeMode = 'contain';
+
+  const onSubmit = ({ username, password }) => {
+    const loginInput = {
+      username: username.trim().toLowerCase(),
+      password, tokenDevice, nameDevice
+    }
+
+    dispatch(loginMobile(loginInput))
+      .then(result => {
+        if (result) navigation.navigate('AppStack')
+      })
+      .catch(error => Alert.alert(error.message))
+
+  };
+
+  const LabeledInput = props => {
+    const { label, nameField } = props;
+
+    const styleInput = errors[nameField] ? styles.inputError : styles.input;
+    const styleLabel = errors[nameField] ? styles.labelError : styles.label;
     return (
+      <>
+        <Text for={nameField} style={styleLabel}>{label}</Text>
 
-        <View style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-        }} >
-            <Background />
-            <View style={styles.container}>
-                <KeyboardAvoidingView behavior='position' enabled>
-                    <Image source={require('msa-mobile/assets/Logo_vert_red.png')}
-                        style={{
-                            alignSelf: "center",
-                            width: 250, height: 250,
-                            resizeMode,
-                        }}
-                    />
-                    <Field
-                        name="email"
-                        label="Email"
-                        component={InputLabeled}
-                        validate={[required, email]}
-                        textContentType="username" />
+        <TextInput
+          onChangeText={text => setValue(nameField, text)}
+          underlineColorAndroid="transparent"
+          style={styleInput}
+          {...props}
+        />
 
-                    <Field
-                        name="password"
-                        label="Password"
-                        component={InputLabeled}
-                        secureTextEntry={true}
-                        textContentType="password"
-                        validate={[required]} />
-
-                    <TouchableOpacity style={{ alignItems: 'flex-end' }}  >
-                        <Text style={styles.linkForgotPassword} >Forgot your password</Text>
-                    </TouchableOpacity>
-
-                    <View style={{ alignItems: 'center', marginTop: 20, }}>
-                        <ButtonLogin
-                            onPress={handleSubmit}
-                            loading={submitting}
-                            disabled={pristine || submitting}
-                        />
-                    </View>
-                </KeyboardAvoidingView>
-
-            </View>
-
-        </View>
-
+        <Text style={styles.labelErrorSmall}> {errors[nameField] && errors[nameField].message}</Text>
+      </>
     )
+  }
+
+  return (
+    <>
+      <Background />
+      <View style={styles.container}>
+        <KeyboardAvoidingView behavior='position' enabled>
+
+          <Image source={require('msa-mobile/assets/Logo_vert_red.png')}
+            style={{
+              alignSelf: "center",
+              width: 250, height: 250,
+              resizeMode,
+            }}
+          />
+
+          <LabeledInput nameField="username" label="Username" disabled={isFetching}
+            ref={
+              register(
+                { name: 'username' },
+                {
+                  max: 50, min: 3, maxLength: 30,
+                  required: 'This is required.',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    message: "Invalid email address."
+                  }
+                }
+              )
+            }
+          />
+
+          <LabeledInput nameField="password" label="Password" secureTextEntry={true} disabled={isFetching}
+            ref={register({ name: 'password' }, { required: 'This is required.', max: 50, min: 3, maxLength: 30 })}
+          />
+
+          <TouchableHighlight style={styles.buttonSubmit}
+            underlayColor='#ad1616' editable={isFetching}
+            onPress={handleSubmit(onSubmit)}>
+            <>
+
+              {isFetching ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                  <Text style={styles.textButton}>
+                    Login
+              </Text>
+                )}
+            </>
+          </TouchableHighlight>
+        </KeyboardAvoidingView>
+      </View>
+    </>
+  )
 }
-
-export default reduxForm({
-    form: 'loginForm',// a unique identifier for this form
-
-})(LoginForm)
