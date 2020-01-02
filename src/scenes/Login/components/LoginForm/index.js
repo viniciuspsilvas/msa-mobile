@@ -1,25 +1,18 @@
-import React from "react"
-import useForm from 'react-hook-form'
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Text, View, TextInput, Alert,
-  Image, KeyboardAvoidingView,
-  TouchableHighlight
-} from "react-native"
-
-import { Spinner } from 'native-base';
+import React from 'react'
+import { View, TouchableHighlight, Image, KeyboardAvoidingView, Text, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './style'
 import Background from 'msa-mobile/src/components/Background'
 
 import { loginMobile } from "../../actions";
-
 import { useDeviceInfo } from "./deviceInfo"
 
 export default function LoginForm({ navigation }) {
   const { register, setValue, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
-  const { tokenDevice, nameDevice } = useDeviceInfo(); // TODO terminar de implementar esse Hooks
+  const { tokenDevice, nameDevice } = useDeviceInfo();
 
   const { isFetching } = useSelector(state => state.loginReducer);
 
@@ -31,11 +24,11 @@ export default function LoginForm({ navigation }) {
       password, tokenDevice, nameDevice
     }
 
-      dispatch(loginMobile(loginInput))
-        .then(result => {
-          if (result) navigation.navigate('AppStack')
-        })
-        .catch(error => Alert.alert(error.message))
+    dispatch(loginMobile(loginInput))
+      .then(result => {
+        if (result) navigation.navigate('AppStack')
+      })
+      .catch(error => Alert.alert(error.message))
 
   };
 
@@ -49,23 +42,19 @@ export default function LoginForm({ navigation }) {
         <Text for={nameField} style={styleLabel}>{label}</Text>
 
         <TextInput
-          ref={register({ name: nameField }, { required: 'This is required.', max: 50, min: 3, maxLength: 30 })}
           onChangeText={text => setValue(nameField, text)}
           underlineColorAndroid="transparent"
           style={styleInput}
           {...props}
         />
+
+        <Text style={styles.labelErrorSmall}> {errors[nameField] && errors[nameField].message}</Text>
       </>
     )
   }
 
   return (
-    <View style={{
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'center',
-    }}>
-
+    <>
       <Background />
       <View style={styles.container}>
         <KeyboardAvoidingView behavior='position' enabled>
@@ -78,8 +67,25 @@ export default function LoginForm({ navigation }) {
             }}
           />
 
-          <LabeledInput nameField="username" label="Username" disabled={isFetching} />
-          <LabeledInput nameField="password" label="Password" secureTextEntry={true} disabled={isFetching} />
+          <LabeledInput nameField="username" label="Username" disabled={isFetching}
+            ref={
+              register(
+                { name: 'username' },
+                {
+                  max: 50, min: 3, maxLength: 30,
+                  required: 'This is required.',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    message: "Invalid email address."
+                  }
+                }
+              )
+            }
+          />
+
+          <LabeledInput nameField="password" label="Password" secureTextEntry={true} disabled={isFetching}
+            ref={register({ name: 'password' }, { required: 'This is required.', max: 50, min: 3, maxLength: 30 })}
+          />
 
           <TouchableHighlight style={styles.buttonSubmit}
             underlayColor='#ad1616' editable={isFetching}
@@ -87,18 +93,16 @@ export default function LoginForm({ navigation }) {
             <>
 
               {isFetching ? (
-                <Spinner color='white' />
+                <ActivityIndicator size="small" color="white" />
               ) : (
                   <Text style={styles.textButton}>
                     Login
               </Text>
                 )}
-
             </>
           </TouchableHighlight>
-
         </KeyboardAvoidingView>
       </View>
-    </View>
+    </>
   )
 }

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import * as Permissions from 'expo-permissions'
 
-export function useDeviceInfo() {
-    const [tokenDevice, setTokenDevice] = useState(null);
-    const [deviceDesc, setDeviceDesc] = useState(null);
+import { Notifications } from 'expo';
 
-    useEffect(async () => {
-        const { status: existingStatus } = await Permissions.getAsync(
-            Permissions.NOTIFICATIONS
-        );
+import Constants from 'expo-constants';
+
+export function useDeviceInfo() {
+    const [tokenDevice, setTokenDevice] = useState("DEV_TOKEN");
+    const [nameDevice, setNameDevice] = useState("DEV_DEVICE");
+
+    async function getPermissionsNotifications() {
+        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+
         let finalStatus = existingStatus;
 
         // only ask if permissions have not already been determined, because
@@ -20,15 +23,16 @@ export function useDeviceInfo() {
             finalStatus = status;
         }
 
-        // Stop here if the user did not grant permissions
-        if (finalStatus !== 'granted') {
-            return;
+        if (finalStatus === 'granted') {
+            // Get the token that uniquely identifies this device
+            setTokenDevice(Constants.isDevice ? await Notifications.getExpoPushTokenAsync() : "DEV_TOKEN")
+            setNameDevice(Expo.Constants.deviceName)
         }
+    }
 
-        // Get the token that uniquely identifies this device
-        setTokenDevice(Constants.isDevice ? await Notifications.getExpoPushTokenAsync() : "DEV_TOKEN")
-        setDeviceDesc(Expo.Constants.deviceName)
+    useEffect(() => {
+        getPermissionsNotifications();
     }, []);
 
-    return { tokenDevice, deviceDesc };
+    return { tokenDevice, nameDevice };
 }

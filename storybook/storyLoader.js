@@ -11,7 +11,6 @@ function loadStories() {
 	require('../src/scenes/Home/components/HomeScreen/story');
 	require('../src/scenes/Login/components/ButtonLogin/story');
 	require('../src/scenes/Login/components/InputLabeled/story');
-	require('../src/scenes/Login/components/LoginForm copy/story');
 	require('../src/scenes/Login/components/LoginForm/story');
 	require('../src/scenes/Messages/components/MessageCard/story');
 	require('../src/scenes/Messages/components/MessageCardList/story');
@@ -26,7 +25,6 @@ const stories = [
 	'../src/scenes/Home/components/HomeScreen/story',
 	'../src/scenes/Login/components/ButtonLogin/story',
 	'../src/scenes/Login/components/InputLabeled/story',
-	'../src/scenes/Login/components/LoginForm copy/story',
 	'../src/scenes/Login/components/LoginForm/story',
 	'../src/scenes/Messages/components/MessageCard/story',
 	'../src/scenes/Messages/components/MessageCardList/story',

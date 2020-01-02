@@ -55,13 +55,18 @@ export default StyleSheet.create({
     justifyContent: 'center',
     height: 50,
     borderRadius: 10,
-    backgroundColor: '#dd3233',
+    backgroundColor: '#EC1C24',
     marginTop: 25
   },
 
   textButton: {
     color: 'white',
     fontSize: 20,
+  },
+
+  labelErrorSmall: {
+    fontSize: 12,
+    color: '#EC1C24',
   }
 
 });
