@@ -42,14 +42,6 @@ publish: &publish
            expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
            expo build:android --non-interactive
 
-    - run:
-        name: bump package version
-        command: |
-          git config --global user.name $CIRCLE_USERNAME 
-          npm version prerelease --preid=alpha -m "Bumped version number to %s [ci skip]"
-          git push origin master
-          git push --tags
-
 jobs:
   publish_to_expo_dev:
     environment:
