@@ -16,6 +16,6 @@ const CenterDecorator = storyFn => <View style={{
 
 storiesOf('Loader', module)
     .addDecorator(CenterDecorator)
-    .add('default', () => <Loader loading />)
+    .add('default', () => <Loader loading={false} />)
 
 

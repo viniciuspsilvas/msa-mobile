@@ -1,73 +1,58 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { View, Alert } from 'react-native';
-import { Icon } from 'native-base';
-
 import Background from '../../components/Background'
 
 import { getMessagesList } from "../Messages/actions"
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'
+import { Icon } from 'native-base';
 
 import Pusher from 'pusher-js/react-native';
 import { PUSHER_APP_KEY, CLUSTER, PUSHER_MSA_MESSAGE_CHANNEL } from 'react-native-dotenv'
 
-class Home extends Component {
+const Home = (props) => {
+    const dispatch = useDispatch();
 
-    static navigationOptions = {
-        drawerLabel: 'Home',
-        drawerIcon: () => (<Icon name='ios-home' type='Ionicons' />)
-    };
+    const { error, messagesList } = useSelector(state => state.messagesReducer);
+    const { userDetails } = useSelector(state => state.loginReducer);
 
-    componentDidMount() {
-        const { userDetails } = this.props;
-        this.props.getMessagesList(userDetails);
-        this.subscribeMessageChannel();
-    }
+    const qtdMessage = messagesList.length > 0 ? messagesList.filter(msg => !msg.isRead).length : 0;
 
-    subscribeMessageChannel = () => {
-        const { userDetails } = this.props;
+    useEffect(() => {
+        dispatch(getMessagesList(userDetails))
 
-        var pusher = new Pusher(PUSHER_APP_KEY, {
+        const pusher = new Pusher(PUSHER_APP_KEY, {
             cluster: CLUSTER,
             forceTLS: true
         });
-        var channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
 
-        channel.bind(`msa.message.student.${userDetails._id}`, () => this.props.getMessagesList(userDetails));
-    }
+        const channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
+        channel.bind(`msa.message.student.${userDetails._id}`, () => dispatch(getMessagesList(userDetails)));
 
-    render() {
-        const { error, messagesList } = this.props;
-        const qtdMessage = messagesList.length > 0 ? messagesList.filter(msg => !msg.isRead).length : 0;
+        return function cleanup() {
+            pusher.unsubscribe(PUSHER_MSA_MESSAGE_CHANNEL);
+        };
+    }, []);
 
-        if (error) { Alert.alert(error.message) };
+    if (error) { Alert.alert(error.message) };
 
-        return (
-            <View style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'center',
-            }} >
-                <Background />
-                <HomeScreen
-                    qtdMessage={qtdMessage}
-                    onClick={() => this.props.navigation.navigate("messages")}
-                />
-
-            </View>
-        );
-    }
+    return (
+        <View style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+        }} >
+            <Background />
+            <HomeScreen
+                qtdMessage={qtdMessage}
+                onClick={() => props.navigation.navigate("messages")}
+            />
+        </View>
+    );
 }
 
-//Redux configuration
-const mapStateToProps = state => ({
-    ...state.messagesReducer,
-    userDetails: state.loginReducer.userDetails
+Home.navigationOptions = () => ({
+    drawerLabel: 'Home',
+    drawerIcon: () => (<Icon name='ios-home' type='Ionicons' />)
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getMessagesList: (filter) => dispatch(getMessagesList(filter)),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

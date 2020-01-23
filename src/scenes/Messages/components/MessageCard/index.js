@@ -1,77 +1,110 @@
-import React from 'react';
-import { Card, CardItem, Thumbnail, Container, Text, Button, Icon, Left, Body, Right } from 'native-base';
-import { getDaysFromDate } from "../../../../util/dateTime"
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, Text, StyleSheet } from 'react-native';
 
-getIcon = category => {
+import Moment from 'react-moment';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-    const INFO_ICON = require('msa-mobile/assets/icon-info.png');
-    const ALERT_ICON = require('msa-mobile/assets/icon-alert.png');
+export default MessageCard = (props) => {
 
-    switch (category) {
-        case 'info':
-            return INFO_ICON;
-        case 'alert':
-            return ALERT_ICON;
-        default:
-            return INFO_ICON;
-    }
-}
+    const [isOpen, setIsOpen] = useState(false);
 
-export default MessageCard = props => {
-
-    const { title, body, createdAt, category, handleBackButton } = props;
-
-    let icon = getIcon(category);
-    let dateNew = new Date(createdAt);
-    var days = getDaysFromDate(createdAt)
+    const { title, body, createdAt, isRead } = props.message;
 
     return (
+        <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)}>
+            <View style={styles.container} ƒ>
 
-        <Container>
-            <Button transparent onPress={handleBackButton} >
-                <Icon name='arrow-back' />
-                <Text> Back</Text>
-            </Button>
-            <Card>
-                <CardItem >
-                    <Left>
-                        <Thumbnail source={icon} />
-                        <Body>
-                            <Text>{title}</Text>
-                            <Text note>{dateNew.toDateString()}</Text>
-                        </Body>
-                    </Left>
-                </CardItem>
-                <CardItem >
-                    <Body>
-                        <Text>
-                            {body}
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline'
+                }} >
+
+                    <View >
+                        {isRead ? (
+                            <Icon color="#707070" name='envelope-open' size={20} type='font-awesome' />
+                        ) : (
+                                <Icon color="#000" name='envelope' size={20} type='font-awesome' />
+                            )}
+                    </View>
+
+                    <View style={{ alignItems: 'flex-start', width: 230, flexDirection: 'row' }}>
+                        <Text style={styles.title}>{title}</Text>
+                    </View>
+
+                    <View style={{ width: 90 }} >
+                        <Text style={!isRead ? styles.unreadMsg : styles.readMsg} note >
+                            <Moment element={Text} format={"DD/MM/YYYY HH:mm"} >{createdAt}</Moment>
                         </Text>
-                    </Body>
-                </CardItem>
-                <CardItem>
-                    <Left>
-                        <Button transparent >
-                            <Icon name="archive" />
+                    </View>
+                </View>
 
-                        </Button>
-                    </Left>
+                {isOpen && <View >
+                    <Text style={styles.body}>{body}</Text>
+                </View>}
 
-                    <Right>
-                        <Text>{days}d ago</Text>
-                    </Right>
-                </CardItem>
-            </Card>
-        </Container>
+                <View style={{ alignSelf: 'flex-end' }} >
+                    <Icon name={`chevron-${isOpen ? 'up' : 'down'}`} color="#707070" size={12} type='font-awesome' />
+                </View>
+            </View >
+        </TouchableWithoutFeedback>
+
     );
 }
 
 
-MessageCard.propTypes = {
-    title: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired,
-    createdAt: PropTypes.number.isRequired,
-    handleBackButton: PropTypes.func.isRequired
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'column',
+        borderRadius: 10,
 
-};
+        backgroundColor: 'rgba(192,192,192,0.3)',
+        padding: 10,
+
+
+
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10,
+    },
+
+    container2: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+
+        alignItems: 'flex-end'
+    },
+
+    title: {
+        fontSize: 15,
+        color: '#707070'
+    },
+
+    body: {
+        marginTop:5,
+        fontSize: 12,
+        color: '#707070'
+    },
+
+    iconRead: {
+        fontSize: 20,
+        color: '#707070'
+    },
+
+    dateTime: {
+        fontSize: 10,
+        color: '#707070'
+    },
+
+    readMsg: {
+        textAlign: 'right',
+        color: '#707070'
+    },
+
+    unreadMsg: {
+        textAlign: 'right',
+        color: '#000'
+    }
+
+});

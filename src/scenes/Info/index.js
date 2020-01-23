@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 
-import { Card, CardItem, Icon, Body } from 'native-base';
+import { Container, Card, CardItem, Icon, Body } from 'native-base';
 
 import Title from '../../components/Title';
 
@@ -14,12 +14,13 @@ export default class Info extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <Container>
+                <Background />
                 <Title title='About' icon='ios-information-circle-outline' />
 
-                <Card style={{ flex: 0 }}>
+                <Card style={{ marginLeft: 20, marginRight: 20 }}>
                     <CardItem>
-                        <Body style={styles.cardItemBody}>
+                        <Body>
                             <View style={styles.cardItemImage}>
                                 <Image
                                     style={{ height: 200, width: 350 }}
@@ -65,7 +66,7 @@ export default class Info extends Component {
                         </Body>
                     </CardItem>
                 </Card>
-            </View>
+            </Container>
         );
     }
 }
@@ -73,7 +74,9 @@ export default class Info extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 5,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
 
     cardItemImage: {
@@ -82,9 +85,5 @@ const styles = StyleSheet.create({
 
     bold: {
         fontWeight: 'bold'
-    },
-
-    cardItemBody: {
-
     },
 });
