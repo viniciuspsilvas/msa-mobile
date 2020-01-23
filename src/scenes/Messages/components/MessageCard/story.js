@@ -8,6 +8,7 @@ import { View } from 'react-native';
 
 const CenterDecorator = storyFn => <View style={{
     flex: 1,
+    marginTop: 100,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'stretch',
@@ -15,22 +16,28 @@ const CenterDecorator = storyFn => <View style={{
     {storyFn()}
 </View>;
 
-storiesOf('MessageCard', module)
+
+const message = {
+    title: 'asdadsadas',
+    body: 'gfdg dgfh dfgdsfg sdfgd gsdgds gfsd gd ',
+    createdAt: Date.now(),
+    isRead: false
+}
+
+const message2 = {
+    title: 'asdadsadas',
+    body: 'gfdg dgfh dfgdsfg sdfgd gsdgds gfsd gd ',
+    createdAt: Date.now(),
+    isRead: true
+}
+
+storiesOf('MessageCard2', module)
     .addDecorator(CenterDecorator)
-    .add('info', () =>
+    .add('unRead', () =>
         <MessageCard
-            title='Title'
-            body='Body'
-            createdAt={2019 - 11 - 22}
-            category='info'
-            handleBackButton={() => console.log("Teste")} />)
+            message={message} />)
 
-    .add('alert', () =>
+    .add('Read', () =>
         <MessageCard
-            title='Title'
-            body='Body'
-            createdAt={2019 - 11 - 22}
-            category='alert'
-            handleBackButton={() => console.log("Teste")} />)
-
+            message={message2} />)
 

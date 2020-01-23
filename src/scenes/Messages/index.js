@@ -14,9 +14,6 @@ import Background from '../../components/Background'
 
 import styles from './style'
 
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
 
 class Messages extends Component {
 
@@ -25,29 +22,23 @@ class Messages extends Component {
         drawerIcon: () => (<Icon type='Ionicons' name='ios-chatboxes' />)
     });
 
-    componentDidMount() {
-        this.props.navigation.addListener('willFocus', () => this.setLastMessageRead());
-    }
-
-    setLastMessageRead = () => {
-        const { userDetails, messagesList , updateMessage} = this.props;
-        if (messagesList && messagesList.length > 0) {
-            setTimeout(function () {
-                messagesList.forEach(msg => {
-                    if (!msg.isRead) {
-                        aux = true;
-                        msg.isRead = true;
-                        updateMessage(msg, userDetails)
-                    }
-                });
-            }, 5000);
-        }
-    }
-
     render() {
-        const { error, messagesList } = this.props;
+        const { error, messagesList, updateMessage, userDetails } = this.props;
 
         if (error) { Alert.alert(error.message) };
+
+        messagesList.find(msg => {
+            if (!msg.isRead) {
+                setTimeout(function () {
+                    msg.isRead = true;
+                    updateMessage(msg, userDetails)
+                }, 5000);
+
+                return msg;
+            } else {
+                return null;
+            }
+        })
 
         return (
             <Container >

@@ -13,18 +13,14 @@ class MainContainer extends React.Component {
     header: null,
   };
 
-  constructor() {
-    super();
-  }
-
   componentDidMount() {
     this.props.navigation.navigate(this.props.isAuthenticated ? 'AppStack' : 'AuthStack');
   }
 
   componentDidUpdate() {
-     if (!this.props.isAuthenticated) {
+    if (!this.props.isAuthenticated) {
       this.props.navigation.navigate('AuthStack');
-    } 
+    }
   }
 
   // Render any loading content that you like here

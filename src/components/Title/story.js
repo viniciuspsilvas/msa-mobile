@@ -19,6 +19,6 @@ const CenterDecorator = storyFn => <View style={{
 
 storiesOf('Title', module)
     .addDecorator(CenterDecorator)
-    .add('default', () => <Title title="Message" />)
+    .add('default', () => <Title title="Message" icon="ios-chatboxes"/>)
 
 

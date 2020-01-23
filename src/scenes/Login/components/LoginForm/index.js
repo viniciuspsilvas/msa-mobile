@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './style'
+import Background from 'msa-mobile/src/components/Background'
 
 import { loginMobile } from "../../actions";
 import { useDeviceInfo } from "./deviceInfo"
