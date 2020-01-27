@@ -5,6 +5,7 @@ import { storiesOf } from '@storybook/react-native';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
+// eslint-disable-next-line import/extensions
 import Button from './Button';
 import CenterView from './CenterView';
 import Welcome from './Welcome';
@@ -15,7 +16,7 @@ storiesOf('Button', module)
   .addDecorator(getStory => <CenterView>{getStory()}</CenterView>)
   .add('with text', () => (
     <Button onPress={action('clicked-text')}>
-      <Text>Hello Button2222</Text>
+      <Text>Hello Button</Text>
     </Button>
   ))
   .add('with some emoji', () => (

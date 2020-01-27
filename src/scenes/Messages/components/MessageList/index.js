@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import styles from './style'
 
+import MessageCard from '../MessageCard'
+
 export default MessageList = ({ list }) =>
     (
         <List>
@@ -12,23 +14,7 @@ export default MessageList = ({ list }) =>
 
             {list &&
                 list.map(message =>
-                    <ListItem key={message._id}  >
-                        {message.isRead ? (
-                            <Icon name='envelope-open' size={20} type='font-awesome' />
-                        ) : (
-                                <Icon name='envelope' size={20} type='font-awesome' />
-                            )}
-                        <Body>
-                            <Text style={!message.isRead ? styles.unreadMsg : {}}>{message.title}</Text>
-                            <Text style={!message.isRead ? styles.unreadMsg : {}} note>{message.body}</Text>
-                        </Body>
-
-                        <Right>
-                            <Text style={!message.isRead ? styles.unreadMsg : {}} note >
-                                <Moment element={Text} format={"DD/MM/YY HH:mm"} >{message.createdAt}</Moment>
-                            </Text>
-                        </Right>
-                    </ListItem>
+                    <MessageCard key={message._id} message={message} />
                 )
             }
         </List>

@@ -32,7 +32,9 @@
     },
     "android": {
       "package": "au.edu.mindroom.msa",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "permissions" : [],
+      "versionCode": 2
     }
   },
   "name": "msa-mobile",

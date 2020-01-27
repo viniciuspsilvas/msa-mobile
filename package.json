@@ -1,6 +1,6 @@
 {
   "name": "msa-mobile",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "storybook": "storybook start",
+    "storybook": "start-storybook -p 7007",
     "prestorybook": "rnstl"
   },
   "config": {
@@ -16,8 +16,7 @@
       "searchDir": [
         "./src"
       ],
-      "pattern": "**/story.js",
-      "outputFile": "./storybook/storyLoader.js"
+      "pattern": "**/story.js"
     }
   },
   "dependencies": {
@@ -51,14 +50,15 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^5.2.6",
-    "@storybook/addon-knobs": "^5.2.6",
-    "@storybook/addon-links": "^5.2.6",
-    "@storybook/addon-ondevice-knobs": "^5.2.6",
-    "@storybook/addon-ondevice-notes": "^5.2.6",
-    "@storybook/addons": "^5.2.6",
-    "@storybook/react-native": "^5.2.6",
+    "@babel/core": "^7.7.5",
+    "@storybook/addon-actions": "^5.2.8",
+    "@storybook/addon-links": "^5.2.8",
+    "@storybook/addons": "^5.2.8",
+    "@storybook/react-native": "^5.2.8",
+    "@storybook/react-native-server": "^5.2.8",
+    "babel-loader": "^8.0.6",
     "babel-preset-expo": "^7.1.0",
+    "react-native-storybook-loader": "^1.8.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6"
   }

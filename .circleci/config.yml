@@ -35,12 +35,12 @@ publish: &publish
             expo optimize
             expo publish --non-interactive
 
-    # - run:
-    #     name: Build Android version
-    #     command:  |
-    #         export PATH="$PATH:$( yarn global bin )"
-    #         expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
-    #         expo build:android --non-interactive
+    - run:
+       name: Build Android version
+       command:  |
+           export PATH="$PATH:$( yarn global bin )"
+           expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
+           expo build:android --non-interactive
 
 jobs:
   publish_to_expo_dev:

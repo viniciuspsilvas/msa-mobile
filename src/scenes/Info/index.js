@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 
-import {  Card, CardItem, Icon, Body } from 'native-base';
+import { Container, Card, CardItem, Icon, Body } from 'native-base';
 
 import Title from '../../components/Title';
 
 export default class Info extends Component {
 
     static navigationOptions = {
-        drawerLabel: 'Info',
+        drawerLabel: 'About',
         drawerIcon: () => (<Icon name='ios-information-circle-outline' />)
     };
 
     render() {
         return (
-            <View style={styles.container}>
-            
-                <Title title='Info' icon='ios-information-circle-outline' />
+            <Container>
+                <Background />
+                <Title title='About' icon='ios-information-circle-outline' />
 
-
-                <Card style={{ flex: 0 }}>
+                <Card style={{ marginLeft: 20, marginRight: 20 }}>
                     <CardItem>
-                        <Body style={styles.cardItemBody}>
+                        <Body>
                             <View style={styles.cardItemImage}>
                                 <Image
                                     style={{ height: 200, width: 350 }}
@@ -34,34 +33,40 @@ export default class Info extends Component {
                     <CardItem>
                         <Body>
                             <Text>
-                                <Text style={styles.bold}> Email: </Text> enrolments@mindroom.com.au
+                                <Text style={styles.bold}>Email: </Text>enrolments@mindroom.com.au
                             </Text>
                             <Text>
-                                <Text style={styles.bold}> Telephone: </Text> 07 5535 8013
-                            </Text>
-                            <Text>
-                                <Text style={styles.bold}> Address: </Text> 1/37 Connor St, Burleigh Heads QLD 4220
+                                <Text style={styles.bold}>Telephone: </Text>07 5535 8013
                             </Text>
                         </Body>
                     </CardItem>
-                    <CardItem bordered>
-                        <Text>Emergency</Text>
+
+                    <CardItem>
+                        <Body>
+                            <Text style={styles.bold}>Gold Coast: </Text>
+                            <Text>1/37 Connor St, Burleigh Heads QLD 4220 </Text>
+                        </Body>
                     </CardItem>
+
+                    <CardItem>
+                        <Body>
+                            <Text style={styles.bold}>Sunshine Coast: </Text>
+                            <Text>64C Aerodrome Road Maroochydore QLD 4558</Text>
+                        </Body>
+                    </CardItem>
+
                     <CardItem>
                         <Body>
                             <Text>
-                                <Text style={styles.bold}> Police: </Text> 000
+                                <Text style={styles.bold}>CRICOS Code: </Text>03586M
                             </Text>
                             <Text>
-                                <Text style={styles.bold}> Fireman: </Text> 999
-                            </Text>
-                            <Text>
-                                <Text style={styles.bold}> Ambulance: </Text> 999
+                                <Text style={styles.bold}>RTO CODE: </Text>45137
                             </Text>
                         </Body>
                     </CardItem>
                 </Card>
-            </View>
+            </Container>
         );
     }
 }
@@ -69,7 +74,9 @@ export default class Info extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 5,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
 
     cardItemImage: {
@@ -78,9 +85,5 @@ const styles = StyleSheet.create({
 
     bold: {
         fontWeight: 'bold'
-    },
-
-    cardItemBody: {
-
     },
 });
