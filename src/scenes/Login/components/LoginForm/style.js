@@ -36,6 +36,19 @@ export default StyleSheet.create({
     textDecorationLine: 'none'
   },
 
+  inputDisabled: {
+    backgroundColor: '#eaeaea',
+    height: 50,
+    borderColor: 'black',
+    borderWidth: 1,
+    marginTop: 5,
+    fontSize: 20,
+    color: 'black',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    textDecorationLine: 'none'
+  },
+
   inputError: {
     height: 50,
     borderColor: 'red',

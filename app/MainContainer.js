@@ -1,37 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
-import { connect } from 'react-redux';
 
-class MainContainer extends React.Component {
+import { Notifications } from 'expo';
+import { useSelector } from 'react-redux'
 
-  static navigationOptions = {
-    header: null,
+const MainContainer = props => {
+  const { navigation } = props;
+  const { isAuthenticated } = useSelector(state => state.loginReducer);
+
+  var _notificationSubscription = null;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      _notificationSubscription = Notifications.addListener(_handleNotification);
+      navigation.navigate('AppStack');
+
+    } else {
+      if (_notificationSubscription) _notificationSubscription.remove();
+      navigation.navigate('AuthStack');
+    }
+  }, []);
+
+
+  const _handleNotification = notification => {
+    if (isAuthenticated) {
+      navigation.navigate('messages');
+    }
   };
 
-  componentDidMount() {
-    this.props.navigation.navigate(this.props.isAuthenticated ? 'AppStack' : 'AuthStack');
-  }
-
-  componentDidUpdate() {
-    if (!this.props.isAuthenticated) {
-      this.props.navigation.navigate('AuthStack');
-    }
-  }
-
   // Render any loading content that you like here
-  render() {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator />
-        <StatusBar barStyle="default" />
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator />
+      <StatusBar barStyle="default" />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -42,8 +50,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({
-  ...state.loginReducer
+MainContainer.navigationOptions = () => ({
+  header: null
 });
 
-export default connect(mapStateToProps)(MainContainer);
+export default MainContainer;

@@ -1,25 +1,22 @@
 import React from 'react'
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { connect } from "react-redux";
-import { bindActionCreators } from 'redux'
 
+import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../scenes/Login/actions';
 
-class LogoutButton extends React.Component {
+const LogoutButton = (props) => {
+    const dispatch = useDispatch();
+    const { userDetails } = useSelector(state => state.loginReducer);
 
-
-    logout = () => { 
-        this.props.logout();
-        this.props.navigation.navigate('AuthStack');
-
+    const handleLogout = () => {
+        dispatch(logout(userDetails._id))
+        props.navigation.navigate('AuthStack');
     };
 
-    render() {
-        return <TouchableOpacity
-            onPress={this.logout}>
-            <Text style={styles.headline}>Log out</Text>
-        </TouchableOpacity>
-    }
+    return <TouchableOpacity
+        onPress={() => handleLogout()}>
+        <Text style={styles.headline}>Log out</Text>
+    </TouchableOpacity>
 }
 
 const styles = StyleSheet.create({
@@ -31,6 +28,4 @@ const styles = StyleSheet.create({
 }
 );
 
-const mapDispatchToProps = dispatch => bindActionCreators({ logout }, dispatch)
-
-export default connect(null, mapDispatchToProps)(LogoutButton);
+export default LogoutButton;

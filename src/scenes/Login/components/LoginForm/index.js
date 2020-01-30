@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableHighlight, Image, KeyboardAvoidingView, Text, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { View, TouchableOpacity, Image, KeyboardAvoidingView, Text, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -33,7 +33,7 @@ export default function LoginForm({ navigation }) {
   };
 
   const LabeledInput = props => {
-    const { label, nameField } = props;
+    const { label, nameField, disabled } = props;
 
     const styleInput = errors[nameField] ? styles.inputError : styles.input;
     const styleLabel = errors[nameField] ? styles.labelError : styles.label;
@@ -42,9 +42,11 @@ export default function LoginForm({ navigation }) {
         <Text for={nameField} style={styleLabel}>{label}</Text>
 
         <TextInput
-          onChangeText={text => setValue(nameField, text)}
+          onChangeText={text => setValue(nameField, text.trim())}
           underlineColorAndroid="transparent"
-          style={styleInput}
+          style={disabled ? styles.inputDisabled : styleInput}
+          disabled={disabled}
+
           {...props}
         />
 
@@ -87,8 +89,8 @@ export default function LoginForm({ navigation }) {
             ref={register({ name: 'password' }, { required: 'This is required.', max: 50, min: 3, maxLength: 30 })}
           />
 
-          <TouchableHighlight style={styles.buttonSubmit}
-            underlayColor='#ad1616' editable={isFetching}
+          <TouchableOpacity style={styles.buttonSubmit}
+            underlayColor='#ad1616' disabled={isFetching}
             onPress={handleSubmit(onSubmit)}>
             <>
 
@@ -100,7 +102,7 @@ export default function LoginForm({ navigation }) {
               </Text>
                 )}
             </>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
       </View>
     </>
