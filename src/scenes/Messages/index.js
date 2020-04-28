@@ -28,9 +28,9 @@ class Messages extends Component {
         if (error) { Alert.alert(error.message) };
 
         messagesList.find(msg => {
-            if (!msg.isRead) {
+            if (!msg.read) {
                 setTimeout(function () {
-                    msg.isRead = true;
+                    msg.read = true;
                     updateMessage(msg, userDetails)
                 }, 5000);
 

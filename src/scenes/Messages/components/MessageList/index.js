@@ -1,10 +1,6 @@
 import React from 'react';
-import { List, ListItem, Body, Right, Text } from 'native-base';
-import Moment from 'react-moment';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { List, Text } from 'native-base';
 import PropTypes from 'prop-types';
-import styles from './style'
-
 import MessageCard from '../MessageCard'
 
 export default MessageList = ({ list }) =>
@@ -14,7 +10,7 @@ export default MessageList = ({ list }) =>
 
             {list &&
                 list.map(message =>
-                    <MessageCard key={message._id} message={message} />
+                    <MessageCard key={message.id} message={message} />
                 )
             }
         </List>

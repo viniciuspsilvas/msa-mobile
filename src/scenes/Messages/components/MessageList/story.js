@@ -23,7 +23,7 @@ const messageList = [
         body: 'Body dsada idij frep bvcnbc dsf digfji  dfdfgdfg ',
         createdAt: '2019-11-22',
         category: 'info',
-        isRead : true
+        read : true
     },
     {
         id: 2,
@@ -31,14 +31,14 @@ const messageList = [
         body: 'Body dsada idij frep bvcnbc dsf digfji  dfdfgdfg ',
         createdAt: '2019-11-22',
         category: 'alert',
-        isRead : true
+        read : true
     }, {
         id: 3,
         title: 'adas',
         body: 'Body dsada idij frep bvcnbc dsf digfji  dfdfgdfg ',
         createdAt: '2019-11-22',
         category: 'info',
-        isRead : true
+        read : true
     },
     {
         id: 4,
@@ -46,7 +46,7 @@ const messageList = [
         body: 'Body dsada idij frep bvcnbc dsf digfji  dfdfgdfg ',
         createdAt: '2019-11-22',
         category: 'info',
-        isRead : false
+        read : false
     },
     {
         id: 5,
@@ -54,14 +54,14 @@ const messageList = [
         body: 'Body dsada idij frep bvcnbc dsf digfji  dfdfgdfg ',
         createdAt: '2019-11-22',
         category: 'alert',
-        isRead : false
+        read : false
     }, {
         id: 6,
         title: 'adas',
         body: 'Body dsada idij frep bvcnbc dsf digfji  dfdfgdfg ',
         createdAt: '2019-11-22',
         category: 'info',
-        isRead : true
+        read : true
     },
 
 ]

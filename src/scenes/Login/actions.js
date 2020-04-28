@@ -10,21 +10,20 @@ const LOGIN_STUDENT = `
         loginStudent(loginInput : $loginInput){
             token
             student{
-                _id
+                id
                 email
-                fullname
-                firstname
-                lastname
-                phone
-                isActive
+                fullName
+                firstName
+                lastName
+                active
             }
         }
     }
 `
 
 const LOGOUT_STUDENT = `
-    mutation logoutStudent($_id : ID!) {
-        logoutStudent (_id: $_id)
+    mutation logoutStudent($id : ID!) {
+        logoutStudent (id: $id)
     }
 `
 
@@ -61,13 +60,12 @@ export const loginMobile = loginInput => async dispatch => {
     }
 }
 
-export const logout = _id => async dispatch => {
+export const logout = id => async dispatch => {
     dispatch({ type: LOGOUT })
-
     try {
         const resp = await axiosInstance.post("/graphql", {
             query: LOGOUT_STUDENT,
-            variables: { _id }
+            variables: {id}
         })
 
         // In case of error coming from server

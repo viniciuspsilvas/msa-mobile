@@ -9,7 +9,7 @@ export default MessageCard = (props) => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const { title, body, createdAt, isRead } = props.message;
+    const { title, body, createdAt, read } = props.message;
 
     return (
         <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)}>
@@ -22,7 +22,7 @@ export default MessageCard = (props) => {
                 }} >
 
                     <View >
-                        {isRead ? (
+                        {read ? (
                             <Icon color="#707070" name='envelope-open' size={20} type='font-awesome' />
                         ) : (
                                 <Icon color="#000" name='envelope' size={20} type='font-awesome' />
@@ -34,7 +34,7 @@ export default MessageCard = (props) => {
                     </View>
 
                     <View style={{ width: 90 }} >
-                        <Text style={!isRead ? styles.unreadMsg : styles.readMsg} note >
+                        <Text style={!read ? styles.unreadMsg : styles.readMsg} note >
                             <Moment element={Text} format={"DD/MM/YYYY HH:mm"} >{createdAt}</Moment>
                         </Text>
                     </View>

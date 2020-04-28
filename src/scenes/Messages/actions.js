@@ -8,19 +8,17 @@ export const FETCH_MESSAGE_FAILURE = 'FETCH_MESSAGE_FAILURE';
 const GET_MESSAGES_BY_STUDENT =
     `query messagesSentByStudent($student : StudentInput!) {
             messagesSentByStudent(student : $student){
-                _id
+                id
                 title
                 body
                 createdAt
-                isRead
+                read
             }
         }
     `
 const SET_MESSAGE_READ = `
-        mutation setMessageAsRead($_id:ID!) {
-            setMessageAsRead (_id:$_id) {
-            _id
-            }
+        mutation updateMessage( $message: MessageInput!) {
+            updateMessage (message: $message)
         }
     `
 
@@ -50,10 +48,9 @@ export function getMessagesList(student) {
             var { data } = await axiosInstance.post("/graphql", {
                 query: GET_MESSAGES_BY_STUDENT,
                 variables: {
-                    student: { _id: student._id }
+                    student: { id: student.id }
                 }
             })
-
 
             // In case of error coming from server
             if (data.errors) throw data.errors[0];
@@ -77,7 +74,10 @@ export function updateMessage(message, userDetails) {
             var { data } = await axiosInstance.post("/graphql", {
                 query: SET_MESSAGE_READ,
                 variables: {
-                    _id: message._id
+                    message: {
+                        id: message.id,
+                        read: true
+                    }
                 }
             })
 

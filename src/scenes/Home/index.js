@@ -15,7 +15,7 @@ const Home = (props) => {
     const { error, messagesList } = useSelector(state => state.messagesReducer);
     const { userDetails } = useSelector(state => state.loginReducer);
 
-    const qtdMessage = messagesList.length > 0 ? messagesList.filter(msg => !msg.isRead).length : 0;
+    const qtdMessage = messagesList.length > 0 ? messagesList.filter(msg => !msg.read).length : 0;
 
     useEffect(() => {
         dispatch(getMessagesList(userDetails))
@@ -26,7 +26,7 @@ const Home = (props) => {
         });
 
         const channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
-        channel.bind(`msa.message.student.${userDetails._id}`, () => dispatch(getMessagesList(userDetails)));
+        channel.bind(`msa.message.student.${userDetails.id}`, () => dispatch(getMessagesList(userDetails)));
 
         return function cleanup() {
             pusher.unsubscribe(PUSHER_MSA_MESSAGE_CHANNEL);

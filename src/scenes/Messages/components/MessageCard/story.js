@@ -21,14 +21,14 @@ const message = {
     title: 'asdadsadas',
     body: 'gfdg dgfh dfgdsfg sdfgd gsdgds gfsd gd ',
     createdAt: Date.now(),
-    isRead: false
+    read: false
 }
 
 const message2 = {
     title: 'asdadsadas',
     body: 'gfdg dgfh dfgdsfg sdfgd gsdgds gfsd gd ',
     createdAt: Date.now(),
-    isRead: true
+    read: true
 }
 
 storiesOf('MessageCard2', module)
