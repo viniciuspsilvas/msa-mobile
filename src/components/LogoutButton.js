@@ -9,7 +9,7 @@ const LogoutButton = (props) => {
     const { userDetails } = useSelector(state => state.loginReducer);
 
     const handleLogout = () => {
-        dispatch(logout(userDetails.id))
+        dispatch(logout(userDetails._id))
         props.navigation.navigate('AuthStack');
     };
 

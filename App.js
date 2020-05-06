@@ -1,26 +1,33 @@
 import React from 'react';
-//AppNavigation
-import AppNavigation from './app/AppNavigation'
+import { Text } from 'react-native';
+import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 
-//Redux
-import { store, persistor } from './src/redux/configureStore'
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import { NavigationContainer } from '@react-navigation/native';
 
-// Storybook
-import { IS_STORYBOOK_ENABLED } from 'react-native-dotenv'
-import StorybookUIRoot from './storybook';
+import client from './src/api'
+import { VERSION_API } from './src/api/configAPI'
+
+import AppNavigation from './src/app/AppNavigation'
 
 export default function App() {
   return (
-    <Provider store={store}>
-      {IS_STORYBOOK_ENABLED === "true" ? (
-        <StorybookUIRoot />
-      ) : (
-          <PersistGate loading={null} persistor={persistor}>
-            <AppNavigation />
-          </PersistGate>
-        )}
-    </Provider>
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <AppNavigation />
+      </NavigationContainer>
+    </ApolloProvider>
   );
+}
+
+const MyVersion = () => {
+
+  const { loading, error, data } = useQuery(VERSION_API);
+
+  if (error) {
+    console.log("error => ", error)
+  }
+
+
+  return (<Text>{data && data.version}</Text>)
+
 }
