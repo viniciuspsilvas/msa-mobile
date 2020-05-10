@@ -24,7 +24,6 @@ export default function LoginScreen({ navigation }) {
 			const student = res.loginStudent.student
 			student.token = res.loginStudent.token
 
-			console.log("onCompleted => ", student)
 			actions.setLoggedUser(student)
 			//navigation.navigate("Drawer")
 		},
