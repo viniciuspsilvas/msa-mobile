@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 
 import { Container, Card, CardItem, Icon, Body } from 'native-base';
-
-// import Title from '../../components/Title';
-
 import Background from 'msa-mobile/src/components/Background'
 
 export default class InfoScreen extends Component {
@@ -70,7 +67,6 @@ export default class InfoScreen extends Component {
         );
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
