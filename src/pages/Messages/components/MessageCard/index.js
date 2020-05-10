@@ -5,11 +5,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import Moment from 'react-moment';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-export default MessageCard = (props) => {
-
+export default MessageCard = ({ message }) => {
     const [isOpen, setIsOpen] = useState(false);
-
-    const { title, body, createdAt, isRead } = props.message;
+    const { title, body, createdAt, isRead } = message;
 
     return (
         <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)}>
@@ -29,7 +27,7 @@ export default MessageCard = (props) => {
                             )}
                     </View>
 
-                    <View style={{ alignItems: 'flex-start', width: 230, flexDirection: 'row' }}>
+                    <View style={{ alignItems: 'flex-start', width: 230, flexDirection: 'row', marginLeft: 5 }}>
                         <Text style={styles.title}>{title}</Text>
                     </View>
 
@@ -47,7 +45,7 @@ export default MessageCard = (props) => {
                 <View style={{ alignSelf: 'flex-end' }} >
                     <Icon name={`chevron-${isOpen ? 'up' : 'down'}`} color="#707070" size={12} type='font-awesome' />
                 </View>
-            </View >
+            </View>
         </TouchableWithoutFeedback>
 
     );
@@ -58,12 +56,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
         borderRadius: 10,
-
         backgroundColor: 'rgba(192,192,192,0.3)',
         padding: 10,
-
-
-
         marginLeft: 10,
         marginRight: 10,
         marginBottom: 10,
@@ -72,7 +66,6 @@ const styles = StyleSheet.create({
     container2: {
         flexDirection: 'column',
         justifyContent: 'space-between',
-
         alignItems: 'flex-end'
     },
 
@@ -82,7 +75,7 @@ const styles = StyleSheet.create({
     },
 
     body: {
-        marginTop:5,
+        marginTop: 5,
         fontSize: 12,
         color: '#707070'
     },

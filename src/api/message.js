@@ -13,3 +13,10 @@ export const GET_MESSAGES_BY_STUDENTS = gql`
     }
   }
 `;
+
+
+export const UPDATE_MESSAGE = gql`
+  mutation( $message: MessageInput!){
+    updateMessage (message: $message)
+  }
+`;

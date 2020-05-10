@@ -14,3 +14,4 @@ msa-mobile_master/
 # macOS
 .DS_Store
 .env
+yarn-error.log

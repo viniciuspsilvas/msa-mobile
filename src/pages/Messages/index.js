@@ -1,66 +1,89 @@
-import React, { Component } from 'react';
-import { Container, Icon, Content, Text } from 'native-base';
-
+import React, { useContext, useEffect } from 'react';
+import { Container, Icon, Content, Text, List } from 'native-base';
 import { Alert } from 'react-native'
 
-import { connect } from "react-redux";
-import { bindActionCreators } from 'redux'
+import { useMutation, useQuery } from "@apollo/react-hooks";
+import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
-import { getMessagesList, updateMessage } from "./actions"
+import Pusher from 'pusher-js/react-native';
+import { PUSHER_APP_KEY, PUSHER_CLUSTER, PUSHER_MSA_MESSAGE_CHANNEL } from 'react-native-dotenv'
+import { GET_MESSAGES_BY_STUDENTS, UPDATE_MESSAGE } from 'msa-mobile/src/api/message'
 
-import MessageList from './components/MessageList'
-import Title from '../../components/Title';
-import Background from '../../components/Background'
+import MessageCard from './components/MessageCard'
+import Title from 'msa-mobile/src/components/Title';
+import Background from 'msa-mobile/src/components/Background'
 
 import styles from './style'
 
+export default MessagesScreen = () => {
+    const { actions } = useContext(AppContext);
+    const user = actions.getLoggedUser();
 
-class Messages extends Component {
-
-    static navigationOptions = ({ navigations }) => ({
-        drawerLabel: 'Messages',
-        drawerIcon: () => (<Icon type='Ionicons' name='ios-chatboxes' />)
+    const { loading, data, error, refetch } = useQuery(GET_MESSAGES_BY_STUDENTS, {
+        variables: { student: { id: user.id } }
     });
 
-    render() {
-        const { error, messagesList, updateMessage, userDetails } = this.props;
+    useEffect(() => {
+        const pusher = new Pusher(PUSHER_APP_KEY, { cluster: PUSHER_CLUSTER, forceTLS: true });
+        const channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
+        channel.bind(`msa.message.student.${user.id}`, () => refetch());
 
-        if (error) { Alert.alert(error.message) };
+        return function cleanup() {
+            pusher.unsubscribe(PUSHER_MSA_MESSAGE_CHANNEL);
+        };
+    }, []);
 
-        messagesList.find(msg => {
-            if (!msg.isRead) {
-                setTimeout(function () {
-                    msg.isRead = true;
-                    updateMessage(msg, userDetails)
-                }, 5000);
 
-                return msg;
-            } else {
-                return null;
-            }
-        })
-
-        return (
-            <Container >
-                <Background />
-                <Title title='Messages' icon="ios-chatboxes" />
-
-                <Content style={styles.container}>
-                    {messagesList <= 0 ? (
-                        <Text>No messages.</Text>
-                    ) : (
-                            <MessageList list={messagesList} />
-                        )}
-                </Content>
-            </Container>
-        );
+    if (error) {
+        console.log(error, data)
+        Alert.alert(error.message)
     }
+    if (loading || !data) { return <Loader /> }
+
+    const messagesList = data.messagesSentByStudent
+    const [updateMessage, { loading: updateLoading }] = useMutation(UPDATE_MESSAGE,
+        {
+            onCompleted() {
+                refetch()
+            },
+            onError(error) {
+                console.error(error)
+                Alert.alert(error.message)
+            }
+        });
+
+    messagesList.find(msg => {
+        if (!msg.isRead) {
+            setTimeout(function () {
+                msg.isRead = true;
+                updateMessage({ variables: { message: { id: msg.id, read: true } } })
+            }, 5000);
+
+            return msg;
+        } else {
+            return null;
+        }
+    })
+
+    return (
+        <Container >
+            <Background />
+            <Title title='Messages' icon="ios-chatboxes" />
+
+            <Content style={styles.container}>
+                {messagesList <= 0 ? (
+                    <Text>No messages.</Text>
+                ) : (
+                        <List>
+                            {messagesList === undefined || messagesList.length == 0 && <Text>No messages.</Text>}
+                            {messagesList &&
+                                messagesList.map(message =>
+                                    <MessageCard key={message.id} message={message} />
+                                )
+                            }
+                        </List>
+                    )}
+            </Content>
+        </Container>
+    );
 }
-
-//Redux configuration
-const mapStateToProps = state => ({ ...state.messagesReducer, userDetails: state.loginReducer.userDetails });
-
-const mapDispatchToProps = dispatch => bindActionCreators({ getMessagesList, updateMessage }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(Messages);
-

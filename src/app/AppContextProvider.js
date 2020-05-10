@@ -8,12 +8,13 @@ const AppContextProvider = ({ children }) => {
     const [state, setState] = useState({ useLoader: false, user: {} })
 
     const actions = {
-        setLoggedUser: async (data) => {
-            console.log("setLoggedUser => ", data)
-            await AsyncStorage.setItem(STUDENT_LOCAL_STORAGE, data)
+        setLoggedUser: (data) => {
+            setState({ user: data })
+
         },
-        getLoggedUser: async () => {
-            return await AsyncStorage.getItem(STUDENT_LOCAL_STORAGE)
+        getLoggedUser: () => {
+            //return await AsyncStorage.getItem(STUDENT_LOCAL_STORAGE)
+            return state.user
         },
     }
     /* 
