@@ -1,19 +1,24 @@
-import React from 'react'
+import React, { useContext } from "react";
 import { Text, View, Image, Alert } from 'react-native';
 import { Button, Badge } from 'native-base';
 import styles from './style'
 import { useQuery } from '@apollo/react-hooks';
 
+import { AppContext } from "msa-mobile/src/app/AppContextProvider";
+
 import Background from 'msa-mobile/src/components/Background'
 import Loader from 'msa-mobile/src/components/Loader'
 
-import { GET_MESSAGES_BY_STUDENTS } from '../../api/message'
+import { GET_MESSAGES_BY_STUDENTS } from 'msa-mobile/src/api/message'
 
-export default HomeScreen = () => {
+export default HomeScreen = ({navigation}) => {
+    const { actions } = useContext(AppContext);
+    const user = actions.getLoggedUser();
+
     const { loading, data, error } = useQuery(GET_MESSAGES_BY_STUDENTS, {
-        variables: { student : { id: parseInt(1) }}, // TODO  alterar para pegar o id do user logado
+        variables: { student: { id: user.id } }
     });
-    
+
     if (error) {
         console.log(error, data)
         Alert.alert(error.message)
@@ -35,6 +40,7 @@ export default HomeScreen = () => {
                 {
                     qtdMessage > 0 ? (
                         <Button block
+                            onPress={() => navigation.navigate('Messages')}
                             style={styles.newMessageButton}
                         >
                             <Badge style={styles.newMessageButton}>
