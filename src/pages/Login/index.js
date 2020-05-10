@@ -4,12 +4,10 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/react-hooks";
 
 import { AppContext } from "msa-mobile/src/app/AppContextProvider";
-
 import Background from 'msa-mobile/src/components/Background'
-import Loader from "msa-mobile/src/components/Loader";
 
 import { useDeviceInfo } from "./deviceInfo"
-import { LOGIN_STUDENT } from '../../api/student'
+import { LOGIN_STUDENT } from 'msa-mobile/src/api/student'
 import styles from './style'
 
 export default function LoginScreen({ navigation }) {
@@ -23,17 +21,9 @@ export default function LoginScreen({ navigation }) {
 		onCompleted(res) {
 			const student = res.loginStudent.student
 			student.token = res.loginStudent.token
-
 			actions.setLoggedUser(student)
-			//navigation.navigate("Drawer")
-		},
-		onError(error) {
-			console.error(error)
-			Alert.alert(error.message)
 		}
 	});
-
-	if (loading) { return <Loader /> }
 
 	const onSubmit = ({ username, password }) => {
 		const loginInput = {
@@ -51,16 +41,13 @@ export default function LoginScreen({ navigation }) {
 		return (
 			<>
 				<Text for={nameField} style={styleLabel}>{label}</Text>
-
 				<TextInput
 					onChangeText={text => setValue(nameField, text.trim())}
 					underlineColorAndroid="transparent"
 					style={disabled ? styles.inputDisabled : styleInput}
 					disabled={disabled}
-
 					{...props}
 				/>
-
 				<Text style={styles.labelErrorSmall}> {errors[nameField] && errors[nameField].message}</Text>
 			</>
 		)
@@ -108,9 +95,7 @@ export default function LoginScreen({ navigation }) {
 							{loading ? (
 								<ActivityIndicator size="small" color="white" />
 							) : (
-									<Text style={styles.textButton}>
-										Login
-									</Text>
+									<Text style={styles.textButton}> Login 	</Text>
 								)}
 						</>
 					</TouchableOpacity>
