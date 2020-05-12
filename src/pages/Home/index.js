@@ -1,23 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Text, View, Image, Alert } from 'react-native';
 import { Button, Badge } from 'native-base';
 import styles from './style'
-import { useQuery } from '@apollo/react-hooks';
-
-import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
 import Background from 'msa-mobile/src/components/Background'
 import Loader from 'msa-mobile/src/components/Loader'
+import { useSubscribeMessages } from 'msa-mobile/src/hooks/useSubscribeMessages'
 
-import { GET_MESSAGES_BY_STUDENTS } from 'msa-mobile/src/api/message'
-
-export default HomeScreen = ({navigation}) => {
-    const { actions } = useContext(AppContext);
-    const user = actions.getLoggedUser();
-
-    const { loading, data, error } = useQuery(GET_MESSAGES_BY_STUDENTS, {
-        variables: { student: { id: user.id } }
-    });
+export default HomeScreen = ({ navigation }) => {
+    const { loading, data, error } = useSubscribeMessages()
 
     if (error) {
         console.log(error, data)
@@ -25,7 +16,7 @@ export default HomeScreen = ({navigation}) => {
     }
     if (loading || !data) { return <Loader /> }
 
-    const qtdMessage = data.messagesSentByStudent.length;
+    const qtdMessage = data.messagesSentByStudent.filter(msg => !msg.read).length;
 
     return (
         <View style={{ lexGrow: 1, height: '100%' }}>

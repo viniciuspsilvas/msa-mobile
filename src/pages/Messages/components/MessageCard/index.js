@@ -1,26 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, StyleSheet } from 'react-native';
 
 import Moment from 'react-moment';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-export default MessageCard = ({ message }) => {
+import { UPDATE_MESSAGE } from 'msa-mobile/src/api/message'
+import { useMutation } from "@apollo/react-hooks";
+
+export default MessageCard = ({ message, callback }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const { title, body, createdAt, isRead } = message;
+    const { title, body, createdAt, read } = message;
+
+    const [updateMessage] = useMutation(UPDATE_MESSAGE,
+        {
+            onCompleted() { if (callback)callback() },
+            onError(error) {
+                console.error(error)
+                Alert.alert(error.message)
+            }
+        });
+
+    useEffect(() => {
+        if (isOpen && !read) {
+            updateMessage({ variables: { message: { id: message.id, read: true } } })
+        }
+    }, [isOpen])
 
     return (
         <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)}>
-            <View style={styles.container} ƒ>
+            <View style={styles.container} >
 
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    alignItems: 'baseline'
+                    alignItems: 'baseline',
+   
                 }} >
 
                     <View >
-                        {isRead ? (
+                        {read ? (
                             <Icon color="#707070" name='envelope-open' size={20} type='font-awesome' />
                         ) : (
                                 <Icon color="#000" name='envelope' size={20} type='font-awesome' />
@@ -31,8 +50,8 @@ export default MessageCard = ({ message }) => {
                         <Text style={styles.title}>{title}</Text>
                     </View>
 
-                    <View style={{ width: 90 }} >
-                        <Text style={!isRead ? styles.unreadMsg : styles.readMsg} note >
+                    <View style={{ width: 80 }} >
+                        <Text style={!read ? styles.unreadMsg : styles.readMsg} note >
                             <Moment element={Text} format={"DD/MM/YYYY HH:mm"} >{createdAt}</Moment>
                         </Text>
                     </View>
@@ -61,12 +80,13 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         marginBottom: 10,
+
     },
 
     container2: {
         flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
     },
 
     title: {

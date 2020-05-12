@@ -49,6 +49,7 @@ export default StyleSheet.create({
         backgroundColor: '#efc4c4',
         backgroundColor: 'rgba(239, 196, 196, 0.8)',
         height: 45,
+        width: 260,
         borderRadius,
         alignItems: 'center',
     },

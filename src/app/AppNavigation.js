@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { description } from 'msa-mobile/package.json';
 
 import { View, SafeAreaView, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
@@ -13,12 +13,12 @@ import MessagesScreen from 'msa-mobile/src/pages/Messages'
 import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
 const styles = StyleSheet.create({
-    headline: {
-      textAlign: 'center',
-      fontSize: 14,
-      marginTop: 20,
-    }
+  headline: {
+    textAlign: 'center',
+    fontSize: 14,
+    marginTop: 20,
   }
+}
 );
 
 export default function AppNavigation() {
