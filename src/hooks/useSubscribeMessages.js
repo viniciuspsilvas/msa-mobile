@@ -1,5 +1,5 @@
-import { useContext, useEffect } from 'react';
-
+import { useContext } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { useQuery } from "@apollo/react-hooks";
 import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
@@ -15,10 +15,10 @@ export function useSubscribeMessages() {
         variables: { student: { id: user.id } }
     });
 
-    useEffect(() => {
+    useFocusEffect(() => {
         const pusher = new Pusher(PUSHER_APP_KEY, { cluster: PUSHER_CLUSTER, forceTLS: true });
         const channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
-        channel.bind(`msa.message.student.${user.id}`, () => refetch());
+        channel.bind(`msa.message.student.${user.id}`, refetch);
 
         return function cleanup() {
             pusher.unsubscribe(PUSHER_MSA_MESSAGE_CHANNEL);

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { description } from 'msa-mobile/package.json';
 
 import { View, SafeAreaView, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
@@ -7,16 +7,21 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { DrawerActions } from '@react-navigation/native';
 import HomeScreen from 'msa-mobile/src/pages/Home'
-import InfoScreen from 'msa-mobile/src/pages/Info'
+import AboutScreen from 'msa-mobile/src/pages/About'
 import LoginScreen from 'msa-mobile/src/pages/Login'
 import MessagesScreen from 'msa-mobile/src/pages/Messages'
 import { AppContext } from "msa-mobile/src/app/AppContextProvider";
+
+import LogoutButton from 'msa-mobile/src/components/LogoutButton'
 
 const styles = StyleSheet.create({
   headline: {
     textAlign: 'center',
     fontSize: 14,
     marginTop: 20,
+  },
+  container: {
+    flex: 1,
   }
 }
 );
@@ -34,10 +39,8 @@ export default function AppNavigation() {
           <Text>{student.fullName}</Text>
         </View>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-          <DrawerItemList {...props} />
-          <TouchableOpacity onPress={() => { actions.logout() }}>
-            <Text style={styles.headline}>Log out</Text>
-          </TouchableOpacity>
+          <DrawerItemList  {...props} options={{ drawerIcon: { size: 5, color: "blue" } }} />
+          <LogoutButton />
         </SafeAreaView>
       </DrawerContentScrollView>
     );
@@ -48,13 +51,18 @@ export default function AppNavigation() {
     return (
       <Drawer.Navigator initialRouteName="Home"
         drawerContent={(props) => <CustomDrawerContent {...props} />}
+        drawerContentOptions={{
+          activeTintColor: '#e91e63',
+          itemStyle: { color: "#FFFFFF" },
+          labelStyle: { fontSize: 15 },
+        }}
         drawerStyle={{
           width: 240,
         }}
       >
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Info" component={InfoScreen} />
-        <Drawer.Screen name="Messages" component={MessagesScreen} />
+        <Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: () => <Icon name='ios-home' type='Ionicons' /> }} />
+        <Drawer.Screen name="About" component={AboutScreen} options={{ drawerIcon: () => <Icon name='ios-information-circle-outline' /> }} />
+        <Drawer.Screen name="Messages" component={MessagesScreen} options={{ drawerIcon: () => <Icon type='Ionicons' name='ios-chatboxes' /> }} />
       </Drawer.Navigator>
     );
   }
@@ -63,22 +71,16 @@ export default function AppNavigation() {
 
   return (
     <Stack.Navigator initialRouteName={isLogged ? "Drawer" : "Login"}>
-      {isLogged ? (
-        <>
-          <Stack.Screen name="Drawer"
-            options={({ navigation }) => ({
-              title: description,
-              headerStyle: { backgroundColor: '#E54236', },
-              headerLeft: () => (
-                <Icon name="md-menu" size={30} style={{ paddingLeft: 16 }} color='black' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />
-              ),
-            })}
-            component={DrawerScreen} />
-        </>
-      ) : (
-          <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
-        )
-      }
+      <Stack.Screen name="Drawer"
+        options={({ navigation }) => ({
+          title: description,
+          headerStyle: { backgroundColor: '#E54236', },
+          headerLeft: () => (
+            <Icon name="md-menu" size={30} style={{ paddingLeft: 16 }} color='black' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />
+          ),
+        })}
+        component={DrawerScreen} />
+      <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
     </Stack.Navigator>
   );
 }

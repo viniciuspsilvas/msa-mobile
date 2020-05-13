@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 
 import Moment from 'react-moment';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -14,7 +14,7 @@ export default MessageCard = ({ message, callback }) => {
 
     const [updateMessage] = useMutation(UPDATE_MESSAGE,
         {
-            onCompleted() { if (callback)callback() },
+            onCompleted() { if (callback) callback() },
             onError(error) {
                 console.error(error)
                 Alert.alert(error.message)
@@ -35,7 +35,6 @@ export default MessageCard = ({ message, callback }) => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'baseline',
-   
                 }} >
 
                     <View >

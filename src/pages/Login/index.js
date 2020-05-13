@@ -5,12 +5,13 @@ import { useMutation } from "@apollo/react-hooks";
 
 import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 import Background from 'msa-mobile/src/components/Background'
-
+import { useNavigation } from '@react-navigation/native';
 import { useDeviceInfo } from "./deviceInfo"
 import { LOGIN_STUDENT } from 'msa-mobile/src/api/student'
 import styles from './style'
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
+	const navigation = useNavigation()
 	const { actions } = useContext(AppContext);
 	const { register, setValue, handleSubmit, errors } = useForm();
 	const { tokenDevice, nameDevice } = useDeviceInfo();
@@ -22,6 +23,7 @@ export default function LoginScreen({ navigation }) {
 			const student = res.loginStudent.student
 			student.token = res.loginStudent.token
 			actions.setLoggedUser(student)
+			navigation.navigate("Drawer")
 		}
 	});
 
