@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Icon, Content, Text, TouchableHighlight } from 'native-base';
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import { Alert } from 'react-native'
 import Loader from 'msa-mobile/src/components/Loader'
 
