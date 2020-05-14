@@ -18,7 +18,7 @@ const LogoutButton = () => {
     });
 
     return <TouchableOpacity
-        onPress={() => logoutStudent({ variables: { id: student.id } })}>
+        onPress={() => logoutStudent({ variables: { studentId: student.id } })}>
         <Text style={styles.headline}>Log out</Text>
     </TouchableOpacity>
 }

@@ -17,7 +17,7 @@ export const LOGIN_STUDENT = gql`
 `
 
 export const LOGOUT_STUDENT = gql`
-    mutation logoutStudent($id : ID!) {
-        logoutStudent (id: $id)
+    mutation logoutStudent($studentId : ID!) {
+        logoutStudent (studentId: $studentId)
     }
 `
