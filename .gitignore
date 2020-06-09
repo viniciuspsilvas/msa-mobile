@@ -15,3 +15,4 @@ msa-mobile_master/
 .DS_Store
 .env
 yarn-error.log
+.env.desenv

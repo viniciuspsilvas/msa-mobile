@@ -8,23 +8,24 @@ import { GET_MESSAGES_BY_STUDENTS } from 'msa-mobile/src/api/message'
 
 export function useSubscribeMessages() {
     const { actions } = useContext(AppContext);
-    const user = actions.getLoggedUser();
+    const student = actions.getLoggedUser();
+    const isLogged = student && student.token;
 
        const { loading, data, error, refetch } = useQuery(GET_MESSAGES_BY_STUDENTS, {
-           variables: { student: { id: user.id } },
-           skip: !user  || !user.id
+           variables: { student: { id: student.id } },
+           skip: !isLogged 
        });
 
        useEffect(() => {
         refetch()
         const pusher = new Pusher(PUSHER_APP_KEY, { cluster: PUSHER_CLUSTER, forceTLS: true });
         const channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
-        channel.bind(`msa.message.student.${user.id}`, refetch);
+        channel.bind(`msa.message.student.${student.id}`, refetch);
 
         return function cleanup() {
             pusher.unsubscribe(PUSHER_MSA_MESSAGE_CHANNEL);
         };
-    }, [user]);
+    }, [student]);
 
     return { loading, data, error, refetch };
 }
