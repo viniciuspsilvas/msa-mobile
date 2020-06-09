@@ -21,7 +21,7 @@ publish: &publish
 
     - run:
         name: Installing exp
-        command: yarn global add expo-cli@3.21.5
+        command: yarn --ignore-engines global add expo-cli@3.21.5 
 
     - run:
         name: Installing dependencies
