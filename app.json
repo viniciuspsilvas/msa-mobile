@@ -33,7 +33,7 @@
       "package": "au.edu.mindroom.msa",
       "googleServicesFile": "./google-services.json",
       "permissions" : [],
-      "versionCode": 7
+      "versionCode": 8
     }
   },
   "name": "msa-mobile",
