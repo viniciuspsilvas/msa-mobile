@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { description } from 'msa-mobile/package.json';
 
-import { View, SafeAreaView, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, Image, Text, StyleSheet } from 'react-native';
 import { Icon } from 'native-base';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
@@ -13,6 +13,7 @@ import MessagesScreen from 'msa-mobile/src/pages/Messages'
 import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
 import LogoutButton from 'msa-mobile/src/components/LogoutButton'
+import Loader from 'msa-mobile/src/components/Loader'
 
 const styles = StyleSheet.create({
   headline: {
@@ -28,8 +29,20 @@ const styles = StyleSheet.create({
 
 export default function AppNavigation() {
   const { actions } = useContext(AppContext);
+  const [isLoading, setIsLoading] = useState(true)
   const student = actions.getLoggedUser();
-  const isLogged = student && student.token;
+
+  useEffect(() => {
+
+    setTimeout(() => {
+      setIsLoading(!isLoading)
+    }, 500)
+
+  }, []);
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   const CustomDrawerContent = (props) => {
     return (
@@ -70,7 +83,7 @@ export default function AppNavigation() {
   const Stack = createStackNavigator();
 
   return (
-    <Stack.Navigator initialRouteName={isLogged ? "Drawer" : "Login"}>
+    <Stack.Navigator initialRouteName={student && student.token ? "Drawer" : "Login"}>
       <Stack.Screen name="Drawer"
         options={({ navigation }) => ({
           title: description,
