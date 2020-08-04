@@ -26,17 +26,19 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 const link = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) => {
-      Alert.alert(message);
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    });
-  if (networkError) {
-    Alert.alert(networkError);
-    console.log(`[Network error]: ${networkError}`)
-  };
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message }) => Alert.alert(message))
+  }
+
+  if (!graphQLErrors && networkError) {
+    Alert.alert(networkError.message)
+    if (networkError.statusCode === 401) {
+      AsyncStorage.removeItem(NAME_LOCAL_STORAGE)
+    }
+  }
+
+
+  console.log(`[Network error]: ${networkError}`,  `[graphQLErrors]: ${graphQLErrors}`)
 });
 
 const client = new ApolloClient({
