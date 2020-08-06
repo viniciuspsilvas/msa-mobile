@@ -1,7 +1,9 @@
 import React, { createContext, useState, useEffect } from "react";
 import { AsyncStorage } from 'react-native';
+import packageJson from '../../package.json';
 
-const STUDENT_LOCAL_STORAGE = 'STUDENT_MSA'
+const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
+
 const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
@@ -9,7 +11,7 @@ const AppContextProvider = ({ children }) => {
 
     useEffect(() => {
         try {
-            AsyncStorage.getItem(STUDENT_LOCAL_STORAGE).then(user => {
+            AsyncStorage.getItem(TOKEN_LOCAL_STORE).then(user => {
                 setState({ user: JSON.parse(user) })
             })
         } catch (error) {
@@ -20,7 +22,7 @@ const AppContextProvider = ({ children }) => {
     const actions = {
         setLoggedUser: (data) => {
             async function saveStorage(value) {
-                await AsyncStorage.setItem(STUDENT_LOCAL_STORAGE, JSON.stringify(value))
+                await AsyncStorage.setItem(TOKEN_LOCAL_STORE, JSON.stringify(value))
             }
             saveStorage(data);
             setState({ user: data })
@@ -29,7 +31,7 @@ const AppContextProvider = ({ children }) => {
 
         logout: () => {
             async function removeUser() {
-                await AsyncStorage.removeItem(STUDENT_LOCAL_STORAGE)
+                await AsyncStorage.removeItem(TOKEN_LOCAL_STORE)
             }
             removeUser();
             setState({ user: {} })

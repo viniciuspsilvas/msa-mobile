@@ -6,16 +6,19 @@ import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { onError } from "apollo-link-error";
 import { Alert } from 'react-native'
+import packageJson from '../../package.json';
 
+const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 const httpLink = createHttpLink({ uri: BACKEND_URL });
 const authLink = setContext(async (_, { headers }) => {
 
-  const student = JSON.parse(await AsyncStorage.getItem('STUDENT_MSA'))
+  const student = JSON.parse(await AsyncStorage.getItem(TOKEN_LOCAL_STORE))
   if (student && student.token) {
+    console.log(`===> ${student.token}`)
     return {
       headers: {
         ...headers,
-        "Authorization": student.token
+        "Authorization": student.token // doesn't need Bearer
       }
     };
   } else {
@@ -33,12 +36,10 @@ const link = onError(({ graphQLErrors, networkError }) => {
   if (!graphQLErrors && networkError) {
     Alert.alert(networkError.message)
     if (networkError.statusCode === 401) {
-      AsyncStorage.removeItem(NAME_LOCAL_STORAGE)
+      AsyncStorage.removeItem(TOKEN_LOCAL_STORE)
     }
   }
-
-
-  console.log(`[Network error]: ${networkError}`,  `[graphQLErrors]: ${graphQLErrors}`)
+  console.log(`[Network error]: ${networkError}`,  `[graphQLErrors]: ${JSON.stringify(graphQLErrors)}`)
 });
 
 const client = new ApolloClient({

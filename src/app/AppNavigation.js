@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { description } from 'msa-mobile/package.json';
-
-import { View, SafeAreaView, Image, Text, StyleSheet } from 'react-native';
+import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { View, SafeAreaView, Image, Text, StyleSheet, Alert } from 'react-native';
 import { Icon } from 'native-base';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
@@ -14,6 +14,8 @@ import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
 import LogoutButton from 'msa-mobile/src/components/LogoutButton'
 import Loader from 'msa-mobile/src/components/Loader'
+
+import { VALIDATE_TOKEN } from 'msa-mobile/src/api/auth'
 
 const styles = StyleSheet.create({
   headline: {
@@ -28,20 +30,64 @@ const styles = StyleSheet.create({
 );
 
 export default function AppNavigation() {
-  const { actions } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true)
+  const [isTokenValid, setIsTokenValid] = useState(false)
+
+  const { actions } = useContext(AppContext);
   const student = actions.getLoggedUser();
 
-  useEffect(() => {
+  /*   const { loading, error, data } = useQuery(VALIDATE_TOKEN, {
+      variables: { token: student.token },
+      skip: student === null || student.token === null,
+      onCompleted: () => {
+        if (data && data.validateToken) {
+          setIsTokenValid(true)
+        } else {
+          setIsTokenValid(false)
+        }
+      }
+    }); */
 
+  const [validateToken, { loading, data, error }] = useLazyQuery(VALIDATE_TOKEN);
+
+  useEffect(() => {
     setTimeout(() => {
       setIsLoading(!isLoading)
     }, 500)
 
-  }, []);
+    if (student !== null && student.token !== null)
+      validateToken({ variables: { token: student.token } })
 
-  if (isLoading) {
+    if (data && data.validateToken) {
+      setIsTokenValid(true)
+    } else {
+      setIsTokenValid(false)
+    }
+
+  }, [data, student]);
+  /* 
+    useEffect(() => {
+      console.log("validating =>", student.token)
+      validateToken({ variables: { token: student.token } })
+      setIsTokenValid(data && data.validateToken === true)
+  
+      console.log("data =>", data)
+  
+      if (data && data.validateToken){
+        setIsTokenValid(true)
+      } else{
+        setIsTokenValid(false)
+      }
+  
+    }, []); */
+
+  if (isLoading || loading) {
     return <Loader />
+  }
+
+  if (error) {
+    Alert.alert(`Error! ${error.message}`)
+    setIsTokenValid(false)
   }
 
   const CustomDrawerContent = (props) => {
@@ -83,7 +129,7 @@ export default function AppNavigation() {
   const Stack = createStackNavigator();
 
   return (
-    <Stack.Navigator initialRouteName={student && student.token ? "Drawer" : "Login"}>
+    <Stack.Navigator initialRouteName={isTokenValid ? "Drawer" : "Login"}>
       <Stack.Screen name="Drawer"
         options={({ navigation }) => ({
           title: description,
