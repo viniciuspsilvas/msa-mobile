@@ -7,8 +7,8 @@ import { PUSHER_APP_KEY, PUSHER_CLUSTER, PUSHER_MSA_MESSAGE_CHANNEL } from 'reac
 import { GET_MESSAGES_BY_STUDENTS } from 'msa-mobile/src/api/message'
 
 export function useSubscribeMessages() {
-    const { actions } = useContext(AppContext);
-    const student = actions.getLoggedUser();
+    // const { actions } = useContext(AppContext);
+    const student =  {}//actions.getLoggedUser();
     const isLogged = student && student.token;
 
        const { loading, data, error, refetch } = useQuery(GET_MESSAGES_BY_STUDENTS, {

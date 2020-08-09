@@ -5,18 +5,18 @@ import styles from './style'
 
 import Background from 'msa-mobile/src/components/Background'
 import Loader from 'msa-mobile/src/components/Loader'
-import { useSubscribeMessages } from 'msa-mobile/src/hooks/useSubscribeMessages'
+// import { useSubscribeMessages } from 'msa-mobile/src/hooks/useSubscribeMessages'
 
 export default HomeScreen = ({ navigation }) => {
-    const { loading, data, error } = useSubscribeMessages()
-
+    // const { loading, data, error } = useSubscribeMessages()
+/* 
     if (error) {
         console.log(error, data)
         Alert.alert(error.message)
     }
-    if (loading || !data) { return <Loader /> }
+    if (loading || !data) { return <Loader /> } */
 
-    const qtdMessage = data.messagesSentByStudent.filter(msg => !msg.read).length;
+    const qtdMessage = 1//data.messagesSentByStudent.filter(msg => !msg.read).length;
 
     return (
         <View style={{ lexGrow: 1, height: '100%' }}>

@@ -3,16 +3,20 @@ import { View, TouchableOpacity, Image, KeyboardAvoidingView, Text, TextInput, A
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/react-hooks";
 
-import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 import Background from 'msa-mobile/src/components/Background'
-import { useNavigation } from '@react-navigation/native';
 import { useDeviceInfo } from "./deviceInfo"
 import { LOGIN_STUDENT } from 'msa-mobile/src/api/student'
 import styles from './style'
+import packageJson from '../../../package.json';
+import { AsyncStorage } from 'react-native';
+
+import { AppContext } from "msa-mobile/src/app/AppContextProvider";
+
+const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 
 export default function LoginScreen() {
-	const navigation = useNavigation()
-	const { actions } = useContext(AppContext);
+	const { dispatch } = useContext(AppContext);
+
 	const { register, setValue, handleSubmit, errors } = useForm();
 	const { tokenDevice, nameDevice } = useDeviceInfo();
 
@@ -22,8 +26,14 @@ export default function LoginScreen() {
 		onCompleted(res) {
 			const student = res.loginStudent.student
 			student.token = res.loginStudent.token
-			actions.setLoggedUser(student)
-			navigation.navigate("Drawer")
+            async function saveStorage(value) {
+                await AsyncStorage.setItem(TOKEN_LOCAL_STORE, value)
+            }
+			saveStorage(student.token);
+
+			// TODO ao fazer login, deve ser colocar o user no state do context,
+			
+			dispatch({ type: 'SIGN_IN', token: student.token });
 		}
 	});
 
