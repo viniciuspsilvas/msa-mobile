@@ -7,16 +7,11 @@ import Background from 'msa-mobile/src/components/Background'
 import { useDeviceInfo } from "./deviceInfo"
 import { LOGIN_STUDENT } from 'msa-mobile/src/api/student'
 import styles from './style'
-import packageJson from '../../../package.json';
-import { AsyncStorage } from 'react-native';
-
 import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
-const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 
 export default function LoginScreen() {
-	const { dispatch } = useContext(AppContext);
-
+	const { authContext } = useContext(AppContext);
 	const { register, setValue, handleSubmit, errors } = useForm();
 	const { tokenDevice, nameDevice } = useDeviceInfo();
 
@@ -24,15 +19,7 @@ export default function LoginScreen() {
 
 	const [loginStudent, { loading }] = useMutation(LOGIN_STUDENT, {
 		onCompleted(res) {
-			const student = res.loginStudent.student
-			student.token = res.loginStudent.token
-            async function saveStorage(value) {
-                await AsyncStorage.setItem(TOKEN_LOCAL_STORE, value)
-            }
-			saveStorage(student.token);
-
-			// TODO ao fazer login, deve ser colocar o user no state do context,
-			dispatch({ type: 'SIGN_IN', token: student.token });
+			authContext.signIn(res.loginStudent)
 		}
 	});
 

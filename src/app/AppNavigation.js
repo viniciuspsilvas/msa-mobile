@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { description } from 'msa-mobile/package.json';
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import { View, SafeAreaView, Image, Text, StyleSheet, Alert } from 'react-native';
 import { Icon } from 'native-base';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -67,24 +66,13 @@ export default function AppNavigation() {
     );
   }
 
-
-  const  SplashScreen = () => {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
   const Stack = createStackNavigator();
-
-  console.log("state.userToken", state.userToken)
 
   return (
     <Stack.Navigator>
       {state.isLoading ? (
         // We haven't finished checking for the token yet
-        <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="Splash" component={Loader} />
       ) : state.userToken == null ? (
         // No token found, user isn't signed in
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />

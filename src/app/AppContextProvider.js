@@ -2,6 +2,7 @@ import React, { createContext, useReducer, useEffect } from "react";
 import { AsyncStorage } from 'react-native';
 import { createApolloFetch } from 'apollo-fetch';
 import packageJson from '../../package.json';
+import { BACKEND_URL } from 'react-native-dotenv'
 
 const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 
@@ -28,6 +29,7 @@ const AppContextProvider = ({ children }) => {
                         ...prevState,
                         isSignout: true,
                         userToken: null,
+                        student: null,
                     };
                 case 'SET_STUDENT':
                     return {
@@ -50,25 +52,21 @@ const AppContextProvider = ({ children }) => {
         }
     );
 
-
     useEffect(() => {
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
             let userToken;
 
-            const fetch = createApolloFetch({
-                uri: 'http://192.168.1.106:4000/graphql',
-            });
-
             try {
+                // TODO change to use Apollo and import { STUDENT_BY_TOKEN } from '../api/student'
+                const fetch = createApolloFetch({
+                    uri: `${BACKEND_URL}/graphql`,
+                });
+
                 userToken = await AsyncStorage.getItem(TOKEN_LOCAL_STORE);
 
-                async function removeUser() {
-                    await AsyncStorage.removeItem(TOKEN_LOCAL_STORE)
-                }
-
-                fetch({
-                    query: `  query studentByToken($token: String!) {
+                const resp = await fetch({
+                    query: `query studentByToken($token: String!) {
                         studentByToken(token: $token){
                           id
                           fullName
@@ -76,23 +74,11 @@ const AppContextProvider = ({ children }) => {
                         }
                       }`,
                     variables: { token: userToken },
-                }).then(res => {
+                })
 
-                    if (res.data.studentByToken) {
-                        dispatch({ type: 'SET_STUDENT', student: res.data.studentByToken });
-                        dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-              
-                    } else {
-                        removeUser();
-                        dispatch({ type: 'RESTORE_TOKEN', token: null });
-                    }
-
-                }).catch((error) => {
-                    removeUser();
-                    dispatch({ type: 'RESTORE_TOKEN', token: null });
-
-                    console.error(error)
-                });
+                const { studentByToken } = resp.data
+                dispatch({ type: 'SET_STUDENT', student: studentByToken });
+                dispatch({ type: 'RESTORE_TOKEN', token: userToken });
 
             } catch (e) {
                 // Restoring token failed
@@ -106,12 +92,11 @@ const AppContextProvider = ({ children }) => {
 
     const authContext = React.useMemo(
         () => ({
-            logout: () => {
-                async function removeUser() {
+            signOut: () => {
+                async function removeStorage() {
                     await AsyncStorage.removeItem(TOKEN_LOCAL_STORE)
                 }
-                removeUser();
-                setState({ user: {} })
+                removeStorage();
 
                 // TODO quando o usuario fizer logout, devera ser interrompido o Pusher, a busca das messagens e tb as notificacoes.
                 // Lembrar tambem de deleter o device do student. 
@@ -120,20 +105,23 @@ const AppContextProvider = ({ children }) => {
                 dispatch({ type: 'SIGN_OUT' })
             },
 
-            signUp: async data => {
-                // In a production app, we need to send user data to server and get a token
-                // We will also need to handle errors if sign up failed
-                // After getting token, we need to persist the token using `AsyncStorage`
-                // In the example, we'll use a dummy token
+            signIn: async data => {
+                const student = data.student
+                student.token = data.token
+                async function saveStorage(value) {
+                    await AsyncStorage.setItem(TOKEN_LOCAL_STORE, value)
+                }
+                saveStorage(student.token);
 
-                dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+                dispatch({ type: 'SET_STUDENT', student: student });
+                dispatch({ type: 'SIGN_IN', token: student.token });
             },
         }),
         []
     );
 
     return (
-        <AppContext.Provider value={{ state, dispatch }}>
+        <AppContext.Provider value={{ state, authContext }}>
             {children}
         </AppContext.Provider>
     );
