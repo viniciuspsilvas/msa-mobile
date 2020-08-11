@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 
 export default function AppNavigation() {
   const { state } = useContext(AppContext);
-  const student = {}//actions.getLoggedUser();
+  const {student} = state
 
   const CustomDrawerContent = (props) => {
     return (

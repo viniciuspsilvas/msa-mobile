@@ -32,7 +32,6 @@ export default function LoginScreen() {
 			saveStorage(student.token);
 
 			// TODO ao fazer login, deve ser colocar o user no state do context,
-			
 			dispatch({ type: 'SIGN_IN', token: student.token });
 		}
 	});

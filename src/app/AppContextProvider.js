@@ -2,7 +2,6 @@ import React, { createContext, useReducer, useEffect } from "react";
 import { AsyncStorage } from 'react-native';
 import { createApolloFetch } from 'apollo-fetch';
 import packageJson from '../../package.json';
-import { VALIDATE_TOKEN } from 'msa-mobile/src/api/auth'
 
 const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 
@@ -30,12 +29,24 @@ const AppContextProvider = ({ children }) => {
                         isSignout: true,
                         userToken: null,
                     };
+                case 'SET_STUDENT':
+                    return {
+                        ...prevState,
+                        student: action.student,
+                    };
+                case 'SIGN_OUT':
+                    return {
+                        ...prevState,
+                        isSignout: true,
+                        userToken: null,
+                    };
             }
         },
         {
             isLoading: true,
             isSignout: false,
             userToken: null,
+            student: null,
         }
     );
 
@@ -57,15 +68,18 @@ const AppContextProvider = ({ children }) => {
                 }
 
                 fetch({
-                    query: `query validateToken($token: String) {
-                        validateToken(token: $token)
+                    query: `  query studentByToken($token: String!) {
+                        studentByToken(token: $token){
+                          id
+                          fullName
+                          email
+                        }
                       }`,
                     variables: { token: userToken },
                 }).then(res => {
 
-                    if (res.data.validateToken) {
-                        //TODO caso o login seja valido, 
-                        // deve ser extrair o usuario do token ou buscar novamente no banco 
+                    if (res.data.studentByToken) {
+                        dispatch({ type: 'SET_STUDENT', student: res.data.studentByToken });
                         dispatch({ type: 'RESTORE_TOKEN', token: userToken });
               
                     } else {
@@ -76,6 +90,8 @@ const AppContextProvider = ({ children }) => {
                 }).catch((error) => {
                     removeUser();
                     dispatch({ type: 'RESTORE_TOKEN', token: null });
+
+                    console.error(error)
                 });
 
             } catch (e) {
