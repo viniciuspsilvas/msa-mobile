@@ -7,6 +7,7 @@ export const GET_MESSAGES_BY_STUDENTS = gql`
         title
         body
         read
+        createdAt
         student{
             firstName
         }
