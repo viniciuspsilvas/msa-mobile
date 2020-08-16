@@ -3,16 +3,15 @@ import { View, TouchableOpacity, Image, KeyboardAvoidingView, Text, TextInput, A
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/react-hooks";
 
-import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 import Background from 'msa-mobile/src/components/Background'
-import { useNavigation } from '@react-navigation/native';
 import { useDeviceInfo } from "./deviceInfo"
 import { LOGIN_STUDENT } from 'msa-mobile/src/api/student'
 import styles from './style'
+import { AppContext } from "msa-mobile/src/app/AppContextProvider";
+
 
 export default function LoginScreen() {
-	const navigation = useNavigation()
-	const { actions } = useContext(AppContext);
+	const { authContext } = useContext(AppContext);
 	const { register, setValue, handleSubmit, errors } = useForm();
 	const { tokenDevice, nameDevice } = useDeviceInfo();
 
@@ -20,10 +19,7 @@ export default function LoginScreen() {
 
 	const [loginStudent, { loading }] = useMutation(LOGIN_STUDENT, {
 		onCompleted(res) {
-			const student = res.loginStudent.student
-			student.token = res.loginStudent.token
-			actions.setLoggedUser(student)
-			navigation.navigate("Drawer")
+			authContext.signIn(res.loginStudent)
 		}
 	});
 

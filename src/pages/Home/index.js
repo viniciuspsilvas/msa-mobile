@@ -1,24 +1,20 @@
-import React from "react";
+import React, { useContext, useMemo } from "react";
 import { Text, View, Image, Alert } from 'react-native';
+import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 import { Button, Badge } from 'native-base';
 import styles from './style'
 
 import Background from 'msa-mobile/src/components/Background'
-import Loader from 'msa-mobile/src/components/Loader'
 import { useSubscribeMessages } from 'msa-mobile/src/hooks/useSubscribeMessages'
 
 export default HomeScreen = ({ navigation }) => {
-    const { loading, data, error } = useSubscribeMessages()
+    useSubscribeMessages();
+    const { state } = useContext(AppContext);
+    const { messages } = state
 
-    if (error) {
-        console.log(error, data)
-        Alert.alert(error.message)
-    }
-    if (loading || !data) { return <Loader /> }
+    const qtdMessage = messages ? messages.filter(msg => !msg.read).length : 0;
 
-    const qtdMessage = data.messagesSentByStudent.filter(msg => !msg.read).length;
-
-    return (
+    return useMemo(() =>
         <View style={{ lexGrow: 1, height: '100%' }}>
             <Background />
             <View style={styles.container}>
@@ -48,6 +44,7 @@ export default HomeScreen = ({ navigation }) => {
 
             </View>
         </View>
-    )
+        , [qtdMessage])
+
 }
 

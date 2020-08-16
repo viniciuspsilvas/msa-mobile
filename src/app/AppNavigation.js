@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { description } from 'msa-mobile/package.json';
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import { View, SafeAreaView, Image, Text, StyleSheet, Alert } from 'react-native';
 import { Icon } from 'native-base';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -15,8 +14,6 @@ import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 import LogoutButton from 'msa-mobile/src/components/LogoutButton'
 import Loader from 'msa-mobile/src/components/Loader'
 
-import { VALIDATE_TOKEN } from 'msa-mobile/src/api/auth'
-
 const styles = StyleSheet.create({
   headline: {
     textAlign: 'center',
@@ -30,72 +27,15 @@ const styles = StyleSheet.create({
 );
 
 export default function AppNavigation() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [isTokenValid, setIsTokenValid] = useState(false)
-
-  const { actions } = useContext(AppContext);
-  const student = actions.getLoggedUser();
-
-  /*   const { loading, error, data } = useQuery(VALIDATE_TOKEN, {
-      variables: { token: student.token },
-      skip: student === null || student.token === null,
-      onCompleted: () => {
-        if (data && data.validateToken) {
-          setIsTokenValid(true)
-        } else {
-          setIsTokenValid(false)
-        }
-      }
-    }); */
-
-  const [validateToken, { loading, data, error }] = useLazyQuery(VALIDATE_TOKEN);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(!isLoading)
-    }, 500)
-
-    if (student !== null && student.token !== null)
-      validateToken({ variables: { token: student.token } })
-
-    if (data && data.validateToken) {
-      setIsTokenValid(true)
-    } else {
-      setIsTokenValid(false)
-    }
-
-  }, [data, student]);
-  /* 
-    useEffect(() => {
-      console.log("validating =>", student.token)
-      validateToken({ variables: { token: student.token } })
-      setIsTokenValid(data && data.validateToken === true)
-  
-      console.log("data =>", data)
-  
-      if (data && data.validateToken){
-        setIsTokenValid(true)
-      } else{
-        setIsTokenValid(false)
-      }
-  
-    }, []); */
-
-  if (isLoading || loading) {
-    return <Loader />
-  }
-
-  if (error) {
-    Alert.alert(`Error! ${error.message}`)
-    setIsTokenValid(false)
-  }
+  const { state } = useContext(AppContext);
+  const { student } = state
 
   const CustomDrawerContent = (props) => {
     return (
       <DrawerContentScrollView {...props}>
         <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
           <Image source={require('msa-mobile/assets/icon_white.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
-          <Text>{student.fullName}</Text>
+          <Text>{student && student.fullName}</Text>
         </View>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItemList  {...props} options={{ drawerIcon: { size: 5, color: "blue" } }} />
@@ -128,18 +68,25 @@ export default function AppNavigation() {
 
   const Stack = createStackNavigator();
 
-  return (
-    <Stack.Navigator initialRouteName={isTokenValid ? "Drawer" : "Login"}>
-      <Stack.Screen name="Drawer"
-        options={({ navigation }) => ({
-          title: description,
-          headerStyle: { backgroundColor: '#E54236', },
-          headerLeft: () => (
-            <Icon name="md-menu" size={30} style={{ paddingLeft: 16 }} color='black' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />
-          ),
-        })}
-        component={DrawerScreen} />
-      <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
-    </Stack.Navigator>
-  );
+  return useMemo(() =>
+    <Stack.Navigator>
+      {state.isLoading ? (
+        // We haven't finished checking for the token yet
+        <Stack.Screen name="Splash" component={Loader} />
+      ) : state.userToken == null ? (
+        // No token found, user isn't signed in
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
+      ) : (
+            // User is signed in
+            <Stack.Screen name="Drawer"
+              options={({ navigation }) => ({
+                title: description,
+                headerStyle: { backgroundColor: '#E54236', },
+                headerLeft: () => (
+                  <Icon name="md-menu" size={30} style={{ paddingLeft: 16 }} color='black' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />
+                ),
+              })}
+              component={DrawerScreen} />
+          )}
+    </Stack.Navigator>, [state.isLoading, state.userToken])
 }

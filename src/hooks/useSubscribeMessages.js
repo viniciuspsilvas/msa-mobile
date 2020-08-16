@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { useQuery } from "@apollo/react-hooks";
+import { useLazyQuery } from "@apollo/react-hooks";
 import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
 import Pusher from 'pusher-js/react-native';
@@ -7,25 +7,35 @@ import { PUSHER_APP_KEY, PUSHER_CLUSTER, PUSHER_MSA_MESSAGE_CHANNEL } from 'reac
 import { GET_MESSAGES_BY_STUDENTS } from 'msa-mobile/src/api/message'
 
 export function useSubscribeMessages() {
-    const { actions } = useContext(AppContext);
-    const student = actions.getLoggedUser();
-    const isLogged = student && student.token;
+    const { state, dispatch } = useContext(AppContext);
+    const { student } = state
 
-       const { loading, data, error, refetch } = useQuery(GET_MESSAGES_BY_STUDENTS, {
-           variables: { student: { id: student.id } },
-           skip: !isLogged 
-       });
+    const [fetchMessages, { error }] = useLazyQuery(GET_MESSAGES_BY_STUDENTS, {
+        onCompleted: data => {
+            dispatch({ type: 'SET_MESSAGES', messages: data.messagesSentByStudent });
+        },
+    });
 
-       useEffect(() => {
-        refetch()
-        const pusher = new Pusher(PUSHER_APP_KEY, { cluster: PUSHER_CLUSTER, forceTLS: true });
-        const channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
-        channel.bind(`msa.message.student.${student.id}`, refetch);
+    if (error) {
+        console.error("Error at useSubscribeMessages", error)
+    }
 
-        return function cleanup() {
-            pusher.unsubscribe(PUSHER_MSA_MESSAGE_CHANNEL);
-        };
+    const getMessages = () => {
+        fetchMessages({ variables: { student: { id: student.id } } })
+    }
+
+    useEffect(() => {
+        if (student && student.id) {
+            getMessages();
+            const pusher = new Pusher(PUSHER_APP_KEY, { cluster: PUSHER_CLUSTER, forceTLS: true });
+            const channel = pusher.subscribe(PUSHER_MSA_MESSAGE_CHANNEL);
+            channel.bind(`msa.message.student.${student.id}`, () => getMessages());
+
+            return function cleanup() {
+                pusher.unsubscribe(PUSHER_MSA_MESSAGE_CHANNEL);
+            };
+        }
     }, [student]);
 
-    return { loading, data, error, refetch };
+    return { getMessages };
 }

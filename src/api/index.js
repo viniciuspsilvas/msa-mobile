@@ -10,23 +10,18 @@ import packageJson from '../../package.json';
 
 const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 const httpLink = createHttpLink({ uri: BACKEND_URL });
-const authLink = setContext(async (_, { headers }) => {
 
-  const student = JSON.parse(await AsyncStorage.getItem(TOKEN_LOCAL_STORE))
-  if (student && student.token) {
-    console.log(`===> ${student.token}`)
-    return {
-      headers: {
-        ...headers,
-        "Authorization": student.token // doesn't need Bearer
-      }
-    };
-  } else {
-    return {
-      headers: { ...headers }
-    };
-  }
+const authLink = setContext(async (_, { headers }) => {
+  const token = await AsyncStorage.getItem(TOKEN_LOCAL_STORE);
+
+  return {
+    headers: {
+      ...headers,
+      "Authorization": token || null
+    }
+  };
 });
+
 
 const link = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -39,12 +34,26 @@ const link = onError(({ graphQLErrors, networkError }) => {
       AsyncStorage.removeItem(TOKEN_LOCAL_STORE)
     }
   }
-  console.log(`[Network error]: ${networkError}`,  `[graphQLErrors]: ${JSON.stringify(graphQLErrors)}`)
+  console.log(`[Network error]: ${networkError}`, `[graphQLErrors]: ${JSON.stringify(graphQLErrors)}`)
 });
+
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'ignore',
+  },
+  query: {
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'all',
+  },
+}
 
 const client = new ApolloClient({
   link: authLink.concat(link).concat(httpLink),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({
+    addTypename: false
+  }),
+  defaultOptions: defaultOptions
 });
 
 export default client;

@@ -21,3 +21,13 @@ export const LOGOUT_STUDENT = gql`
         logoutStudent (studentId: $studentId)
     }
 `
+
+export const STUDENT_BY_TOKEN = gql`
+    query studentByToken($token: String!, $tokenDevice: String!) {
+        studentByToken(token: $token, tokenDevice: $tokenDevice){
+            id
+            fullName
+            email
+        }
+    }
+`
