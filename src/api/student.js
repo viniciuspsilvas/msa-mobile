@@ -23,8 +23,8 @@ export const LOGOUT_STUDENT = gql`
 `
 
 export const STUDENT_BY_TOKEN = gql`
-    query studentByToken($token: String!) {
-        studentByToken(token: $token){
+    query studentByToken($token: String!, $tokenDevice: String!) {
+        studentByToken(token: $token, tokenDevice: $tokenDevice){
             id
             fullName
             email
