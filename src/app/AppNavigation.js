@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { description } from 'msa-mobile/package.json';
 import { View, SafeAreaView, Image, Text, StyleSheet, Alert } from 'react-native';
 import { Icon } from 'native-base';
@@ -28,14 +28,14 @@ const styles = StyleSheet.create({
 
 export default function AppNavigation() {
   const { state } = useContext(AppContext);
-  const {student} = state
+  const { student } = state
 
   const CustomDrawerContent = (props) => {
     return (
       <DrawerContentScrollView {...props}>
         <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
           <Image source={require('msa-mobile/assets/icon_white.png')} style={{ height: 120, width: 120, borderRadius: 60 }} />
-          <Text>{student.fullName}</Text>
+          <Text>{student && student.fullName}</Text>
         </View>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItemList  {...props} options={{ drawerIcon: { size: 5, color: "blue" } }} />
@@ -68,7 +68,7 @@ export default function AppNavigation() {
 
   const Stack = createStackNavigator();
 
-  return (
+  return useMemo(() =>
     <Stack.Navigator>
       {state.isLoading ? (
         // We haven't finished checking for the token yet
@@ -88,6 +88,5 @@ export default function AppNavigation() {
               })}
               component={DrawerScreen} />
           )}
-    </Stack.Navigator>
-  )
+    </Stack.Navigator>, [state.isLoading, state.userToken])
 }

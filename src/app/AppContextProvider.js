@@ -4,11 +4,15 @@ import { createApolloFetch } from 'apollo-fetch';
 import packageJson from '../../package.json';
 import { BACKEND_URL } from 'react-native-dotenv'
 
+import { useDeviceInfo } from "msa-mobile/src/pages/Login/deviceInfo"
+
 const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 
 const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
+	const { tokenDevice } = useDeviceInfo();
+
     const [state, dispatch] = useReducer(
         (prevState, action) => {
             switch (action.type) {
@@ -42,6 +46,11 @@ const AppContextProvider = ({ children }) => {
                         isSignout: true,
                         userToken: null,
                     };
+                case 'SET_MESSAGES':
+                    return {
+                        ...prevState,
+                        messages: action.messages,
+                    };
             }
         },
         {
@@ -49,6 +58,7 @@ const AppContextProvider = ({ children }) => {
             isSignout: false,
             userToken: null,
             student: null,
+            messages: null,
         }
     );
 
@@ -73,7 +83,7 @@ const AppContextProvider = ({ children }) => {
                           email
                         }
                       }`,
-                    variables: { token: userToken },
+                    variables: { token: userToken, tokenDevice: tokenDevice },
                 })
 
                 const { studentByToken } = resp.data
@@ -98,10 +108,6 @@ const AppContextProvider = ({ children }) => {
                 }
                 removeStorage();
 
-                // TODO quando o usuario fizer logout, devera ser interrompido o Pusher, a busca das messagens e tb as notificacoes.
-                // Lembrar tambem de deleter o device do student. 
-                // Ou seja, o aparelho nao deve buscar messagens e receber notificacoes
-
                 dispatch({ type: 'SIGN_OUT' })
             },
 
@@ -116,12 +122,16 @@ const AppContextProvider = ({ children }) => {
                 dispatch({ type: 'SET_STUDENT', student: student });
                 dispatch({ type: 'SIGN_IN', token: student.token });
             },
+
+            setMessages: messages => {
+                dispatch({ type: 'SET_MESSAGES', messages });
+            }
         }),
         []
     );
 
     return (
-        <AppContext.Provider value={{ state, authContext }}>
+        <AppContext.Provider value={{ state, authContext, dispatch }}>
             {children}
         </AppContext.Provider>
     );

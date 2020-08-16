@@ -1,38 +1,38 @@
-import React from 'react';
-import { Container, Icon, Content, Text, TouchableHighlight } from 'native-base';
-import { Alert } from 'react-native'
-import Loader from 'msa-mobile/src/components/Loader'
-
+import React, { useContext } from 'react';
+import { Container, Content, Text } from 'native-base';
 import MessageCard from './components/MessageCard'
 import Title from 'msa-mobile/src/components/Title';
 import Background from 'msa-mobile/src/components/Background'
+import { useLazyQuery } from "@apollo/react-hooks";
+import { AppContext } from "msa-mobile/src/app/AppContextProvider";
+import { GET_MESSAGES_BY_STUDENTS } from 'msa-mobile/src/api/message'
 import { useSubscribeMessages } from 'msa-mobile/src/hooks/useSubscribeMessages'
 
 import styles from './style'
 
 export default MessagesScreen = () => {
-    const { loading, data, error, refetch } = useSubscribeMessages()
+  useSubscribeMessages();
+  const { state, authContext } = useContext(AppContext);
+  const { student } = state
 
-    if (error) {
-        console.log(error, data)
-        Alert.alert(error.message)
-    }
-    if (loading || !data) { return <Loader /> }
+  const [fetchMessages] = useLazyQuery(GET_MESSAGES_BY_STUDENTS, {
+    onCompleted: data => {
+      authContext.setMessages(data.messagesSentByStudent)
+    },
+  });
 
-    const messagesList = data.messagesSentByStudent //.map((msg) => ({ key: `${msg.id}`, ...msg }));
+  const { messages } = state
 
-    return (
-        <Container >
-            <Background />
-            <Title title='Messages' icon="ios-chatboxes" />
+  return <Container >
+    <Background />
+    <Title title='Messages' icon="ios-chatboxes" />
 
-            <Content style={styles.container}>
-                {!messagesList && messagesList.length === 0 ? (
-                    <Text>No messages.</Text>
-                ) : (
-                        messagesList.map(message => <MessageCard key={message.id} message={message} callback={refetch} />)
-                    )}
-            </Content>
-        </Container>
-    );
+    <Content style={styles.container}>
+      {messages == null || messages.length === 0 ? (
+        <Text>No messages.</Text>
+      ) : (
+          messages.map(message => <MessageCard key={message.id} message={message} callback={() => fetchMessages({ variables: { student: { id: student.id } } })} />)
+        )}
+    </Content>
+  </Container>
 }
