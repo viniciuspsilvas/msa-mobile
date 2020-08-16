@@ -7,6 +7,11 @@ publish: &publish
   steps:
     - checkout
 
+    - restore_cache:
+      name: Restore Yarn Package Cache
+      keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
+
     - run: 
           name: "Setup custom environment variables"
           command: |
@@ -41,6 +46,12 @@ publish: &publish
            export PATH="$PATH:$( yarn global bin )"
            expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
            expo build:android --non-interactive
+
+    - save_cache:
+        name: Save Yarn Package Cache
+        key: yarn-packages-{{ checksum "yarn.lock" }}
+        paths:
+          - ~/.cache/yarn
 
 jobs:
   publish_to_expo_dev:
