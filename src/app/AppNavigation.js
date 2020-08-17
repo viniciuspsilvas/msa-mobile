@@ -72,7 +72,7 @@ export default function AppNavigation() {
     <Stack.Navigator>
       {state.isLoading ? (
         // We haven't finished checking for the token yet
-        <Stack.Screen name="Splash" component={Loader} />
+        <Stack.Screen options={{ headerShown: false }} name="Splash" component={Loader} />
       ) : state.userToken == null ? (
         // No token found, user isn't signed in
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
