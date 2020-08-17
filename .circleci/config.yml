@@ -13,16 +13,16 @@ publish: &publish
         - yarn-packages-{{ checksum "yarn.lock" }}
 
     - run: 
-          name: "Setup custom environment variables"
-          command: |
-            echo 'BACKEND_URL='${BACKEND_URL} > .env
-            echo 'IS_STORYBOOK_ENABLED=false' >> .env
-            echo 'PUSHER_APP_ID='${PUSHER_APP_ID} >> .env
-            echo 'PUSHER_APP_KEY='${PUSHER_APP_KEY} >> .env
-            echo 'PUSHER_APP_SECRET='${PUSHER_APP_SECRET} >> .env
-            echo 'PUSHER_CLUSTER='${PUSHER_CLUSTER} >> .env
-            echo 'PUSHER_MSA_MESSAGE_CHANNEL='${PUSHER_MSA_MESSAGE_CHANNEL} >> .env
-            cat .env
+        name: "Setup custom environment variables"
+        command: |
+          echo 'BACKEND_URL='${BACKEND_URL} > .env
+          echo 'IS_STORYBOOK_ENABLED=false' >> .env
+          echo 'PUSHER_APP_ID='${PUSHER_APP_ID} >> .env
+          echo 'PUSHER_APP_KEY='${PUSHER_APP_KEY} >> .env
+          echo 'PUSHER_APP_SECRET='${PUSHER_APP_SECRET} >> .env
+          echo 'PUSHER_CLUSTER='${PUSHER_CLUSTER} >> .env
+          echo 'PUSHER_MSA_MESSAGE_CHANNEL='${PUSHER_MSA_MESSAGE_CHANNEL} >> .env
+          cat .env
 
     - run:
         name: Installing exp
