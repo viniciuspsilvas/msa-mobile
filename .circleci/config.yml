@@ -6,11 +6,10 @@ publish: &publish
 
   steps:
     - checkout
-
-    - restore_cache:
-      name: Restore Yarn Package Cache
-      keys:
-        - yarn-packages-{{ checksum "yarn.lock" }}
+      - restore_cache:
+        name: Restore Yarn Package Cache
+        keys:
+          - yarn-packages-{{ checksum "yarn.lock" }}
 
     - run: 
         name: "Setup custom environment variables"
