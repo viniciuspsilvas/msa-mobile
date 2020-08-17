@@ -27,7 +27,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "au.edu.mindroom.msa"
+      "bundleIdentifier": "au.edu.mindroom.msa",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "package": "au.edu.mindroom.msa",
