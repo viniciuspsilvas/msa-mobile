@@ -1,20 +1,29 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useMutation } from "@apollo/react-hooks";
+import { LOGOUT_STUDENT } from 'msa-mobile/src/api/student'
+import { AppContext } from "msa-mobile/src/app/AppContextProvider";
 
-import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '../scenes/Login/actions';
+const LogoutButton = () => {
+    const { state, authContext } = useContext(AppContext);
+    const { student } = state
 
-const LogoutButton = (props) => {
-    const dispatch = useDispatch();
-    const { userDetails } = useSelector(state => state.loginReducer);
+    const [logoutStudent] = useMutation(LOGOUT_STUDENT, {
+        onCompleted(res) {
+            authContext.signOut()
+        },
+        onError() {
+            authContext.signOut()
+        }
+    });
 
-    const handleLogout = () => {
-        dispatch(logout(userDetails._id))
-        props.navigation.navigate('AuthStack');
-    };
+    const onLogoutPress = () => {
+        authContext.signOut();
+        logoutStudent({ variables: { studentId: student.id } })
+    }
 
     return <TouchableOpacity
-        onPress={() => handleLogout()}>
+        onPress={onLogoutPress}>
         <Text style={styles.headline}>Log out</Text>
     </TouchableOpacity>
 }

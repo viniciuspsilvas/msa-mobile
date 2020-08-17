@@ -2,10 +2,15 @@ version: 2
 publish: &publish
   working_directory: ~/msa-mobile
   docker:
-    - image: circleci/node:10.13.0
+    - image: circleci/node:10.17.0
 
   steps:
     - checkout
+
+    - restore_cache:
+      name: Restore Yarn Package Cache
+      keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
 
     - run: 
           name: "Setup custom environment variables"
@@ -15,13 +20,13 @@ publish: &publish
             echo 'PUSHER_APP_ID='${PUSHER_APP_ID} >> .env
             echo 'PUSHER_APP_KEY='${PUSHER_APP_KEY} >> .env
             echo 'PUSHER_APP_SECRET='${PUSHER_APP_SECRET} >> .env
-            echo 'CLUSTER='${CLUSTER} >> .env
+            echo 'PUSHER_CLUSTER='${PUSHER_CLUSTER} >> .env
             echo 'PUSHER_MSA_MESSAGE_CHANNEL='${PUSHER_MSA_MESSAGE_CHANNEL} >> .env
             cat .env
 
     - run:
         name: Installing exp
-        command: yarn global add expo-cli
+        command: yarn --ignore-engines global add expo-cli@3.21.5 
 
     - run:
         name: Installing dependencies
@@ -41,6 +46,12 @@ publish: &publish
            export PATH="$PATH:$( yarn global bin )"
            expo push:android:upload --api-key ${FIREBASE_SERVER_KEY}
            expo build:android --non-interactive
+
+    - save_cache:
+        name: Save Yarn Package Cache
+        key: yarn-packages-{{ checksum "yarn.lock" }}
+        paths:
+          - ~/.cache/yarn
 
 jobs:
   publish_to_expo_dev:
