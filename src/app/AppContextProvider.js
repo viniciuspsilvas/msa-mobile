@@ -76,8 +76,8 @@ const AppContextProvider = ({ children }) => {
                 userToken = await AsyncStorage.getItem(TOKEN_LOCAL_STORE);
 
                 const resp = await fetch({
-                    query: `query studentByToken($token: String!) {
-                        studentByToken(token: $token){
+                    query: `query studentByToken($token: String!, $tokenDevice: String!) {
+                        studentByToken(token: $token, tokenDevice: $tokenDevice){
                           id
                           fullName
                           email
@@ -85,6 +85,8 @@ const AppContextProvider = ({ children }) => {
                       }`,
                     variables: { token: userToken, tokenDevice: tokenDevice },
                 })
+
+                if (resp.errors) throw Error(resp.errors[0].message)
 
                 const { studentByToken } = resp.data
                 dispatch({ type: 'SET_STUDENT', student: studentByToken });
