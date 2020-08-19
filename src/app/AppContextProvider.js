@@ -4,8 +4,6 @@ import { createApolloFetch } from 'apollo-fetch';
 import packageJson from '../../package.json';
 import { BACKEND_URL } from 'react-native-dotenv'
 
-import { useDeviceInfo } from "msa-mobile/src/pages/Login/deviceInfo"
-
 const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 
 const AppContext = createContext();
@@ -69,10 +67,10 @@ const AppContextProvider = ({ children }) => {
                     uri: `${BACKEND_URL}/graphql`,
                 });
 
-                const localStore = await AsyncStorage.getItem(TOKEN_LOCAL_STORE); // TODO alterar para pegar o token do usuario
+                const localStore = await AsyncStorage.getItem(TOKEN_LOCAL_STORE);
                 const tokens = JSON.parse(localStore)
-                const {tokenStudent, tokenDevice} = tokens
-              
+                const { tokenStudent, tokenDevice } = tokens
+
                 const resp = await fetch({
                     query: `query studentByToken($token: String!, $tokenDevice: String!) {
                         studentByToken(token: $token, tokenDevice: $tokenDevice){
