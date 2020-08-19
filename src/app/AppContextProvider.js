@@ -11,8 +11,6 @@ const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
-	const { tokenDevice } = useDeviceInfo();
-
     const [state, dispatch] = useReducer(
         (prevState, action) => {
             switch (action.type) {
@@ -65,16 +63,16 @@ const AppContextProvider = ({ children }) => {
     useEffect(() => {
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
-            let userToken;
-
             try {
                 // TODO change to use Apollo and import { STUDENT_BY_TOKEN } from '../api/student'
                 const fetch = createApolloFetch({
                     uri: `${BACKEND_URL}/graphql`,
                 });
 
-                userToken = await AsyncStorage.getItem(TOKEN_LOCAL_STORE);
-
+                const localStore = await AsyncStorage.getItem(TOKEN_LOCAL_STORE); // TODO alterar para pegar o token do usuario
+                const tokens = JSON.parse(localStore)
+                const {tokenStudent, tokenDevice} = tokens
+              
                 const resp = await fetch({
                     query: `query studentByToken($token: String!, $tokenDevice: String!) {
                         studentByToken(token: $token, tokenDevice: $tokenDevice){
@@ -83,17 +81,21 @@ const AppContextProvider = ({ children }) => {
                           email
                         }
                       }`,
-                    variables: { token: userToken, tokenDevice: tokenDevice },
+                    variables: { token: tokenStudent, tokenDevice },
                 })
 
                 if (resp.errors) throw Error(resp.errors[0].message)
 
                 const { studentByToken } = resp.data
                 dispatch({ type: 'SET_STUDENT', student: studentByToken });
-                dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+                dispatch({ type: 'RESTORE_TOKEN', token: tokenStudent });
 
             } catch (e) {
                 // Restoring token failed
+                async function removeStorage() {
+                    await AsyncStorage.removeItem(TOKEN_LOCAL_STORE)
+                }
+                removeStorage();
                 dispatch({ type: 'RESTORE_TOKEN', token: null });
             }
         };
@@ -113,13 +115,20 @@ const AppContextProvider = ({ children }) => {
                 dispatch({ type: 'SIGN_OUT' })
             },
 
-            signIn: async data => {
+            signIn: async (data, tokenDevice) => {
                 const student = data.student
                 student.token = data.token
+
                 async function saveStorage(value) {
-                    await AsyncStorage.setItem(TOKEN_LOCAL_STORE, value)
+                    await AsyncStorage.setItem(TOKEN_LOCAL_STORE, JSON.stringify(value))
                 }
-                saveStorage(student.token);
+
+                const tokens = {
+                    tokenStudent: student.token,
+                    tokenDevice: tokenDevice,
+                }
+
+                saveStorage(tokens);
 
                 dispatch({ type: 'SET_STUDENT', student: student });
                 dispatch({ type: 'SIGN_IN', token: student.token });
