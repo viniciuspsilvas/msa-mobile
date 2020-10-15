@@ -60,3 +60,8 @@ exp r -c
 yarn cache clean  && rm -fr node_modules && rm -fr $TMPDIR/metro* && watchman watch-del-all && yarn && yarn ios
 
 exp r -c
+
+
+# upload your iOS app to TestFlight
+
+expo upload:ios --apple-id viniciuspsilvas@gmail.com --apple-id-password ****** --app-name 'Mindroom Student APP'

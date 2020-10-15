@@ -17,3 +17,4 @@ msa-mobile_master/
 yarn-error.log
 .env.desenv
 dist/*
+.env.dev
