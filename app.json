@@ -35,9 +35,7 @@
       "package": "au.edu.mindroom.msa",
       "googleServicesFile": "./google-services.json",
       "permissions" : [],
-      "versionCode": 15,
-      "android.adaptiveIcon.foregroundImage": "./assets/icon_black.png",
-      "android.adaptiveIcon.backgroundColor": "#E54236"
+      "versionCode": 15
     }
   },
   "name": "msa-mobile",
