@@ -12,12 +12,8 @@ const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 const httpLink = createHttpLink({ uri: BACKEND_URL });
 
 const authLink = setContext(async (_, { headers }) => {
-  const localStore = await AsyncStorage.getItem(TOKEN_LOCAL_STORE); // TODO alterar para pegar o token do usuario
- 
-  console.log("#localStore 4", localStore)
+  const localStore = await AsyncStorage.getItem(TOKEN_LOCAL_STORE); 
   const tokens = JSON.parse(localStore)
-
-  console.log("#tokens 2", tokens)
 
   return {
     headers: {
