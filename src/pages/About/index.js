@@ -66,7 +66,7 @@ const AboutScreen = () => {
                 <CardItem>
                     <Body>
                         <Text style={styles.bold}>Sunshine Coast: </Text>
-                        <Text>64C Aerodrome Road Maroochydore QLD 4558</Text>
+                        <Text>3c/66 Jessica Blvd, Minyama QLD 4575</Text>
                     </Body>
                 </CardItem>
 
