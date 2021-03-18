@@ -47,11 +47,11 @@ export default MessageCard = ({ message, callback }) => {
                                 )}
                         </View>
 
-                        <View style={{ alignItems: 'flex-start', width: 230, flexDirection: 'row', marginLeft: 5 }}>
+                        <View style={{ alignItems: 'flex-start', width: 210, flexDirection: 'row', marginLeft: 5 }}>
                             <Text style={styles.title}>{title}</Text>
                         </View>
 
-                        <View style={{ width: 80 }} >
+                        <View style={{ width: 100 }} >
                             <Text style={!read ? styles.unreadMsg : styles.readMsg} note >
                                 <Moment element={Text} format={"DD/MM/YYYY HH:mm"} >{createdAt}</Moment>
                             </Text>
@@ -113,11 +113,13 @@ const styles = StyleSheet.create({
     },
 
     readMsg: {
+        marginRight: 5 ,
         textAlign: 'right',
         color: '#707070'
     },
 
     unreadMsg: {
+        marginRight: 5 ,
         textAlign: 'right',
         color: '#000'
     }

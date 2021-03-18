@@ -19,7 +19,7 @@ export default function LoginScreen() {
 
 	const [loginStudent, { loading }] = useMutation(LOGIN_STUDENT, {
 		onCompleted(res) {
-			authContext.signIn(res.loginStudent)
+			authContext.signIn(res.loginStudent, tokenDevice)
 		}
 	});
 

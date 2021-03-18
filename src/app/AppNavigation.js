@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { description } from 'msa-mobile/package.json';
+import { description, version } from 'msa-mobile/package.json';
 import { View, SafeAreaView, Image, Text, StyleSheet, Alert } from 'react-native';
 import { Icon } from 'native-base';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -22,6 +22,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  version: {
+    textAlign: 'center',
+    color: '#cccccc',
+    fontSize: 10,
+    marginTop: 180,
   }
 }
 );
@@ -40,6 +46,7 @@ export default function AppNavigation() {
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItemList  {...props} options={{ drawerIcon: { size: 5, color: "blue" } }} />
           <LogoutButton />
+          <Text style={styles.version} >V: {version}</Text>
         </SafeAreaView>
       </DrawerContentScrollView>
     );
@@ -72,7 +79,7 @@ export default function AppNavigation() {
     <Stack.Navigator>
       {state.isLoading ? (
         // We haven't finished checking for the token yet
-        <Stack.Screen name="Splash" component={Loader} />
+        <Stack.Screen options={{ headerShown: false }} name="Splash" component={Loader} />
       ) : state.userToken == null ? (
         // No token found, user isn't signed in
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />

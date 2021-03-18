@@ -12,12 +12,13 @@ const TOKEN_LOCAL_STORE = `${packageJson.name}-token`;
 const httpLink = createHttpLink({ uri: BACKEND_URL });
 
 const authLink = setContext(async (_, { headers }) => {
-  const token = await AsyncStorage.getItem(TOKEN_LOCAL_STORE);
+  const localStore = await AsyncStorage.getItem(TOKEN_LOCAL_STORE); 
+  const tokens = JSON.parse(localStore)
 
   return {
     headers: {
       ...headers,
-      "Authorization": token || null
+      "Authorization": tokens && tokens.tokenStudent || null
     }
   };
 });
